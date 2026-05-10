@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="6qaDK9WfePT3KPsbkW4ocp8ywbCRqfJLv0Q_syjZCr8">
+<title>GreenRock AI | AI-Powered Mineral Exploration</title>
+<meta name="description" content="GreenRock AI uses artificial intelligence and geophysics to optimise drill plans and discover new mineralisation across Africa and globally.">
+<meta name="keywords" content="AI mineral exploration, drill plan optimisation, geophysics AI, copper exploration Africa, drillhole prediction, Copperbelt mining AI">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.greenrock-ai.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--blue-deep:#020b18;--blue-mid:#0a2a4a;--blue-bright:#00b4d8;--cyan:#00f5ff;--gold:#f0c040;--surface:#071e33;--surface2:#0d2a42;--text:#e0f4ff;--text-muted:#5a8fa8;--border:rgba(0,180,216,0.15)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Exo 2',sans-serif;background:var(--blue-deep);color:var(--text);overflow-x:hidden}
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,180,216,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,180,216,0.03) 1px,transparent 1px);background-size:50px 50px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(2,11,24,0.95);border-bottom:1px solid var(--border)}
+.logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.1rem;color:var(--text);text-decoration:none}
+.logo span{color:var(--blue-bright)}
+.nav-links{display:flex;gap:1.5rem;list-style:none}
+.nav-links a{color:var(--text-muted);text-decoration:none;font-size:0.85rem;transition:color 0.2s}
+.nav-links a:hover{color:var(--blue-bright)}
+.nav-admin{background:transparent;border:1px solid var(--border);color:var(--text-muted);padding:0.4rem 0.9rem;border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:'Exo 2',sans-serif;transition:all 0.2s}
+.nav-admin:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
+#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 4rem;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(0,180,216,0.08);border:1px solid rgba(0,180,216,0.25);border-radius:100px;padding:0.4rem 1.2rem;font-size:0.75rem;color:var(--blue-bright);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.5rem}
+.badge-pulse{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.8rem,5vw,3.8rem);font-weight:900;line-height:1.1;margin-bottom:1.2rem}
+h1 .accent{color:var(--blue-bright)}
+h1 .gold{color:var(--gold)}
+.hero-sub{font-size:1rem;color:var(--text-muted);line-height:1.8;max-width:540px;margin:0 auto 2.5rem}
+.globe-wrap{position:relative;width:200px;height:200px;margin:0 auto 2.5rem}
+.globe{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 35% 35%,#0d4a7a,#020b18);border:1px solid rgba(0,180,216,0.3);box-shadow:0 0 60px rgba(0,180,216,0.15);position:relative;overflow:hidden}
+.globe::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 18px,rgba(0,180,216,0.05) 18px,rgba(0,180,216,0.05) 19px)}
+.globe::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 18px,rgba(0,180,216,0.05) 18px,rgba(0,180,216,0.05) 19px)}
+.globe-ring{position:absolute;inset:-15px;border-radius:50%;border:1px dashed rgba(0,180,216,0.2);animation:spin 20s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.globe-dot{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:dotP 2s ease-in-out infinite}
+.globe-dot:nth-child(1){top:30%;left:40%}
+.globe-dot:nth-child(2){top:55%;left:60%;animation-delay:0.7s}
+.globe-dot:nth-child(3){top:70%;left:35%;animation-delay:1.4s}
+@keyframes dotP{0%,100%{transform:scale(1)}50%{transform:scale(1.6)}}
+.hero-btn{display:inline-flex;align-items:center;gap:0.5rem;background:var(--blue-bright);color:var(--blue-deep);padding:0.85rem 2.2rem;border-radius:8px;font-family:'Orbitron',monospace;font-weight:700;font-size:0.82rem;text-decoration:none;letter-spacing:0.08em;box-shadow:0 4px 30px rgba(0,180,216,0.3);transition:all 0.2s}
+.hero-btn:hover{background:var(--cyan);transform:translateY(-2px)}
+#services{padding:5rem 2rem;position:relative;z-index:1;max-width:900px;margin:0 auto}
+.section-label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.2em;color:var(--blue-bright);margin-bottom:0.8rem;text-align:center}
+.section-title{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,3vw,2rem);font-weight:700;text-align:center;margin-bottom:2.5rem}
+.services-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.svc-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.8rem;transition:all 0.3s}
+.svc-card:hover{transform:translateY(-4px);border-color:rgba(0,180,216,0.3)}
+.svc-icon{font-size:2rem;margin-bottom:1rem}
+.svc-card h3{font-family:'Orbitron',monospace;font-size:0.85rem;font-weight:700;margin-bottom:0.8rem;color:#90e0ef}
+.svc-card p{font-size:0.85rem;color:var(--text-muted);line-height:1.7}
+.svc-tag{display:inline-block;margin-top:1rem;background:rgba(0,180,216,0.08);border:1px solid rgba(0,180,216,0.2);border-radius:100px;padding:0.2rem 0.8rem;font-size:0.68rem;color:var(--blue-bright);font-weight:600}
+.minerals{text-align:center;padding:1rem 2rem 4rem;position:relative;z-index:1}
+.mineral-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:0.7rem;margin-top:1.2rem}
+.mchip{background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:0.4rem 1rem;font-size:0.8rem;transition:all 0.2s;cursor:default}
+.mchip:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
+.mchip .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:0.4rem}
+#portal{padding:4rem 2rem;position:relative;z-index:1;max-width:700px;margin:0 auto}
+.portal-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+.portal-head{background:linear-gradient(135deg,var(--blue-mid),var(--surface2));padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem}
+.portal-head-icon{width:44px;height:44px;background:rgba(0,180,216,0.12);border:1px solid rgba(0,180,216,0.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.portal-head h3{font-family:'Orbitron',monospace;font-size:0.95rem;font-weight:700}
+.portal-head p{font-size:0.78rem;color:var(--text-muted)}
+.portal-body{padding:1.8rem}
+.code-entry{text-align:center}
+.code-entry h4{font-family:'Orbitron',monospace;font-size:0.95rem;margin-bottom:0.5rem}
+.code-entry p{font-size:0.82rem;color:var(--text-muted);margin-bottom:1.2rem}
+.code-row{display:flex;gap:0.5rem;max-width:360px;margin:0 auto 0.8rem}
+.code-row input{flex:1;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.8rem 1rem;color:var(--text);font-family:'Orbitron',monospace;font-size:1rem;letter-spacing:0.15em;text-align:center;outline:none;transition:border-color 0.2s}
+.code-row input:focus{border-color:var(--blue-bright)}
+.btn-p{background:var(--blue-bright);color:var(--blue-deep);border:none;border-radius:8px;padding:0.8rem 1.2rem;font-family:'Orbitron',monospace;font-weight:700;font-size:0.78rem;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.btn-p:hover{background:var(--cyan)}
+.btn-p:disabled{background:var(--surface2);color:var(--text-muted);cursor:not-allowed}
+#analysis-area{display:none}
+.steps-bar{display:flex;gap:0.3rem;margin-bottom:1.5rem;overflow-x:auto;padding-bottom:0.3rem}
+.step-dot{flex:1;min-width:70px;text-align:center;padding:0.4rem 0.3rem;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;font-size:0.65rem;color:var(--text-muted);transition:all 0.2s}
+.step-dot.active{border-color:var(--blue-bright);color:var(--blue-bright);background:rgba(0,180,216,0.08)}
+.step-dot.done{border-color:var(--cyan);color:var(--cyan)}
+.file-cards{display:flex;flex-direction:column;gap:0.8rem}
+.file-card{background:var(--blue-deep);border:1px solid var(--border);border-radius:10px;padding:1rem;display:flex;align-items:center;gap:0.8rem;transition:all 0.2s;flex-wrap:wrap}
+.file-card.uploaded{border-color:var(--cyan)}
+.file-card-icon{font-size:1.5rem;min-width:32px;text-align:center}
+.file-card-info{flex:1;min-width:120px}
+.file-card-info h4{font-size:0.82rem;font-weight:600;margin-bottom:0.2rem}
+.file-card-info p{font-size:0.72rem;color:var(--text-muted)}
+.file-card-status{font-size:0.72rem;color:var(--text-muted)}
+.file-card-status.ok{color:var(--cyan)}
+.upload-btn-small{background:rgba(0,180,216,0.1);border:1px solid rgba(0,180,216,0.25);border-radius:6px;color:var(--blue-bright);padding:0.35rem 0.7rem;font-size:0.72rem;cursor:pointer;font-family:'Exo 2',sans-serif;transition:all 0.2s;white-space:nowrap}
+.upload-btn-small:hover{background:rgba(0,180,216,0.2)}
+.upload-btn-small.done{background:rgba(0,245,255,0.08);border-color:var(--cyan);color:var(--cyan)}
+.options-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin:1.2rem 0}
+.opt-group label{display:block;font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;font-weight:600}
+.opt-group select{width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.8rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.82rem;outline:none;cursor:pointer}
+.opt-group select:focus{border-color:var(--blue-bright)}
+.uses-badge{text-align:center;margin:0.8rem 0;font-size:0.72rem;color:var(--text-muted)}
+.uses-badge span{color:var(--gold);font-weight:600}
+.expiry-badge{text-align:center;font-size:0.7rem;color:var(--text-muted);margin-bottom:1rem}
+.expiry-badge span{color:#ff9060;font-weight:600}
+.run-btn{width:100%;background:var(--blue-bright);color:var(--blue-deep);border:none;border-radius:10px;padding:0.9rem;font-family:'Orbitron',monospace;font-weight:700;font-size:0.82rem;cursor:pointer;margin-top:1rem;letter-spacing:0.06em;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.5rem}
+.run-btn:hover{background:var(--cyan)}
+.run-btn:disabled{background:var(--surface2);color:var(--text-muted);cursor:not-allowed}
+.progress-wrap{display:none;margin-top:1rem}
+.progress-label{font-size:0.78rem;color:var(--text-muted);margin-bottom:0.5rem;text-align:center}
+.progress-bar{height:6px;background:var(--blue-deep);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue-bright),var(--cyan));border-radius:3px;width:0%;transition:width 0.5s ease}
+#result-area{display:none;margin-top:1.5rem}
+.result-box{background:var(--blue-deep);border:1px solid var(--border);border-radius:10px;padding:1.2rem;font-size:0.85rem;line-height:1.8;white-space:pre-wrap;max-height:400px;overflow-y:auto;color:var(--text)}
+.result-actions{display:flex;gap:0.8rem;margin-top:0.8rem}
+.btn-o{flex:1;background:transparent;border:1px solid var(--blue-bright);color:var(--blue-bright);border-radius:8px;padding:0.7rem;font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-o:hover{background:rgba(0,180,216,0.1)}
+#err-box{display:none;margin-top:0.8rem;background:rgba(255,80,80,0.08);border:1px solid rgba(255,80,80,0.2);border-radius:8px;padding:0.8rem;color:#ff8080;font-size:0.82rem}
+#contact{padding:4rem 2rem;position:relative;z-index:1;max-width:700px;margin:0 auto;text-align:center}
+.contact-grid{display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin-top:2rem}
+.citem{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.5rem;min-width:160px;transition:all 0.2s}
+.citem:hover{border-color:rgba(0,180,216,0.3);transform:translateY(-3px)}
+.citem-icon{font-size:1.3rem;margin-bottom:0.5rem}
+.citem-label{font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem}
+.citem-val{font-size:0.82rem}
+.citem-val a{color:var(--blue-bright);text-decoration:none}
+footer{border-top:1px solid var(--border);padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;position:relative;z-index:1}
+footer p{font-size:0.75rem;color:var(--text-muted)}
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(2,11,24,0.96);align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2rem;width:95%;max-width:560px;max-height:90vh;overflow-y:auto;position:relative}
+.modal-close{position:absolute;top:1rem;right:1rem;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text-muted);width:30px;height:30px;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center}
+.modal h2{font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;margin-bottom:0.3rem}
+.modal-sub{font-size:0.8rem;color:var(--text-muted);margin-bottom:1.5rem}
+.fg{margin-bottom:1rem}
+.fg label{display:block;font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;font-weight:600}
+.fg input,.fg textarea{width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.7rem 1rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.88rem;outline:none;transition:border-color 0.2s}
+.fg input:focus,.fg textarea:focus{border-color:var(--blue-bright)}
+.fg textarea{resize:vertical;min-height:120px}
+.a-section{margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.a-section:last-child{border-bottom:none;margin-bottom:0}
+.a-section h3{font-family:'Orbitron',monospace;font-size:0.8rem;font-weight:700;margin-bottom:0.8rem;color:#90e0ef}
+.save-btn{width:100%;background:var(--blue-bright);color:var(--blue-deep);border:none;border-radius:8px;padding:0.8rem;font-family:'Orbitron',monospace;font-weight:700;font-size:0.82rem;cursor:pointer;margin-top:0.5rem;transition:all 0.2s}
+.save-btn:hover{background:var(--cyan)}
+.save-confirm{display:none;text-align:center;color:var(--cyan);font-size:0.8rem;margin-top:0.5rem}
+.code-chip{display:flex;align-items:center;justify-content:space-between;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.5rem 0.8rem;margin-bottom:0.4rem;font-family:'Orbitron',monospace;font-size:0.72rem;flex-wrap:wrap;gap:0.3rem}
+.cu{font-size:0.65rem;color:var(--text-muted)}
+.cu.warn{color:var(--gold)}
+.cu.dead{color:#ff6060}
+.cc{background:rgba(0,180,216,0.1);border:1px solid rgba(0,180,216,0.2);border-radius:4px;color:var(--blue-bright);padding:0.15rem 0.5rem;font-size:0.65rem;cursor:pointer}
+#admin-panel{display:none}
+@media(max-width:600px){.services-grid{grid-template-columns:1fr}.options-row{grid-template-columns:1fr}.nav-links{display:none}footer{flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<nav>
+  <a href="#" class="logo">Green<span>Rock</span> AI</a>
+  <div style="display:flex;align-items:center;gap:1rem">
+    <ul class="nav-links"><li><a href="#services">Services</a></li><li><a href="#portal">Platform</a></li><li><a href="#contact">Contact</a></li></ul>
+    <button class="nav-admin" onclick="openAdmin()">Admin ⚙</button>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-badge"><span class="badge-pulse"></span> AI-Powered Mineral Exploration</div>
+  <h1>Find the <span class="accent">ore.</span><br>Drill with <span class="gold">precision.</span><br>Generate returns.</h1>
+  <p class="hero-sub">GreenRock AI combines geophysics, geochemistry and artificial intelligence to tell you exactly where to drill — before you spend a cent on the rig.</p>
+  <div class="globe-wrap">
+    <div class="globe"><div class="globe-dot"></div><div class="globe-dot"></div><div class="globe-dot"></div></div>
+    <div class="globe-ring"></div>
+  </div>
+  <a href="#portal" class="hero-btn">▶ Launch Platform</a>
+</section>
+
+<section id="services">
+  <div class="section-label">What We Do</div>
+  <h2 class="section-title">GreenRock <span style="color:var(--blue-bright)">Services</span></h2>
+  <div class="services-grid">
+    <div class="svc-card"><div class="svc-icon">🎯</div><h3>Drill Plan Optimisation</h3><p>Using your existing drillhole data — geochemical assays, lithological logs, and grade intervals — our AI models predict exactly where the next hole should be drilled to intersect high-grade mineralisation.</p><span class="svc-tag">High Precision · Fast · Cost Effective</span></div>
+    <div class="svc-card"><div class="svc-icon">📡</div><h3>Geophysics & New Discovery</h3><p>GreenRock deploys ground geophysics instruments in the field — IP, EM, and Magnetics — then processes datasets through our AI engine to detect and map new mineralisation zones.</p><span class="svc-tag">IP · EM · Magnetics · AI</span></div>
+  </div>
+</section>
+
+<div class="minerals">
+  <div class="section-label">Commodity Coverage</div>
+  <div class="mineral-chips">
+    <div class="mchip"><span class="dot" style="background:#c8753a"></span>Copper</div>
+    <div class="mchip"><span class="dot" style="background:#f0d080"></span>Gold</div>
+    <div class="mchip"><span class="dot" style="background:#6090e0"></span>Cobalt</div>
+    <div class="mchip"><span class="dot" style="background:#a0c080"></span>Nickel</div>
+    <div class="mchip"><span class="dot" style="background:#d0a0f0"></span>Zinc</div>
+    <div class="mchip"><span class="dot" style="background:#e0e0e0"></span>PGMs</div>
+    <div class="mchip"><span class="dot" style="background:#80c0d0"></span>Lead</div>
+    <div class="mchip"><span class="dot" style="background:#f09060"></span>Uranium</div>
+    <div class="mchip"><span class="dot" style="background:#90e090"></span>REEs</div>
+    <div class="mchip"><span class="dot" style="background:#f0f060"></span>Manganese</div>
+  </div>
+</div>
+
+<section id="portal">
+  <div class="section-label">Client Platform</div>
+  <h2 class="section-title" style="margin-bottom:1.5rem">Upload data. <span style="color:var(--blue-bright)">Get answers.</span></h2>
+  <div class="portal-box">
+    <div class="portal-head"><div class="portal-head-icon">🧠</div><div><h3>GreenRock AI Platform</h3><p>Secure · Real-time · Powered by AI</p></div></div>
+    <div class="portal-body">
+      <div class="code-entry" id="code-entry">
+        <h4>Enter Access Code</h4>
+        <p>Enter your 10-digit access code provided by GreenRock AI</p>
+        <div class="code-row">
+          <input type="text" id="access-code" maxlength="10" placeholder="0000000000" oninput="this.value=this.value.replace(/\D/g,'')">
+          <button class="btn-p" onclick="verifyCode()">Enter →</button>
+        </div>
+        <div id="code-error" style="color:#ff8080;font-size:0.8rem;margin-top:0.4rem;display:none"></div>
+        <p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.8rem">Contact <a href="mailto:kimba@greenrock-ai.com" style="color:var(--blue-bright)">kimba@greenrock-ai.com</a> to get your access code.</p>
+      </div>
+
+      <div id="analysis-area">
+        <div class="uses-badge" id="uses-badge"></div>
+        <div class="expiry-badge" id="expiry-badge"></div>
+        <div class="steps-bar">
+          <div class="step-dot" id="step-0">Collar</div>
+          <div class="step-dot" id="step-1">Survey</div>
+          <div class="step-dot" id="step-2">Assay</div>
+          <div class="step-dot" id="step-3">Lithology</div>
+          <div class="step-dot" id="step-4">Geology</div>
+          <div class="step-dot" id="step-5">Target</div>
+        </div>
+        <div class="file-cards">
+          <div class="file-card" id="fc-0"><div class="file-card-icon">📍</div><div class="file-card-info"><h4>1. Collar Coordinates</h4><p>Drillhole locations (Easting, Northing, Elevation)</p></div><input type="file" id="fi-0" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(0,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-0').click()">Upload</button><div class="file-card-status" id="fs-0">Pending</div></div>
+          <div class="file-card" id="fc-1"><div class="file-card-icon">📐</div><div class="file-card-info"><h4>2. Downhole Survey</h4><p>Inclination and azimuth measurements</p></div><input type="file" id="fi-1" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(1,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-1').click()">Upload</button><div class="file-card-status" id="fs-1">Pending</div></div>
+          <div class="file-card" id="fc-2"><div class="file-card-icon">🧪</div><div class="file-card-info"><h4>3. Assay Results</h4><p>Cu grades and geochemical data</p></div><input type="file" id="fi-2" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(2,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-2').click()">Upload</button><div class="file-card-status" id="fs-2">Pending</div></div>
+          <div class="file-card" id="fc-3"><div class="file-card-icon">🪨</div><div class="file-card-info"><h4>4. Lithological Logs</h4><p>Rock types linked by Hole ID</p></div><input type="file" id="fi-3" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(3,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-3').click()">Upload</button><div class="file-card-status" id="fs-3">Pending</div></div>
+          <div class="file-card" id="fc-4"><div class="file-card-icon">🗺️</div><div class="file-card-info"><h4>5. Geological Context</h4><p>Structural and geological interpretation</p></div><input type="file" id="fi-4" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(4,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-4').click()">Upload</button><div class="file-card-status" id="fs-4">Pending</div></div>
+          <div class="file-card" id="fc-5"><div class="file-card-icon">🎯</div><div class="file-card-info"><h4>6. Target Area</h4><p>Polygon coordinates of exploration target</p></div><input type="file" id="fi-5" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(5,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-5').click()">Upload</button><div class="file-card-status" id="fs-5">Pending</div></div>
+        </div>
+        <div class="options-row">
+          <div class="opt-group"><label>Cu Cut-off Grade</label><select id="cutoff-grade"><option value="0.4">0.4% Cu</option><option value="0.5" selected>0.5% Cu</option><option value="0.6">0.6% Cu</option><option value="0.7">0.7% Cu</option><option value="0.8">0.8% Cu</option><option value="1.0">1.0% Cu</option><option value="1.2">1.2% Cu</option><option value="1.5">1.5% Cu</option><option value="2.0">2.0% Cu</option><option value="2.5">2.5% Cu</option><option value="3.0">3.0% Cu</option><option value="3.5">3.5% Cu</option><option value="4.0">4.0% Cu</option><option value="5.0">5.0% Cu</option><option value="6.0">6.0% Cu</option><option value="7.0">7.0% Cu</option></select></div>
+          <div class="opt-group"><label>Report Language</label><select id="report-lang"><option value="English">English</option><option value="French">Français</option></select></div>
+          <div class="opt-group"><label>Report Format</label><select id="report-format"><option value="pdf">PDF</option><option value="word">Word (.doc)</option></select></div>
+        </div>
+        <button class="run-btn" id="run-btn" onclick="runAnalysis()">▶ Upload all 6 files (0/6)</button>
+        <div class="progress-wrap" id="progress-wrap"><div class="progress-label" id="progress-label">Integrating datasets...</div><div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div></div>
+        <div id="err-box"></div>
+        <div id="result-area">
+          <div class="result-box" id="result-content"></div>
+          <div class="result-actions">
+            <button class="btn-o" onclick="downloadReport()">⬇ Download Report</button>
+            <button class="btn-o" onclick="resetAnalysis()">↺ New Analysis</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-label">Get In Touch</div>
+  <h2 class="section-title">Ready to find <span style="color:var(--blue-bright)">your next orebody?</span></h2>
+  <div class="contact-grid">
+    <div class="citem"><div class="citem-icon">📞</div><div class="citem-label">Phone</div><div class="citem-val"><a href="tel:+27662998028">+27 66 299 8028</a></div></div>
+    <div class="citem"><div class="citem-icon">✉️</div><div class="citem-label">Email</div><div class="citem-val"><a href="mailto:kimba@greenrock-ai.com">kimba@greenrock-ai.com</a></div></div>
+    <div class="citem"><div class="citem-icon">🌐</div><div class="citem-label">Website</div><div class="citem-val"><a href="http://www.greenrock-ai.com">www.greenrock-ai.com</a></div></div>
+    <div class="citem"><div class="citem-icon">📍</div><div class="citem-label">Address</div><div class="citem-val" style="font-size:0.75rem">114 Nicholson Rd, Unit 10<br>Sunward Park, Boksburg<br>Gauteng, South Africa</div></div>
+  </div>
+</section>
+
+<footer>
+  <span class="logo">Green<span>Rock</span> AI</span>
+  <p>© 2026 GreenRock AI · Boksburg, South Africa</p>
+</footer>
+
+<div class="modal-overlay" id="admin-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeAdmin()">✕</button>
+    <div id="admin-login">
+      <h2>Admin Access</h2>
+      <p class="modal-sub">Enter your admin password</p>
+      <div class="fg"><label>Password</label><input type="password" id="admin-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkAdminPass()"></div>
+      <button class="btn-p" style="width:100%" onclick="checkAdminPass()">Login →</button>
+      <div id="pass-error" style="color:#ff8080;font-size:0.8rem;margin-top:0.6rem;display:none">Incorrect password</div>
+    </div>
+    <div id="admin-panel">
+      <h2>Admin Panel</h2>
+      <p class="modal-sub">Manage API key, prompt and client codes</p>
+      <div class="a-section">
+        <h3>🔑 OpenAI API Key (ChatGPT)</h3>
+        <div class="fg"><label>API Key — saved permanently in your browser</label><input type="password" id="admin-api-key" placeholder="sk-..."></div>
+      </div>
+      <div class="a-section">
+        <h3>📝 Analysis Prompt</h3>
+        <div class="fg"><label>Prompt sent to ChatGPT with every analysis</label><textarea id="admin-prompt" rows="8"></textarea></div>
+      </div>
+      <button class="save-btn" onclick="saveSettings()">💾 Save API Key & Prompt</button>
+      <div class="save-confirm" id="save-confirm">✅ Saved successfully!</div>
+      <div class="a-section" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+        <h3>🎫 Client Access Codes</h3>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.8rem">Each code: <strong>2 uses</strong> within <strong>24 hours</strong> of generation.</p>
+        <button class="btn-p" onclick="generateCode()">+ Generate New Code</button>
+        <div id="codes-list" style="margin-top:0.8rem"></div>
+      </div>
+      <button class="btn-o" style="width:100%;margin-top:1rem" onclick="adminLogout()">Logout</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function getCodes(){try{return JSON.parse(localStorage.getItem('gr_codes3')||'{}')}catch(e){return{}}}
+function saveCodes(c){localStorage.setItem('gr_codes3',JSON.stringify(c))}
+function getSettings(){try{return JSON.parse(localStorage.getItem('gr_settings3')||'{}')}catch(e){return{}}}
+
+function defaultPrompt(){return`You are an expert exploration geologist and mining engineer. You have received six datasets related to a drilling program:
+1. Collar coordinates (drillhole locations)
+2. Downhole survey data (inclination and azimuth)
+3. Assay results (including Cu grades)
+4. Lithological logs (linked by Hole ID)
+5. Geological Context
+6. Target Area (polygon coordinates WGS84/UTM)
+
+All datasets are connected through a common field: Hole ID.
+
+OBJECTIVE: Using all six datasets:
+- Integrate collar, survey, assay, lithology, geological context, and target area data
+- Identify mineralized zones, trends, and controls (structural and lithological)
+- Interpret the geometry and continuity of Cu mineralisation
+
+TASKS:
+1. DATA INTEGRATION & INTERPRETATION
+   - Correlate Cu grades with lithology
+   - Analyze structural influence (faults/breccia zones)
+
+2. TARGET GENERATION - Recommend new drillhole locations within the defined target area:
+   - Suggested collar coordinates (Easting/Northing)
+   - Proposed drill orientation (azimuth and dip)
+   - Target depth
+
+3. PREDICTION - For each proposed drillhole:
+   - Expected lithology sequence
+   - Likely mineralisation (grade range and thickness)
+   - Geological justification
+
+4. UNCERTAINTY ASSESSMENT
+   - Assign a confidence level (%) to each proposed drillhole
+
+5. Apply the Cu cut-off grade provided to define mineralized intervals.
+
+OUTPUT: Write a complete professional report with:
+- Executive Summary
+- Methodology
+- Interpretation
+- Drill Targets (table + explanation)
+- Confidence Assessment`}
+
+function openAdmin(){document.getElementById('admin-modal').classList.add('open');document.getElementById('admin-pass').value='';document.getElementById('pass-error').style.display='none'}
+function closeAdmin(){document.getElementById('admin-modal').classList.remove('open');adminLogout()}
+function checkAdminPass(){
+  if(document.getElementById('admin-pass').value==='Johnny22'){
+    document.getElementById('admin-login').style.display='none';
+    document.getElementById('admin-panel').style.display='block';
+    loadAdminPanel();
+  }else{document.getElementById('pass-error').style.display='block'}
+}
+function adminLogout(){document.getElementById('admin-login').style.display='block';document.getElementById('admin-panel').style.display='none'}
+function loadAdminPanel(){
+  const s=getSettings();
+  if(s.apiKey)document.getElementById('admin-api-key').value=s.apiKey;
+  document.getElementById('admin-prompt').value=s.prompt||defaultPrompt();
+  renderCodes();
+}
+function saveSettings(){
+  localStorage.setItem('gr_settings3',JSON.stringify({
+    apiKey:document.getElementById('admin-api-key').value.trim(),
+    prompt:document.getElementById('admin-prompt').value.trim()
+  }));
+  const c=document.getElementById('save-confirm');
+  c.style.display='block';
+  setTimeout(()=>c.style.display='none',2500);
+}
+function generateCode(){
+  const code=Array.from({length:10},()=>Math.floor(Math.random()*10)).join('');
+  const codes=getCodes();
+  codes[code]={uses:0,created:Date.now(),expires:Date.now()+86400000};
+  saveCodes(codes);renderCodes();
+}
+function renderCodes(){
+  const codes=getCodes();const list=document.getElementById('codes-list');const now=Date.now();
+  const entries=Object.entries(codes).reverse();
+  if(!entries.length){list.innerHTML='<p style="font-size:0.78rem;color:var(--text-muted)">No codes yet.</p>';return}
+  list.innerHTML=entries.map(([code,data])=>{
+    const expired=now>data.expires;const usedUp=data.uses>=2;const dead=expired||usedUp;
+    const r=2-data.uses;const hoursLeft=Math.max(0,Math.ceil((data.expires-now)/3600000));
+    const label=dead?'EXPIRED':`${r} use${r!==1?'s':''} left · ${hoursLeft}h`;
+    const cls=dead?'dead':r===1?'warn':'';
+    return`<div class="code-chip"><span>${code.replace(/(\d{5})(\d{5})/,'$1 $2')}</span><span class="cu ${cls}">${label}</span><button class="cc" onclick="copyCode('${code}')">Copy</button></div>`;
+  }).join('');
+}
+function copyCode(code){navigator.clipboard.writeText(code).then(()=>alert('Code copied: '+code))}
+
+let currentCode=null;
+function verifyCode(){
+  const input=document.getElementById('access-code').value.trim();
+  const err=document.getElementById('code-error');
+  const codes=getCodes();const now=Date.now();
+  if(!codes[input]){err.textContent='❌ Invalid code. Contact kimba@greenrock-ai.com';err.style.display='block';return}
+  if(now>codes[input].expires){err.textContent='❌ Code expired (24h). Request a new code.';err.style.display='block';return}
+  if(codes[input].uses>=2){err.textContent='❌ Code fully used (2/2). Request a new code.';err.style.display='block';return}
+  currentCode=input;err.style.display='none';
+  document.getElementById('code-entry').style.display='none';
+  document.getElementById('analysis-area').style.display='block';
+  updateBadges();
+}
+function updateBadges(){
+  const codes=getCodes();if(!currentCode||!codes[currentCode])return;
+  const r=2-codes[currentCode].uses;
+  const hoursLeft=Math.max(0,Math.ceil((codes[currentCode].expires-Date.now())/3600000));
+  document.getElementById('uses-badge').innerHTML=`Code: <span>${r} analysis use${r!==1?'s':''} remaining</span>`;
+  document.getElementById('expiry-badge').innerHTML=`Code expires in: <span>${hoursLeft} hour${hoursLeft!==1?'s':''}</span>`;
+}
+
+const uploadedFiles={};
+const fileNames=['Collar','Survey','Assay','Lithology','Geology','Target'];
+function handleFileUpload(index,input){
+  const file=input.files[0];if(!file)return;
+  uploadedFiles[index]=file;
+  const short=file.name.length>18?file.name.substring(0,15)+'...':file.name;
+  document.getElementById('fs-'+index).textContent='✓ '+short;
+  document.getElementById('fs-'+index).className='file-card-status ok';
+  document.getElementById('fc-'+index).classList.add('uploaded');
+  document.querySelector('#fc-'+index+' .upload-btn-small').textContent='Change';
+  document.querySelector('#fc-'+index+' .upload-btn-small').classList.add('done');
+  document.getElementById('step-'+index).classList.add('done');
+  updateRunBtn();
+}
+function updateRunBtn(){
+  const count=Object.keys(uploadedFiles).length;
+  const btn=document.getElementById('run-btn');
+  btn.disabled=count<6;
+  btn.textContent=count>=6?'▶ GENERATE AI REPORT':'▶ Upload all 6 files ('+count+'/6)';
+}
+function readFileAsText(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    if(file.name.toLowerCase().endsWith('.csv')){reader.onload=e=>resolve(e.target.result);reader.onerror=reject;reader.readAsText(file)}
+    else{reader.onload=e=>{try{const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});let t='';wb.SheetNames.forEach(sn=>{t+=`Sheet: ${sn}\n${XLSX.utils.sheet_to_csv(wb.Sheets[sn])}\n\n`});resolve(t)}catch(err){reject(err)}};reader.onerror=reject;reader.readAsArrayBuffer(file)}
+  });
+}
+
+let lastResult='',lastLang='English',lastFormat='pdf';
+async function runAnalysis(){
+  const s=getSettings();
+  const eb=document.getElementById('err-box');const ra=document.getElementById('result-area');
+  const pw=document.getElementById('progress-wrap');const pf=document.getElementById('progress-fill');const pl=document.getElementById('progress-label');
+  eb.style.display='none';ra.style.display='none';
+  if(!s.apiKey){eb.textContent='⚠️ No API key. Contact your GreenRock AI administrator.';eb.style.display='block';return}
+  if(Object.keys(uploadedFiles).length<6){eb.textContent='⚠️ Please upload all 6 files.';eb.style.display='block';return}
+  const cutoff=document.getElementById('cutoff-grade').value;
+  lastLang=document.getElementById('report-lang').value;
+  lastFormat=document.getElementById('report-format').value;
+  const btn=document.getElementById('run-btn');btn.disabled=true;btn.textContent='⏳ ANALYSING...';
+  pw.style.display='block';pf.style.width='5%';
+  const steps=['Reading collar data...','Reading survey data...','Reading assay data...','Reading lithology...','Reading geological context...','Reading target area...','Integrating all datasets...','Running AI analysis...','Generating report...'];
+  let si=0;
+  const sv=setInterval(()=>{if(si<steps.length-1){si++;pl.textContent=steps[si];pf.style.width=Math.min(85,(si+1)/steps.length*85)+'%'}},2500);
+  try{
+    const texts=await Promise.all([0,1,2,3,4,5].map(i=>readFileAsText(uploadedFiles[i])));
+    const combined=fileNames.map((name,i)=>`=== ${name.toUpperCase()} DATA ===\n${texts[i].substring(0,6000)}`).join('\n\n');
+    const prompt=(s.prompt||defaultPrompt())+`\n\nCU CUT-OFF GRADE: ${cutoff}% Cu\nREPORT LANGUAGE: ${lastLang}\n\nPlease write the entire report in ${lastLang}.\n\n=== DATASETS ===\n${combined}`;
+    const res=await fetch('https://api.openai.com/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${s.apiKey}`},
+      body:JSON.stringify({model:'gpt-4o',max_tokens:4000,messages:[{role:'user',content:prompt}]})
+    });
+    clearInterval(sv);
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error?.message||'API error');
+    lastResult=data.choices[0].message.content;
+    const codes=getCodes();codes[currentCode].uses++;saveCodes(codes);updateBadges();
+    pf.style.width='100%';pl.textContent='✅ Analysis complete!';
+    setTimeout(()=>pw.style.display='none',2000);
+    document.getElementById('result-content').textContent=lastResult;
+    ra.style.display='block';ra.scrollIntoView({behavior:'smooth'});
+  }catch(err){clearInterval(sv);pw.style.display='none';eb.textContent='❌ Error: '+err.message;eb.style.display='block'}
+  finally{btn.disabled=false;updateRunBtn()}
+}
+function downloadReport(){if(lastFormat==='pdf')downloadPDF();else downloadWord()}
+function downloadPDF(){
+  const w=window.open('','_blank');const fr=lastLang==='French';
+  w.document.write(`<!DOCTYPE html><html><head><title>GreenRock AI Report</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:2rem;color:#111;font-size:11pt;line-height:1.6}.header{border-bottom:3px solid #007ba7;padding-bottom:1rem;margin-bottom:2rem}.logo{font-size:1.8rem;font-weight:900;color:#007ba7}.meta{font-size:9pt;color:#666;margin-top:0.5rem}pre{white-space:pre-wrap;font-size:10pt;line-height:1.7}.footer{margin-top:3rem;border-top:1px solid #ccc;padding-top:1rem;font-size:8pt;color:#999;text-align:center}.conf{background:#fff3cd;border:1px solid #ffc107;border-radius:4px;padding:0.5rem 1rem;font-size:9pt;margin-bottom:1rem;text-align:center}</style></head><body><div class="header"><div class="logo">GREENROCK AI</div><div class="meta">${fr?'Rapport':'Report'} · ${new Date().toLocaleDateString()} · ${fr?'Confidentiel':'Confidential'}</div></div><div class="conf">⚠️ ${fr?'Document confidentiel':'Confidential Document'}</div><div class="meta">Cu Cut-off: ${document.getElementById('cutoff-grade').value}% | ${lastLang} | ${new Date().toLocaleString()}</div><pre>${lastResult}</pre><div class="footer">GreenRock AI · www.greenrock-ai.com · kimba@greenrock-ai.com · +27 66 299 8028</div><script>window.onload=function(){window.print()}<\/script></body></html>`);
+  w.document.close();
+}
+function downloadWord(){
+  const content=`GREENROCK AI - MINERAL EXPLORATION REPORT\n${'='.repeat(50)}\nDate: ${new Date().toLocaleDateString()}\nCu Cut-off: ${document.getElementById('cutoff-grade').value}%\nLanguage: ${lastLang}\nCONFIDENTIAL\n\n${lastResult}\n\n--\nGreenRock AI | www.greenrock-ai.com | kimba@greenrock-ai.com | +27 66 299 8028`;
+  const blob=new Blob([content],{type:'application/msword'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download='GreenRock_AI_Report_'+new Date().toISOString().split('T')[0]+'.doc';
+  a.click();URL.revokeObjectURL(url);
+}
+function resetAnalysis(){
+  Object.keys(uploadedFiles).forEach(k=>delete uploadedFiles[k]);
+  [0,1,2,3,4,5].forEach(i=>{
+    document.getElementById('fs-'+i).textContent='Pending';
+    document.getElementById('fs-'+i).className='file-card-status';
+    document.getElementById('fc-'+i).classList.remove('uploaded');
+    document.querySelector('#fc-'+i+' .upload-btn-small').textContent='Upload';
+    document.querySelector('#fc-'+i+' .upload-btn-small').classList.remove('done');
+    document.getElementById('step-'+i).className='step-dot';
+    document.getElementById('fi-'+i).value='';
+  });
+  document.getElementById('result-area').style.display='none';
+  document.getElementById('err-box').style.display='none';
+  lastResult='';updateRunBtn();updateBadges();
+}
+updateRunBtn();
+</script>
+</body>
+</html>

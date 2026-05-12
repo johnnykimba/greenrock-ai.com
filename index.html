@@ -3,3695 +3,612 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Academy AI — Your Personal AI Study Coach</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="google-site-verification" content="6qaDK9WfePT3KPsbkW4ocp8ywbCRqfJLv0Q_syjZCr8">
+<title>GreenRock AI | AI-Powered Mineral Exploration</title>
+<meta name="description" content="GreenRock AI uses artificial intelligence and geophysics to optimise drill plans and discover new mineralisation across Africa and globally.">
+<meta name="keywords" content="AI mineral exploration, drill plan optimisation, geophysics AI, copper exploration Africa, drillhole prediction, Copperbelt mining AI">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.greenrock-ai.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-:root {
-  --navy:    #0f2044;
-  --blue:    #1a56db;
-  --blue2:   #2563eb;
-  --sky:     #3b82f6;
-  --cyan:    #06b6d4;
-  --gold:    #f59e0b;
-  --green:   #10b981;
-  --red:     #ef4444;
-  --white:   #ffffff;
-  --offwhite:#f0f4ff;
-  --text:    #1e293b;
-  --muted:   #64748b;
-  --border:  #e2e8f0;
-  --card:    #ffffff;
-  --shadow:  rgba(26,86,219,0.12);
-}
-
-*{margin:0;padding:0;box-sizing:border-box;}
-
-body{
-  font-family:'DM Sans',sans-serif;
-  background:var(--offwhite);
-  color:var(--text);
-  overflow-x:hidden;
-}
-
-/* ══════════════════════════════════════
-   PAGES
-══════════════════════════════════════ */
-.page{display:none;}
-.page.active{display:block;}
-
-/* ══════════════════════════════════════
-   LANDING PAGE
-══════════════════════════════════════ */
+:root{--blue-deep:#020b18;--blue-mid:#0a2a4a;--blue-bright:#00b4d8;--cyan:#00f5ff;--gold:#f0c040;--surface:#071e33;--surface2:#0d2a42;--text:#e0f4ff;--text-muted:#5a8fa8;--border:rgba(0,180,216,0.15);--red:#ff4444}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Exo 2',sans-serif;background:var(--blue-deep);color:var(--text);overflow-x:hidden}
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,180,216,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,180,216,0.03) 1px,transparent 1px);background-size:50px 50px}
 
 /* NAV */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  background:rgba(15,32,68,0.97);
-  backdrop-filter:blur(12px);
-  padding:0 40px;
-  height:68px;
-  display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid rgba(59,130,246,0.2);
-}
-.nav-logo{
-  display:flex;align-items:center;gap:10px;
-  font-family:'Playfair Display',serif;
-  font-size:22px;font-weight:800;
-  color:var(--white);
-  text-decoration:none;
-}
-.nav-logo .logo-icon{
-  width:38px;height:38px;
-  background:linear-gradient(135deg,var(--blue),var(--cyan));
-  border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;
-}
-.nav-links{display:flex;align-items:center;gap:32px;}
-.nav-links a{
-  color:rgba(255,255,255,0.75);
-  text-decoration:none;font-size:14px;font-weight:500;
-  transition:color 0.2s;
-}
-.nav-links a:hover{color:var(--white);}
-.nav-cta{
-  background:linear-gradient(135deg,var(--blue),var(--sky));
-  color:var(--white)!important;
-  padding:9px 22px!important;
-  border-radius:8px!important;
-  font-weight:600!important;
-}
-.nav-cta:hover{opacity:0.9;}
-.nav-adm{
-  background:rgba(255,255,255,0.1)!important;
-  color:var(--white)!important;
-  padding:9px 22px!important;
-  border-radius:8px!important;
-  font-weight:600!important;
-  font-size:14px!important;
-  border:1px solid rgba(255,255,255,0.2)!important;
-  cursor:pointer!important;
-}
-.nav-adm:hover{
-  background:rgba(255,255,255,0.18)!important;
-  color:var(--white)!important;
-  border-color:rgba(255,255,255,0.35)!important;
-}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(2,11,24,0.97);border-bottom:1px solid var(--border)}
+.logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.1rem;color:var(--text);text-decoration:none}
+.logo span{color:var(--blue-bright)}
+.nav-links{display:flex;gap:1.5rem;list-style:none;align-items:center}
+.nav-links a{color:var(--text-muted);text-decoration:none;font-size:0.85rem;transition:color 0.2s}
+.nav-links a:hover{color:var(--blue-bright)}
+.nav-admin{background:transparent;border:1px solid var(--border);color:var(--text-muted);padding:0.4rem 0.9rem;border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:'Exo 2',sans-serif;transition:all 0.2s}
+.nav-admin:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:5px;background:none;border:none}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text-muted);border-radius:2px;transition:all 0.3s}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;position:fixed;top:60px;left:0;right:0;background:rgba(2,11,24,0.98);border-bottom:1px solid var(--border);padding:1.5rem 2rem;z-index:99;flex-direction:column;gap:1rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--text-muted);text-decoration:none;font-size:1rem;padding:0.5rem 0;border-bottom:1px solid var(--border)}
+.mobile-menu a:hover{color:var(--blue-bright)}
+.mobile-menu button{background:var(--blue-bright);color:var(--blue-deep);border:none;border-radius:8px;padding:0.7rem;font-family:'Orbitron',monospace;font-weight:700;font-size:0.82rem;cursor:pointer;margin-top:0.5rem}
 
 /* HERO */
-.hero{
-  min-height:100vh;
-  background:linear-gradient(160deg,var(--navy) 0%,#1a3460 50%,#0f2044 100%);
-  display:flex;align-items:center;
-  padding:100px 40px 60px;
-  position:relative;
-  overflow:hidden;
-}
-.hero::before{
-  content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 70% 60% at 80% 50%,rgba(37,99,235,0.15) 0%,transparent 70%),
-    radial-gradient(ellipse 50% 40% at 20% 80%,rgba(6,182,212,0.1) 0%,transparent 60%);
-}
+#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 4rem;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(0,180,216,0.08);border:1px solid rgba(0,180,216,0.25);border-radius:100px;padding:0.4rem 1.2rem;font-size:0.75rem;color:var(--blue-bright);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.5rem}
+.badge-pulse{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.8rem,5vw,3.8rem);font-weight:900;line-height:1.1;margin-bottom:1.2rem}
+h1 .accent{color:var(--blue-bright)}
+h1 .gold{color:var(--gold)}
+.hero-sub{font-size:1rem;color:var(--text-muted);line-height:1.8;max-width:540px;margin:0 auto 2.5rem}
+.globe-wrap{position:relative;width:200px;height:200px;margin:0 auto 2.5rem}
+.globe{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 35% 35%,#0d4a7a,#020b18);border:1px solid rgba(0,180,216,0.3);box-shadow:0 0 60px rgba(0,180,216,0.15);position:relative;overflow:hidden}
+.globe::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 18px,rgba(0,180,216,0.05) 18px,rgba(0,180,216,0.05) 19px)}
+.globe::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 18px,rgba(0,180,216,0.05) 18px,rgba(0,180,216,0.05) 19px)}
+.globe-ring{position:absolute;inset:-15px;border-radius:50%;border:1px dashed rgba(0,180,216,0.2);animation:spin 20s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.globe-dot{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:dotP 2s ease-in-out infinite}
+.globe-dot:nth-child(1){top:30%;left:40%}
+.globe-dot:nth-child(2){top:55%;left:60%;animation-delay:0.7s}
+.globe-dot:nth-child(3){top:70%;left:35%;animation-delay:1.4s}
+@keyframes dotP{0%,100%{transform:scale(1)}50%{transform:scale(1.6)}}
+.hero-btn{display:inline-flex;align-items:center;gap:0.5rem;background:var(--blue-bright);color:var(--blue-deep);padding:0.85rem 2.2rem;border-radius:8px;font-family:'Orbitron',monospace;font-weight:700;font-size:0.82rem;text-decoration:none;letter-spacing:0.08em;box-shadow:0 4px 30px rgba(0,180,216,0.3);transition:all 0.2s}
+.hero-btn:hover{background:var(--cyan);transform:translateY(-2px)}
 
-/* FLOATING STUDY ELEMENTS */
-.floating-elements{
-  position:absolute;inset:0;pointer-events:none;overflow:hidden;
-}
-.float-el{
-  position:absolute;
-  font-size:clamp(32px,5vw,64px);
-  opacity:0.08;
-  animation:floatAnim 8s ease-in-out infinite;
-}
-.float-el:nth-child(1){top:10%;left:5%;animation-delay:0s;font-size:80px;}
-.float-el:nth-child(2){top:20%;right:8%;animation-delay:1.5s;font-size:60px;}
-.float-el:nth-child(3){top:50%;left:2%;animation-delay:3s;font-size:50px;}
-.float-el:nth-child(4){bottom:20%;right:5%;animation-delay:0.8s;font-size:70px;}
-.float-el:nth-child(5){bottom:10%;left:15%;animation-delay:2s;font-size:45px;}
-.float-el:nth-child(6){top:35%;right:20%;animation-delay:4s;font-size:55px;}
-.float-el:nth-child(7){top:70%;left:30%;animation-delay:1s;font-size:40px;}
-.float-el:nth-child(8){top:15%;left:40%;animation-delay:2.5s;font-size:48px;}
+/* SERVICES */
+#services{padding:5rem 2rem;position:relative;z-index:1;max-width:900px;margin:0 auto}
+.section-label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.2em;color:var(--blue-bright);margin-bottom:0.8rem;text-align:center}
+.section-title{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,3vw,2rem);font-weight:700;text-align:center;margin-bottom:2.5rem}
+.services-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.svc-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.8rem;transition:all 0.3s}
+.svc-card:hover{transform:translateY(-4px);border-color:rgba(0,180,216,0.3)}
+.svc-icon{font-size:2rem;margin-bottom:1rem}
+.svc-card h3{font-family:'Orbitron',monospace;font-size:0.85rem;font-weight:700;margin-bottom:0.8rem;color:#90e0ef}
+.svc-card p{font-size:0.85rem;color:var(--text-muted);line-height:1.7}
+.svc-tag{display:inline-block;margin-top:1rem;background:rgba(0,180,216,0.08);border:1px solid rgba(0,180,216,0.2);border-radius:100px;padding:0.2rem 0.8rem;font-size:0.68rem;color:var(--blue-bright);font-weight:600}
 
-@keyframes floatAnim{
-  0%,100%{transform:translateY(0) rotate(0deg);}
-  33%{transform:translateY(-20px) rotate(5deg);}
-  66%{transform:translateY(10px) rotate(-3deg);}
-}
+/* MINERALS */
+.minerals{text-align:center;padding:1rem 2rem 4rem;position:relative;z-index:1}
+.mineral-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:0.7rem;margin-top:1.2rem}
+.mchip{background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:0.4rem 1rem;font-size:0.8rem;transition:all 0.2s;cursor:default}
+.mchip:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
+.mchip .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:0.4rem}
 
-.hero-content{
-  position:relative;z-index:1;
-  max-width:620px;
-  animation:fadeUp 0.8s ease both;
-}
-.hero-tag{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(59,130,246,0.15);
-  border:1px solid rgba(59,130,246,0.3);
-  border-radius:999px;
-  padding:6px 16px;
-  font-size:12px;font-weight:600;
-  color:var(--sky);
-  letter-spacing:1px;text-transform:uppercase;
-  margin-bottom:24px;
-}
-.hero-tag .dot{
-  width:6px;height:6px;border-radius:50%;
-  background:var(--sky);
-  box-shadow:0 0 6px var(--sky);
-  animation:pulse 2s ease infinite;
-}
-@keyframes pulse{
-  0%,100%{opacity:1;}50%{opacity:0.4;}
-}
-.hero h1{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(38px,6vw,64px);
-  font-weight:900;
-  line-height:1.08;
-  color:var(--white);
-  margin-bottom:12px;
-}
-.hero h1 span{
-  background:linear-gradient(90deg,var(--sky),var(--cyan));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.hero-sub{
-  font-size:18px;font-weight:400;
-  color:rgba(255,255,255,0.7);
-  line-height:1.6;
-  margin-bottom:10px;
-}
-.hero-sub2{
-  font-size:15px;
-  color:rgba(255,255,255,0.5);
-  margin-bottom:36px;
-  font-style:italic;
-}
-.hero-btns{display:flex;gap:14px;flex-wrap:wrap;}
-.btn-hero-primary{
-  background:linear-gradient(135deg,var(--blue),var(--sky));
-  color:var(--white);
-  padding:16px 36px;
-  border-radius:12px;
-  font-size:16px;font-weight:600;
-  border:none;cursor:pointer;
-  box-shadow:0 8px 32px rgba(37,99,235,0.4);
-  transition:all 0.2s;
-  font-family:'DM Sans',sans-serif;
-}
-.btn-hero-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(37,99,235,0.5);}
-.btn-hero-secondary{
-  background:transparent;
-  color:var(--white);
-  padding:16px 36px;
-  border-radius:12px;
-  font-size:16px;font-weight:600;
-  border:1px solid rgba(255,255,255,0.25);
-  cursor:pointer;
-  transition:all 0.2s;
-  font-family:'DM Sans',sans-serif;
-}
-.btn-hero-secondary:hover{background:rgba(255,255,255,0.08);}
+/* PORTAL */
+#portal{padding:4rem 2rem;position:relative;z-index:1;max-width:700px;margin:0 auto}
+.portal-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+.portal-head{background:linear-gradient(135deg,var(--blue-mid),var(--surface2));padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.portal-head-left{display:flex;align-items:center;gap:1rem}
+.portal-head-icon{width:44px;height:44px;background:rgba(0,180,216,0.12);border:1px solid rgba(0,180,216,0.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.portal-head h3{font-family:'Orbitron',monospace;font-size:0.95rem;font-weight:700}
+.portal-head p{font-size:0.78rem;color:var(--text-muted)}
+.portal-close{background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.3);color:#ff8080;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.portal-close:hover{background:rgba(255,68,68,0.2)}
+.portal-body{padding:1.8rem}
 
-/* HERO ILLUSTRATION SIDE */
-.hero-visual{
-  position:absolute;right:5%;top:50%;
-  transform:translateY(-50%);
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:16px;
-  opacity:0.9;
-  animation:fadeLeft 1s ease 0.3s both;
-}
-@keyframes fadeLeft{
-  from{opacity:0;transform:translateY(-50%) translateX(40px);}
-  to{opacity:0.9;transform:translateY(-50%) translateX(0);}
-}
-.visual-card{
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:20px;
-  padding:24px;
-  text-align:center;
-  backdrop-filter:blur(10px);
-  transition:transform 0.3s;
-}
-.visual-card:hover{transform:translateY(-4px);}
-.visual-card .vc-icon{font-size:48px;margin-bottom:10px;display:block;}
-.visual-card .vc-label{
-  font-size:12px;font-weight:600;
-  color:rgba(255,255,255,0.6);
-  letter-spacing:1px;text-transform:uppercase;
-}
-.visual-card.featured{
-  background:linear-gradient(135deg,rgba(37,99,235,0.3),rgba(6,182,212,0.2));
-  border-color:rgba(59,130,246,0.4);
-  grid-column:span 2;
-}
-.visual-card.featured .vc-stat{
-  font-family:'Playfair Display',serif;
-  font-size:36px;font-weight:800;
-  color:var(--white);
-  margin-bottom:4px;
-}
-.visual-card.featured .vc-label{color:rgba(255,255,255,0.7);}
+/* CODE ENTRY */
+.code-entry{text-align:center}
+.code-entry h4{font-family:'Orbitron',monospace;font-size:0.95rem;margin-bottom:0.5rem}
+.code-entry p{font-size:0.82rem;color:var(--text-muted);margin-bottom:1.2rem}
+.code-row{display:flex;gap:0.5rem;max-width:360px;margin:0 auto 0.8rem}
+.code-row input{flex:1;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.8rem 1rem;color:var(--text);font-family:'Orbitron',monospace;font-size:1rem;letter-spacing:0.15em;text-align:center;outline:none;transition:border-color 0.2s}
+.code-row input:focus{border-color:var(--blue-bright)}
+.btn-p{background:var(--blue-bright);color:var(--blue-deep);border:none;border-radius:8px;padding:0.8rem 1.2rem;font-family:'Orbitron',monospace;font-weight:700;font-size:0.78rem;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.btn-p:hover{background:var(--cyan)}
+.btn-p:disabled{background:var(--surface2);color:var(--text-muted);cursor:not-allowed}
 
-/* STATS BAR */
-.stats-bar{
-  background:var(--navy);
-  padding:32px 40px;
-  display:flex;justify-content:center;gap:60px;
-  flex-wrap:wrap;
-  border-bottom:1px solid rgba(59,130,246,0.15);
-}
-.stat-item{text-align:center;}
-.stat-item .s-num{
-  font-family:'Playfair Display',serif;
-  font-size:32px;font-weight:800;
-  color:var(--sky);
-  display:block;
-}
-.stat-item .s-label{
-  font-size:13px;color:rgba(255,255,255,0.5);
-  font-weight:500;
-}
-
-/* HOW IT WORKS */
-.section{padding:80px 40px;max-width:1100px;margin:0 auto;}
-.section-tag{
-  display:inline-block;
-  background:rgba(37,99,235,0.1);
-  color:var(--blue2);
-  border:1px solid rgba(37,99,235,0.2);
-  border-radius:999px;
-  padding:5px 16px;
-  font-size:11px;font-weight:700;
-  letter-spacing:2px;text-transform:uppercase;
-  margin-bottom:16px;
-}
-.section h2{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(28px,4vw,44px);
-  font-weight:800;
-  color:var(--navy);
-  margin-bottom:12px;
-  line-height:1.15;
-}
-.section h2 span{color:var(--blue2);}
-.section-sub{
-  font-size:16px;color:var(--muted);
-  max-width:560px;line-height:1.7;
-  margin-bottom:52px;
-}
-
-/* STEPS */
-.steps-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:24px;
-}
-.step-card{
-  background:var(--white);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:32px 28px;
-  position:relative;
-  overflow:hidden;
-  transition:all 0.3s;
-}
-.step-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 20px 60px var(--shadow);
-  border-color:var(--sky);
-}
-.step-card::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--blue),var(--cyan));
-}
-.step-num{
-  width:44px;height:44px;
-  background:linear-gradient(135deg,var(--blue),var(--sky));
-  border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'JetBrains Mono',monospace;
-  font-size:16px;font-weight:700;color:var(--white);
-  margin-bottom:20px;
-}
-.step-icon{font-size:36px;margin-bottom:14px;display:block;}
-.step-card h3{
-  font-family:'Playfair Display',serif;
-  font-size:20px;font-weight:700;
-  color:var(--navy);margin-bottom:10px;
-}
-.step-card p{font-size:14px;color:var(--muted);line-height:1.7;}
-
-/* FEATURES */
-.features-bg{
-  background:linear-gradient(160deg,var(--navy),#1a3460);
-  padding:80px 40px;
-}
-.features-inner{max-width:1100px;margin:0 auto;}
-.features-bg .section-tag{
-  background:rgba(59,130,246,0.15);
-  color:var(--sky);border-color:rgba(59,130,246,0.3);
-}
-.features-bg h2{color:var(--white);}
-.features-bg .section-sub{color:rgba(255,255,255,0.6);}
-
-.features-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-}
-.feature-card{
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:16px;
-  padding:28px 24px;
-  transition:all 0.3s;
-}
-.feature-card:hover{
-  background:rgba(255,255,255,0.09);
-  border-color:rgba(59,130,246,0.4);
-  transform:translateY(-3px);
-}
-.feature-icon{
-  width:48px;height:48px;
-  background:linear-gradient(135deg,rgba(37,99,235,0.3),rgba(6,182,212,0.2));
-  border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;margin-bottom:16px;
-  border:1px solid rgba(59,130,246,0.3);
-}
-.feature-card h3{
-  font-size:16px;font-weight:700;
-  color:var(--white);margin-bottom:8px;
-}
-.feature-card p{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6;}
-
-/* SUBJECTS */
-.subjects-wrap{
-  display:flex;flex-wrap:wrap;gap:12px;
-  margin-top:40px;
-}
-.subject-chip{
-  display:flex;align-items:center;gap:8px;
-  background:var(--white);
-  border:1px solid var(--border);
-  border-radius:999px;
-  padding:10px 18px;
-  font-size:13px;font-weight:600;
-  color:var(--navy);
-  transition:all 0.2s;cursor:default;
-}
-.subject-chip:hover{
-  border-color:var(--blue2);
-  color:var(--blue2);
-  box-shadow:0 4px 16px var(--shadow);
-}
-
-/* PRICING */
-.pricing-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:24px;
-  margin-top:0;
-}
-.pricing-card{
-  background:var(--white);
-  border:2px solid var(--border);
-  border-radius:20px;
-  padding:36px 28px;
-  text-align:center;
-  transition:all 0.3s;
-  position:relative;
-}
-.pricing-card.featured{
-  border-color:var(--blue2);
-  transform:scale(1.03);
-  box-shadow:0 20px 60px var(--shadow);
-}
-.pricing-card.featured::before{
-  content:'MOST POPULAR';
-  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
-  background:linear-gradient(135deg,var(--blue),var(--sky));
-  color:var(--white);
-  padding:5px 18px;border-radius:999px;
-  font-size:10px;font-weight:700;letter-spacing:1.5px;
-}
-.pricing-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 20px 60px var(--shadow);
-}
-.pricing-card.featured:hover{transform:scale(1.03) translateY(-4px);}
-.price-icon{font-size:40px;margin-bottom:16px;display:block;}
-.price-plan{
-  font-size:13px;font-weight:700;
-  color:var(--muted);letter-spacing:2px;
-  text-transform:uppercase;margin-bottom:8px;
-}
-.price-amount{
-  font-family:'Playfair Display',serif;
-  font-size:42px;font-weight:800;
-  color:var(--navy);line-height:1;
-  margin-bottom:4px;
-}
-.price-amount span{font-size:16px;font-weight:500;color:var(--muted);}
-.price-period{font-size:13px;color:var(--muted);margin-bottom:24px;}
-.price-features{
-  list-style:none;text-align:left;
-  margin-bottom:28px;
-}
-.price-features li{
-  display:flex;align-items:center;gap:10px;
-  font-size:14px;color:var(--text);
-  padding:7px 0;
-  border-bottom:1px solid var(--border);
-}
-.price-features li:last-child{border-bottom:none;}
-.price-features li::before{content:'✓';color:var(--green);font-weight:700;}
-.btn-pricing{
-  width:100%;padding:13px;
-  border-radius:10px;font-size:14px;font-weight:700;
-  border:none;cursor:pointer;
-  font-family:'DM Sans',sans-serif;
-  transition:all 0.2s;
-}
-.btn-pricing.primary{
-  background:linear-gradient(135deg,var(--blue),var(--sky));
-  color:var(--white);
-  box-shadow:0 4px 20px rgba(37,99,235,0.3);
-}
-.btn-pricing.primary:hover{box-shadow:0 8px 32px rgba(37,99,235,0.5);}
-.btn-pricing.outline{
-  background:transparent;
-  border:2px solid var(--border);
-  color:var(--navy);
-}
-.btn-pricing.outline:hover{border-color:var(--blue2);color:var(--blue2);}
+/* ANALYSIS */
+#analysis-area{display:none}
+.steps-bar{display:flex;gap:0.3rem;margin-bottom:1.5rem;overflow-x:auto;padding-bottom:0.3rem}
+.step-dot{flex:1;min-width:60px;text-align:center;padding:0.4rem 0.3rem;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;font-size:0.62rem;color:var(--text-muted);transition:all 0.2s}
+.step-dot.done{border-color:var(--cyan);color:var(--cyan)}
+.file-cards{display:flex;flex-direction:column;gap:0.8rem}
+.file-card{background:var(--blue-deep);border:1px solid var(--border);border-radius:10px;padding:1rem;display:flex;align-items:center;gap:0.8rem;transition:all 0.2s;flex-wrap:wrap}
+.file-card.uploaded{border-color:var(--cyan)}
+.file-card-icon{font-size:1.5rem;min-width:32px;text-align:center}
+.file-card-info{flex:1;min-width:120px}
+.file-card-info h4{font-size:0.82rem;font-weight:600;margin-bottom:0.2rem}
+.file-card-info p{font-size:0.72rem;color:var(--text-muted)}
+.file-card-status{font-size:0.72rem;color:var(--text-muted)}
+.file-card-status.ok{color:var(--cyan)}
+.upload-btn-small{background:rgba(0,180,216,0.1);border:1px solid rgba(0,180,216,0.25);border-radius:6px;color:var(--blue-bright);padding:0.35rem 0.7rem;font-size:0.72rem;cursor:pointer;font-family:'Exo 2',sans-serif;transition:all 0.2s;white-space:nowrap}
+.upload-btn-small:hover{background:rgba(0,180,216,0.2)}
+.upload-btn-small.done{background:rgba(0,245,255,0.08);border-color:var(--cyan);color:var(--cyan)}
+.options-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin:1.2rem 0}
+.opt-group label{display:block;font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;font-weight:600}
+.opt-group select{width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.8rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.82rem;outline:none;cursor:pointer}
+.opt-group select:focus{border-color:var(--blue-bright)}
+.uses-badge{text-align:center;margin:0.8rem 0;font-size:0.72rem;color:var(--text-muted)}
+.uses-badge span{color:var(--gold);font-weight:600}
+.expiry-badge{text-align:center;font-size:0.7rem;color:var(--text-muted);margin-bottom:1rem}
+.expiry-badge span{color:#ff9060;font-weight:600}
+.run-btn{width:100%;background:var(--blue-bright);color:var(--blue-deep);border:none;border-radius:10px;padding:0.9rem;font-family:'Orbitron',monospace;font-weight:700;font-size:0.82rem;cursor:pointer;margin-top:1rem;letter-spacing:0.06em;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.5rem}
+.run-btn:hover{background:var(--cyan)}
+.run-btn:disabled{background:var(--surface2);color:var(--text-muted);cursor:not-allowed}
+.progress-wrap{display:none;margin-top:1rem}
+.progress-label{font-size:0.78rem;color:var(--text-muted);margin-bottom:0.5rem;text-align:center}
+.progress-bar{height:6px;background:var(--blue-deep);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue-bright),var(--cyan));border-radius:3px;width:0%;transition:width 0.5s ease}
+#result-area{display:none;margin-top:1.5rem}
+.result-box{background:var(--blue-deep);border:1px solid var(--border);border-radius:10px;padding:1.2rem;font-size:0.85rem;line-height:1.8;white-space:pre-wrap;max-height:400px;overflow-y:auto;color:var(--text)}
+.result-actions{display:flex;gap:0.8rem;margin-top:0.8rem;flex-wrap:wrap}
+.btn-o{flex:1;min-width:120px;background:transparent;border:1px solid var(--blue-bright);color:var(--blue-bright);border-radius:8px;padding:0.7rem;font-family:'Orbitron',monospace;font-size:0.68rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-o:hover{background:rgba(0,180,216,0.1)}
+.btn-o.red{border-color:#ff8080;color:#ff8080}
+.btn-o.red:hover{background:rgba(255,80,80,0.1)}
+#err-box{display:none;margin-top:0.8rem;background:rgba(255,80,80,0.08);border:1px solid rgba(255,80,80,0.2);border-radius:8px;padding:0.8rem;color:#ff8080;font-size:0.82rem}
 
 /* CONTACT */
-.contact-bg{
-  background:var(--navy);
-  padding:80px 40px;
-}
-.contact-inner{
-  max-width:700px;margin:0 auto;text-align:center;
-}
-.contact-inner h2{
-  font-family:'Playfair Display',serif;
-  font-size:36px;font-weight:800;
-  color:var(--white);margin-bottom:12px;
-}
-.contact-inner p{
-  color:rgba(255,255,255,0.6);
-  font-size:16px;margin-bottom:36px;line-height:1.7;
-}
-.contact-cards{
-  display:grid;grid-template-columns:1fr 1fr;gap:16px;
-  margin-bottom:36px;
-}
-.contact-card{
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:14px;padding:24px;
-  text-align:center;
-}
-.contact-card .cc-icon{font-size:32px;margin-bottom:10px;display:block;}
-.contact-card .cc-label{
-  font-size:11px;color:rgba(255,255,255,0.4);
-  text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;
-}
-.contact-card .cc-val{
-  font-size:15px;font-weight:600;color:var(--white);
-}
-.contact-card a{color:var(--sky);text-decoration:none;}
-.contact-card a:hover{text-decoration:underline;}
+#contact{padding:4rem 2rem;position:relative;z-index:1;max-width:700px;margin:0 auto;text-align:center}
+.contact-grid{display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin-top:2rem}
+.citem{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.5rem;min-width:160px;transition:all 0.2s}
+.citem:hover{border-color:rgba(0,180,216,0.3);transform:translateY(-3px)}
+.citem-icon{font-size:1.3rem;margin-bottom:0.5rem}
+.citem-label{font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem}
+.citem-val{font-size:0.82rem}
+.citem-val a{color:var(--blue-bright);text-decoration:none}
+footer{border-top:1px solid var(--border);padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;position:relative;z-index:1}
+footer p{font-size:0.75rem;color:var(--text-muted)}
 
-/* FOOTER */
-footer{
-  background:#080f1e;
-  padding:32px 40px;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:16px;
-  border-top:1px solid rgba(59,130,246,0.1);
-}
-.footer-logo{
-  font-family:'Playfair Display',serif;
-  font-size:18px;font-weight:800;color:var(--white);
-}
-.footer-copy{font-size:12px;color:rgba(255,255,255,0.3);}
-.footer-links{display:flex;gap:20px;}
-.footer-links a{
-  font-size:12px;color:rgba(255,255,255,0.4);
-  text-decoration:none;transition:color 0.2s;
-}
-.footer-links a:hover{color:var(--sky);}
+/* ADMIN MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(2,11,24,0.96);align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2rem;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;position:relative}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.3rem}
+.modal-close-btn{background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.3);color:#ff8080;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.modal-close-btn:hover{background:rgba(255,68,68,0.2)}
+.modal h2{font-family:'Orbitron',monospace;font-size:1rem;font-weight:700}
+.modal-sub{font-size:0.8rem;color:var(--text-muted);margin-bottom:1.5rem}
+.fg{margin-bottom:1rem}
+.fg label{display:block;font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;font-weight:600}
+.fg input,.fg textarea{width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.7rem 1rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.88rem;outline:none;transition:border-color 0.2s}
+.fg input:focus,.fg textarea:focus{border-color:var(--blue-bright)}
+.fg textarea{resize:vertical;min-height:80px}
+.a-section{margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.a-section:last-child{border-bottom:none;margin-bottom:0}
+.a-section h3{font-family:'Orbitron',monospace;font-size:0.8rem;font-weight:700;margin-bottom:0.8rem;color:#90e0ef}
+.save-btn{width:100%;background:var(--blue-bright);color:var(--blue-deep);border:none;border-radius:8px;padding:0.8rem;font-family:'Orbitron',monospace;font-weight:700;font-size:0.82rem;cursor:pointer;margin-top:0.5rem;transition:all 0.2s}
+.save-btn:hover{background:var(--cyan)}
+.save-confirm{display:none;text-align:center;color:var(--cyan);font-size:0.8rem;margin-top:0.5rem}
+.code-chip{display:flex;align-items:center;justify-content:space-between;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.5rem 0.8rem;margin-bottom:0.4rem;font-family:'Orbitron',monospace;font-size:0.72rem;flex-wrap:wrap;gap:0.3rem}
+.cu{font-size:0.65rem;color:var(--text-muted)}
+.cu.warn{color:var(--gold)}
+.cu.dead{color:#ff6060}
+.cc{background:rgba(0,180,216,0.1);border:1px solid rgba(0,180,216,0.2);border-radius:4px;color:var(--blue-bright);padding:0.15rem 0.5rem;font-size:0.65rem;cursor:pointer;font-family:'Exo 2',sans-serif}
+#admin-panel{display:none}
 
-/* All pages need top padding for fixed nav */
-#page-access, #page-profile, #page-quiz,
-#page-results, #page-report {
-  padding-top: 68px;
-}
-.upload-tab{
-  flex:1;padding:10px 16px;
-  border-radius:8px;border:2px solid var(--border);
-  background:var(--offwhite);
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
-  cursor:pointer;color:var(--muted);transition:all 0.2s;
-}
-.upload-tab.active{
-  border-color:var(--blue2);
-  background:rgba(37,99,235,0.07);
-  color:var(--blue2);
-}
-.upload-tab:hover:not(.active){border-color:var(--blue2);color:var(--blue2);}
+/* WORKER URL INFO */
+.worker-info{background:rgba(0,180,216,0.05);border:1px solid rgba(0,180,216,0.15);border-radius:8px;padding:0.8rem;margin-bottom:1rem;font-size:0.78rem;color:var(--text-muted)}
+.worker-info strong{color:var(--blue-bright)}
 
-/* PDF THUMB */
-.pdf-thumb{
-  flex-shrink:0;width:70px;
-  border:2px solid var(--border);border-radius:8px;
-  overflow:hidden;cursor:pointer;transition:all 0.2s;
-  position:relative;
-}
-.pdf-thumb.selected{border-color:var(--blue2);}
-.pdf-thumb img{width:100%;display:block;}
-.pdf-thumb .pg-num{
-  position:absolute;bottom:0;left:0;right:0;
-  background:rgba(0,0,0,0.6);color:#fff;
-  font-size:9px;font-weight:700;text-align:center;padding:2px;
-}
-.pdf-thumb .pg-check{
-  position:absolute;top:3px;right:3px;
-  width:16px;height:16px;border-radius:50%;
-  background:var(--blue2);color:#fff;
-  font-size:9px;display:none;
-  align-items:center;justify-content:center;
-}
-.pdf-thumb.selected .pg-check{display:flex;}
-
-/* ADMIN HIDDEN BUTTON — now in nav */
-
-/* ══════════════════════════════════════
-   ADMIN PANEL
-══════════════════════════════════════ */
-.admin-overlay{
-  position:fixed;inset:0;z-index:9999;
-  background:rgba(8,15,30,0.97);
-  display:none;
-  align-items:center;justify-content:center;
-  animation:fadeIn 0.3s ease;
-}
-.admin-overlay.open{display:flex;}
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-
-.admin-box{
-  background:#111827;
-  border:1px solid rgba(59,130,246,0.25);
-  border-radius:20px;
-  width:100%;max-width:640px;
-  padding:36px;
-  position:relative;
-  max-height:90vh;overflow-y:auto;
-  animation:slideUp 0.3s ease;
-}
-@keyframes slideUp{
-  from{transform:translateY(20px);opacity:0;}
-  to{transform:translateY(0);opacity:1;}
-}
-.admin-close{
-  position:absolute;top:16px;right:16px;
-  width:32px;height:32px;
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:8px;color:#fff;font-size:16px;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-}
-.admin-logo{
-  font-family:'Playfair Display',serif;
-  font-size:20px;font-weight:800;color:#fff;
-  margin-bottom:4px;
-}
-.admin-sub{font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:28px;}
-
-.admin-section{
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:12px;padding:20px;
-  margin-bottom:16px;
-}
-.admin-section-title{
-  font-size:10px;font-weight:700;
-  letter-spacing:2px;text-transform:uppercase;
-  color:var(--sky);margin-bottom:16px;
-  display:flex;align-items:center;gap:8px;
-}
-.admin-section-title::before{
-  content:'';width:3px;height:14px;
-  background:var(--sky);border-radius:2px;display:block;
-}
-
-/* ADMIN LOGIN */
-#admin-login-form .a-field{margin-bottom:14px;}
-#admin-login-form label{
-  display:block;font-size:11px;font-weight:600;
-  color:rgba(255,255,255,0.5);
-  letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;
-}
-#admin-login-form input{
-  width:100%;background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:8px;padding:11px 14px;
-  color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;
-  outline:none;transition:border-color 0.2s;
-}
-#admin-login-form input:focus{border-color:var(--sky);}
-.btn-admin{
-  width:100%;padding:12px;
-  background:linear-gradient(135deg,var(--blue),var(--sky));
-  color:#fff;border:none;border-radius:8px;
-  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;
-  cursor:pointer;transition:opacity 0.2s;margin-top:4px;
-}
-.btn-admin:hover{opacity:0.9;}
-.admin-error{
-  color:var(--red);font-size:13px;
-  margin-top:8px;display:none;
-  padding:8px;background:rgba(239,68,68,0.08);
-  border-radius:6px;text-align:center;
-}
-
-/* ADMIN DASHBOARD */
-#admin-dashboard{display:none;}
-.api-row{display:flex;gap:10px;align-items:center;}
-.api-input{
-  flex:1;background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:8px;padding:10px 14px;
-  color:#fff;font-family:'JetBrains Mono',monospace;font-size:13px;
-  outline:none;transition:border-color 0.2s;
-}
-.api-input:focus{border-color:var(--sky);}
-.btn-small{
-  padding:10px 16px;border-radius:8px;
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
-  border:none;cursor:pointer;transition:all 0.2s;white-space:nowrap;
-}
-.btn-save{background:var(--green);color:#fff;}
-.btn-save:hover{opacity:0.9;}
-.btn-clear{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);}
-.btn-clear:hover{background:rgba(255,255,255,0.12);}
-
-.code-gen-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
-  margin-bottom:16px;
-}
-.code-type-btn{
-  padding:14px 10px;border-radius:10px;
-  border:2px solid rgba(255,255,255,0.1);
-  background:rgba(255,255,255,0.04);
-  color:rgba(255,255,255,0.7);
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
-  cursor:pointer;transition:all 0.2s;text-align:center;
-}
-.code-type-btn .ct-icon{font-size:24px;display:block;margin-bottom:6px;}
-.code-type-btn.active{
-  border-color:var(--sky);
-  background:rgba(59,130,246,0.12);
-  color:var(--white);
-}
-.btn-generate{
-  width:100%;padding:13px;
-  background:linear-gradient(135deg,var(--blue),var(--cyan));
-  color:#fff;border:none;border-radius:8px;
-  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;
-  cursor:pointer;transition:all 0.2s;
-  margin-top:12px;
-}
-.btn-generate:hover{opacity:0.9;transform:translateY(-1px);}
-
-.generated-codes{margin-top:16px;}
-.code-item{
-  display:flex;align-items:center;justify-content:space-between;
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.07);
-  border-radius:8px;padding:12px 14px;
-  margin-bottom:8px;
-}
-.code-val{
-  font-family:'JetBrains Mono',monospace;
-  font-size:14px;font-weight:600;color:var(--sky);
-  letter-spacing:1px;
-}
-.code-meta{font-size:11px;color:rgba(255,255,255,0.35);}
-.btn-copy{
-  background:rgba(59,130,246,0.15);
-  border:1px solid rgba(59,130,246,0.3);
-  color:var(--sky);
-  padding:5px 12px;border-radius:6px;
-  font-size:11px;font-weight:600;
-  cursor:pointer;font-family:'DM Sans',sans-serif;
-  transition:all 0.2s;
-}
-.btn-copy:hover{background:rgba(59,130,246,0.25);}
-.no-codes{
-  text-align:center;
-  color:rgba(255,255,255,0.25);
-  font-size:13px;padding:20px;
-}
-
-/* ══════════════════════════════════════
-   ACCESS CODE SCREEN
-══════════════════════════════════════ */
-#page-access{
-  min-height:100vh;
-  background:linear-gradient(160deg,var(--navy),#1a3460);
-  display:flex;align-items:center;justify-content:center;
-  padding:40px 20px;
-}
-.access-card{
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:24px;padding:48px 40px;
-  width:100%;max-width:460px;
-  backdrop-filter:blur(20px);
-  text-align:center;
-  animation:fadeUp 0.5s ease both;
-}
-.access-logo{
-  font-family:'Playfair Display',serif;
-  font-size:26px;font-weight:900;color:var(--white);
-  margin-bottom:6px;
-}
-.access-logo span{
-  background:linear-gradient(90deg,var(--sky),var(--cyan));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.access-tagline{
-  font-size:13px;color:rgba(255,255,255,0.4);
-  margin-bottom:36px;
-}
-.access-icon{
-  width:72px;height:72px;
-  background:linear-gradient(135deg,var(--blue),var(--cyan));
-  border-radius:20px;margin:0 auto 24px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:32px;
-  box-shadow:0 12px 40px rgba(37,99,235,0.4);
-  animation:pulse2 3s ease infinite;
-}
-@keyframes pulse2{
-  0%,100%{box-shadow:0 12px 40px rgba(37,99,235,0.4);}
-  50%{box-shadow:0 12px 60px rgba(37,99,235,0.7);}
-}
-.access-card h2{
-  font-family:'Playfair Display',serif;
-  font-size:22px;font-weight:800;color:var(--white);margin-bottom:8px;
-}
-.access-card p{
-  font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:28px;
-}
-.access-field{margin-bottom:16px;text-align:left;}
-.access-field label{
-  display:block;font-size:11px;font-weight:600;
-  color:rgba(255,255,255,0.5);
-  letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;
-}
-.access-field input{
-  width:100%;
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:10px;padding:13px 16px;
-  color:var(--white);
-  font-family:'JetBrains Mono',monospace;font-size:15px;
-  letter-spacing:2px;text-transform:uppercase;
-  outline:none;transition:border-color 0.2s;text-align:center;
-}
-.access-field input:focus{border-color:var(--sky);}
-.access-field input::placeholder{
-  letter-spacing:1px;font-size:13px;
-  color:rgba(255,255,255,0.2);text-transform:none;
-}
-.btn-access{
-  width:100%;padding:14px;
-  background:linear-gradient(135deg,var(--blue),var(--sky));
-  color:#fff;border:none;border-radius:10px;
-  font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;
-  cursor:pointer;transition:all 0.2s;
-  box-shadow:0 6px 24px rgba(37,99,235,0.4);
-}
-.btn-access:hover{transform:translateY(-1px);box-shadow:0 10px 32px rgba(37,99,235,0.5);}
-.access-error{
-  color:var(--red);font-size:13px;margin-top:10px;
-  padding:10px;background:rgba(239,68,68,0.08);
-  border-radius:8px;display:none;
-}
-.access-back{
-  margin-top:20px;color:rgba(255,255,255,0.35);
-  font-size:13px;cursor:pointer;
-  background:none;border:none;font-family:'DM Sans',sans-serif;
-}
-.access-back:hover{color:rgba(255,255,255,0.6);}
-
-/* ══════════════════════════════════════
-   PROFILE SETUP
-══════════════════════════════════════ */
-#page-profile{
-  min-height:100vh;
-  background:var(--offwhite);
-  padding:40px 20px;
-}
-.profile-wrap{max-width:680px;margin:0 auto;}
-.profile-header{
-  text-align:center;margin-bottom:32px;
-}
-.profile-header h2{
-  font-family:'Playfair Display',serif;
-  font-size:28px;font-weight:800;color:var(--navy);margin-bottom:6px;
-}
-.profile-header p{font-size:14px;color:var(--muted);}
-
-.pcard{
-  background:var(--white);
-  border:1px solid var(--border);
-  border-radius:16px;padding:28px;
-  margin-bottom:20px;
-  position:relative;overflow:hidden;
-}
-.pcard::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--blue),var(--cyan));
-}
-.pcard-title{
-  font-size:11px;font-weight:700;letter-spacing:2px;
-  text-transform:uppercase;color:var(--blue2);margin-bottom:18px;
-}
-.pfield{margin-bottom:16px;}
-.pfield label{
-  display:block;font-size:12px;font-weight:600;
-  color:var(--muted);letter-spacing:0.5px;margin-bottom:7px;
-}
-.pfield input,.pfield select{
-  width:100%;
-  background:var(--offwhite);
-  border:1px solid var(--border);
-  border-radius:8px;padding:11px 14px;
-  color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;
-  outline:none;transition:border-color 0.2s;
-}
-.pfield input:focus,.pfield select:focus{border-color:var(--blue2);}
-.pfield select{cursor:pointer;appearance:none;}
-.select-wrap{position:relative;}
-.select-wrap::after{
-  content:'▾';position:absolute;right:12px;top:50%;
-  transform:translateY(-50%);color:var(--muted);pointer-events:none;
-}
-.pgrid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-
-/* QCOUNT */
-.qcount-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.qopt{
-  border:2px solid var(--border);border-radius:12px;
-  padding:18px;text-align:center;cursor:pointer;
-  transition:all 0.2s;background:var(--offwhite);
-  position:relative;
-}
-.qopt.active{
-  border-color:var(--blue2);
-  background:rgba(37,99,235,0.05);
-}
-.qopt.active::after{
-  content:'✓';position:absolute;top:8px;right:10px;
-  color:var(--blue2);font-size:12px;font-weight:700;
-}
-.qopt .qnum{font-family:'Playfair Display',serif;font-size:36px;font-weight:800;color:var(--blue2);}
-.qopt .qlbl{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
-.qopt .qdesc{font-size:11px;color:var(--muted);line-height:1.5;}
-
-/* UPLOAD */
-.upload-zone{
-  border:2px dashed var(--border);border-radius:12px;
-  padding:40px 20px;text-align:center;cursor:pointer;
-  background:var(--offwhite);transition:all 0.2s;position:relative;
-}
-.upload-zone:hover,.upload-zone.drag{
-  border-color:var(--blue2);background:rgba(37,99,235,0.03);
-}
-.upload-zone input{
-  position:absolute;inset:0;opacity:0;cursor:pointer;
-  width:100%;height:100%;border:none;padding:0;
-}
-.upload-zone .uz-icon{font-size:40px;margin-bottom:10px;display:block;}
-.upload-zone .uz-title{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:4px;}
-.upload-zone .uz-sub{font-size:12px;color:var(--muted);}
-.upload-thumbs{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
-.uthumb{
-  position:relative;width:80px;height:80px;
-  border-radius:8px;overflow:hidden;border:1px solid var(--border);
-}
-.uthumb img{width:100%;height:100%;object-fit:cover;}
-.uthumb .urm{
-  position:absolute;top:2px;right:2px;
-  width:18px;height:18px;border-radius:50%;
-  background:var(--red);color:#fff;font-size:10px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;border:none;
-}
-
-.btn-start{
-  width:100%;padding:16px;
-  background:linear-gradient(135deg,var(--blue),var(--sky));
-  color:#fff;border:none;border-radius:12px;
-  font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;
-  cursor:pointer;transition:all 0.2s;
-  box-shadow:0 8px 32px rgba(37,99,235,0.3);
-  margin-top:8px;
-}
-.btn-start:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(37,99,235,0.4);}
-
-/* ══════════════════════════════════════
-   QUIZ PAGE
-══════════════════════════════════════ */
-#page-quiz{
-  min-height:100vh;
-  background:var(--offwhite);
-  padding:20px;
-}
-.quiz-wrap{max-width:800px;margin:0 auto;}
-
-.quiz-topbar{
-  background:var(--white);
-  border:1px solid var(--border);
-  border-radius:12px;padding:14px 20px;
-  display:flex;align-items:center;gap:16px;
-  margin-bottom:16px;
-}
-.progress-track{
-  flex:1;height:6px;background:var(--border);
-  border-radius:999px;overflow:hidden;
-}
-.progress-fill{
-  height:100%;border-radius:999px;
-  background:linear-gradient(90deg,var(--blue),var(--cyan));
-  transition:width 0.4s ease;
-}
-.progress-lbl{
-  font-family:'JetBrains Mono',monospace;
-  font-size:12px;color:var(--muted);white-space:nowrap;
-}
-.streak-badge{
-  display:none;align-items:center;gap:5px;
-  background:rgba(245,158,11,0.1);
-  border:1px solid rgba(245,158,11,0.3);
-  border-radius:999px;padding:4px 12px;
-  font-size:12px;font-weight:700;color:var(--gold);
-}
-
-.chips-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
-.chip{
-  display:flex;align-items:center;gap:5px;
-  background:var(--white);border:1px solid var(--border);
-  border-radius:999px;padding:5px 12px;
-  font-size:12px;color:var(--muted);
-}
-.chip strong{color:var(--text);}
-
-.chat-card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:16px;padding:20px;margin-bottom:16px;
-}
-#chat-box{
-  display:flex;flex-direction:column;gap:14px;
-  max-height:380px;overflow-y:auto;
-  scroll-behavior:smooth;
-}
-#chat-box::-webkit-scrollbar{width:4px;}
-#chat-box::-webkit-scrollbar-track{background:transparent;}
-#chat-box::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
-
-.msg{display:flex;gap:10px;animation:fadeUp 0.3s ease both;}
-.msg.user{flex-direction:row-reverse;}
-.msg-av{
-  width:30px;height:30px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;flex-shrink:0;margin-top:2px;
-}
-.msg.ai .msg-av{background:linear-gradient(135deg,var(--blue),var(--cyan));}
-.msg.user .msg-av{background:var(--border);}
-.msg-bub{
-  max-width:82%;padding:12px 16px;
-  border-radius:14px;font-size:14px;line-height:1.65;
-}
-.msg.ai .msg-bub{
-  background:var(--offwhite);border:1px solid var(--border);
-  border-top-left-radius:4px;color:var(--text);
-}
-.msg.user .msg-bub{
-  background:linear-gradient(135deg,var(--blue),var(--blue2));
-  color:#fff;border-bottom-right-radius:4px;
-}
-.typing-ind{
-  display:flex;gap:5px;align-items:center;
-  padding:12px 16px;background:var(--offwhite);
-  border:1px solid var(--border);border-radius:14px;
-  border-top-left-radius:4px;width:fit-content;
-}
-.typing-ind span{
-  width:7px;height:7px;border-radius:50%;
-  background:var(--blue2);
-  animation:bounce 1.2s ease infinite;
-}
-.typing-ind span:nth-child(2){animation-delay:0.2s;}
-.typing-ind span:nth-child(3){animation-delay:0.4s;}
-@keyframes bounce{
-  0%,80%,100%{transform:scale(0.7);opacity:0.5;}
-  40%{transform:scale(1.2);opacity:1;}
-}
-
-/* QUESTION UI */
-.q-card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:16px;padding:24px;
-  animation:fadeUp 0.35s ease both;
-}
-.q-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
-.qbadge{
-  padding:4px 10px;border-radius:999px;
-  font-size:11px;font-weight:700;letter-spacing:0.5px;
-  text-transform:uppercase;
-}
-.qbadge.simple{background:rgba(16,185,129,0.1);color:var(--green);border:1px solid rgba(16,185,129,0.25);}
-.qbadge.average{background:rgba(245,158,11,0.1);color:var(--gold);border:1px solid rgba(245,158,11,0.25);}
-.qbadge.hard{background:rgba(239,68,68,0.1);color:var(--red);border:1px solid rgba(239,68,68,0.25);}
-.qbadge.info{background:rgba(37,99,235,0.08);color:var(--blue2);border:1px solid rgba(37,99,235,0.2);}
-.q-text{font-size:16px;font-weight:500;line-height:1.65;margin-bottom:20px;color:var(--navy);}
-.options{display:flex;flex-direction:column;gap:10px;}
-.opt-btn{
-  display:flex;align-items:center;gap:12px;
-  padding:12px 16px;background:var(--offwhite);
-  border:1px solid var(--border);border-radius:10px;
-  cursor:pointer;text-align:left;
-  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);
-  transition:all 0.18s;width:100%;
-}
-.opt-btn:hover:not(:disabled){border-color:var(--blue2);background:rgba(37,99,235,0.04);}
-.opt-btn.selected{border-color:var(--blue2);background:rgba(37,99,235,0.07);}
-.opt-btn.correct{border-color:var(--green);background:rgba(16,185,129,0.08);color:var(--green);}
-.opt-btn.wrong{border-color:var(--red);background:rgba(239,68,68,0.06);color:var(--red);}
-.opt-btn:disabled{cursor:default;}
-.opt-letter{
-  width:28px;height:28px;border-radius:6px;
-  background:var(--border);display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:12px;flex-shrink:0;
-  font-family:'JetBrains Mono',monospace;
-}
-.opt-btn.selected .opt-letter{background:var(--blue2);color:#fff;}
-.opt-btn.correct .opt-letter{background:var(--green);color:#fff;}
-.opt-btn.wrong .opt-letter{background:var(--red);color:#fff;}
-
-.conf-row{display:flex;gap:10px;margin-top:14px;}
-.conf-btn{
-  flex:1;padding:10px;border-radius:8px;
-  border:1px solid var(--border);background:var(--offwhite);
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
-  cursor:pointer;color:var(--muted);transition:all 0.18s;
-}
-.conf-btn:hover:not(:disabled){border-color:var(--blue2);color:var(--blue2);}
-.conf-btn.active{border-color:var(--blue2);background:rgba(37,99,235,0.07);color:var(--blue2);}
-.conf-btn:disabled{opacity:0.4;cursor:default;}
-
-.act-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;}
-.btn-hint{
-  padding:10px 16px;border-radius:8px;
-  border:1px solid var(--border);background:var(--offwhite);
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
-  cursor:pointer;color:var(--muted);transition:all 0.2s;
-}
-.btn-hint:hover{border-color:var(--gold);color:var(--gold);}
-.btn-challenge{
-  padding:10px 16px;border-radius:8px;
-  border:1px solid var(--border);background:var(--offwhite);
-  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
-  cursor:pointer;color:var(--muted);transition:all 0.2s;
-}
-.btn-challenge:hover{border-color:var(--red);color:var(--red);}
-.btn-submit{
-  flex:2;padding:10px;border-radius:8px;
-  background:linear-gradient(135deg,var(--blue),var(--sky));
-  color:#fff;border:none;font-family:'DM Sans',sans-serif;
-  font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;
-}
-.btn-submit:disabled{opacity:0.4;cursor:default;}
-.btn-submit:not(:disabled):hover{opacity:0.9;}
-
-/* ══════════════════════════════════════
-   RESULTS PAGE
-══════════════════════════════════════ */
-#page-results{min-height:100vh;background:var(--offwhite);padding:30px 20px;}
-.results-wrap{max-width:720px;margin:0 auto;}
-
-.score-card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:20px;padding:36px 28px;
-  text-align:center;margin-bottom:20px;
-}
-.score-ring{
-  width:140px;height:140px;border-radius:50%;
-  margin:0 auto 20px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  position:relative;
-  background:conic-gradient(var(--blue) var(--pct,0%),var(--border) 0%);
-}
-.score-ring::before{
-  content:'';position:absolute;inset:12px;
-  border-radius:50%;background:var(--white);
-}
-.score-inner{position:relative;z-index:1;text-align:center;}
-.score-num{
-  font-family:'Playfair Display',serif;
-  font-size:28px;font-weight:800;color:var(--navy);line-height:1;
-}
-.score-pct{font-size:13px;font-weight:700;color:var(--blue2);margin-top:2px;}
-.grade-pill{
-  display:inline-block;padding:8px 24px;border-radius:999px;
-  font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
-  margin:0 auto 16px;
-}
-.gd{background:rgba(245,158,11,0.12);color:var(--gold);border:1px solid rgba(245,158,11,0.3);}
-.gm{background:rgba(16,185,129,0.1);color:var(--green);border:1px solid rgba(16,185,129,0.3);}
-.gc{background:rgba(37,99,235,0.08);color:var(--blue2);border:1px solid rgba(37,99,235,0.2);}
-.gs{background:rgba(6,182,212,0.08);color:var(--cyan);border:1px solid rgba(6,182,212,0.2);}
-.gp{background:var(--border);color:var(--muted);}
-.gn{background:rgba(239,68,68,0.08);color:var(--red);border:1px solid rgba(239,68,68,0.2);}
-
-.score-feedback{
-  font-size:14px;color:var(--muted);line-height:1.7;
-  max-width:480px;margin:0 auto 24px;
-}
-.breakdown-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
-}
-.bc{
-  background:var(--offwhite);border:1px solid var(--border);
-  border-radius:10px;padding:14px;text-align:center;
-}
-.bc-num{font-family:'Playfair Display',serif;font-size:24px;font-weight:800;line-height:1;}
-.bc-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-top:4px;}
-
-.detail-card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:16px;padding:24px;margin-bottom:16px;
-}
-.detail-card .dc-title{
-  font-size:11px;font-weight:700;letter-spacing:2px;
-  text-transform:uppercase;color:var(--blue2);margin-bottom:16px;
-}
-.rrow{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;
-}
-.rrow:last-child{border-bottom:none;}
-.rrow .rl{color:var(--muted);}
-.rrow .rv{font-weight:600;color:var(--text);}
-.rv.green{color:var(--green);}
-.rv.red{color:var(--red);}
-.rv.gold{color:var(--gold);}
-
-.menu-card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:16px;padding:24px;
-}
-.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.btn-menu{
-  padding:13px;border-radius:10px;
-  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
-  cursor:pointer;transition:all 0.2s;border:none;
-}
-.btn-menu.primary{
-  background:linear-gradient(135deg,var(--blue),var(--sky));color:#fff;
-}
-.btn-menu.secondary{
-  background:var(--offwhite);border:1px solid var(--border);color:var(--navy);
-}
-.btn-menu.secondary:hover{border-color:var(--blue2);color:var(--blue2);}
-.btn-menu.ghost{
-  background:transparent;border:1px solid var(--border);color:var(--muted);
-  font-size:13px;
-}
-.btn-menu.ghost:hover{color:var(--text);}
-
-/* ══════════════════════════════════════
-   REPORT PAGE
-══════════════════════════════════════ */
-#page-report{min-height:100vh;background:var(--offwhite);padding:30px 20px;}
-.report-wrap{max-width:720px;margin:0 auto;}
-.report-card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:16px;padding:32px;margin-bottom:20px;
-}
-.report-header{
-  border-bottom:3px solid var(--blue2);
-  padding-bottom:20px;margin-bottom:24px;
-}
-.report-header .rh-tag{
-  font-size:10px;font-weight:700;letter-spacing:2px;
-  color:var(--blue2);text-transform:uppercase;margin-bottom:6px;
-}
-.report-header h2{
-  font-family:'Playfair Display',serif;
-  font-size:24px;font-weight:800;color:var(--navy);
-}
-.report-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;
-}
-.rg-cell{padding:10px 0;border-bottom:1px solid var(--border);}
-.rg-cell .rgc-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
-.rg-cell .rgc-v{font-size:14px;font-weight:600;color:var(--text);}
-.report-score-center{
-  text-align:center;padding:24px 0;
-  border-bottom:1px solid var(--border);margin-bottom:20px;
-}
-.report-score-center .rs-num{
-  font-family:'Playfair Display',serif;
-  font-size:56px;font-weight:900;color:var(--blue2);line-height:1;
-}
-.report-score-center .rs-label{font-size:16px;font-weight:600;color:var(--navy);margin:8px 0;}
-.report-3grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
-.r3c{background:var(--offwhite);border-radius:10px;padding:14px;text-align:center;}
-.r3c .r3n{font-size:22px;font-weight:800;line-height:1;}
-.r3c .r3l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px;}
-.report-section{margin-bottom:18px;}
-.report-section h3{
-  font-size:12px;font-weight:700;color:var(--navy);
-  letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;
-  padding-bottom:6px;border-bottom:1px solid var(--border);
-}
-.report-section p{font-size:14px;color:var(--muted);line-height:1.7;}
-.report-footer{
-  text-align:center;padding-top:16px;border-top:1px solid var(--border);
-  font-size:11px;color:var(--muted);
-}
-.btn-print{
-  padding:13px 32px;
-  background:linear-gradient(135deg,var(--blue),var(--sky));
-  color:#fff;border:none;border-radius:10px;
-  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;
-  cursor:pointer;transition:all 0.2s;margin-right:12px;
-}
-.btn-back{
-  padding:13px 24px;background:var(--offwhite);
-  border:1px solid var(--border);border-radius:10px;
-  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
-  cursor:pointer;color:var(--navy);transition:all 0.2s;
-}
-
-/* ══════════════════════════════════════
-   TOAST
-══════════════════════════════════════ */
-#toast{
-  position:fixed;bottom:24px;left:50%;
-  transform:translateX(-50%) translateY(20px);
-  background:var(--navy);border:1px solid rgba(59,130,246,0.3);
-  border-radius:10px;padding:12px 22px;
-  font-size:13px;font-weight:500;color:var(--white);
-  box-shadow:0 8px 32px rgba(0,0,0,0.3);
-  opacity:0;transition:all 0.3s;z-index:9999;
-  pointer-events:none;white-space:nowrap;
-}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-#toast.ok{border-color:var(--green);color:var(--green);}
-#toast.err{border-color:var(--red);color:var(--red);}
-#toast.inf{border-color:var(--sky);color:var(--sky);}
-
-/* ANIMATIONS */
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(14px);}
-  to{opacity:1;transform:translateY(0);}
-}
-
-/* RESPONSIVE */
 @media(max-width:768px){
-  nav{padding:0 20px;}
-  .nav-links{display:none;}
-  .nav-links.open{
-    display:flex;
-    flex-direction:column;
-    position:fixed;
-    top:68px;left:0;right:0;
-    background:rgba(15,32,68,0.99);
-    backdrop-filter:blur(16px);
-    padding:20px 24px 28px;
-    gap:6px;
-    border-bottom:1px solid rgba(59,130,246,0.2);
-    z-index:99;
-    animation:fadeUp 0.2s ease both;
-  }
-  .nav-links.open a,
-  .nav-links.open button{
-    padding:13px 16px;
-    border-radius:10px;
-    font-size:15px;
-    border:1px solid rgba(255,255,255,0.06);
-    background:rgba(255,255,255,0.03);
-    text-align:left;
-    color:rgba(255,255,255,0.75);
-    text-decoration:none;
-    font-family:'DM Sans',sans-serif;
-    font-weight:500;
-    cursor:pointer;
-    width:100%;
-  }
-  .nav-links.open .nav-cta{
-    padding:13px 16px!important;
-    margin-top:6px;
-    text-align:center;
-  }
-  .nav-links.open .nav-adm{
-    padding:13px 16px!important;
-    text-align:left;
-  }
-  .hamburger{
-    display:flex;flex-direction:column;
-    justify-content:center;gap:5px;
-    width:36px;height:36px;
-    background:rgba(255,255,255,0.06);
-    border:1px solid rgba(255,255,255,0.12);
-    border-radius:8px;cursor:pointer;
-    padding:8px;
-  }
-  .hamburger span{
-    display:block;height:2px;
-    background:rgba(255,255,255,0.8);
-    border-radius:2px;
-    transition:all 0.3s;
-  }
-  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-  .hamburger.open span:nth-child(2){opacity:0;}
-  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-  .hero{padding:100px 20px 60px;}
-  .hero-visual{display:none;}
-  .section{padding:60px 20px;}
-  .steps-grid,.features-grid,.pricing-grid{grid-template-columns:1fr;}
-  .pricing-card.featured{transform:none;}
-  .stats-bar{gap:30px;padding:24px 20px;}
-  .contact-cards{grid-template-columns:1fr;}
-  .pgrid2{grid-template-columns:1fr;}
-  .menu-grid{grid-template-columns:1fr;}
-  .report-grid{grid-template-columns:1fr;}
-}
-@media(min-width:769px){
-  .hamburger{display:none;}
-}
-
-@media print{
-  #page-report .btn-print,
-  #page-report #btn-download,
-  #page-report #btn-pdf,
-  #page-report .btn-back{display:none;}
-  body{background:white;}
-  .report-card{box-shadow:none;border:1px solid #ddd;}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .services-grid{grid-template-columns:1fr}
+  .options-row{grid-template-columns:1fr}
+  footer{flex-direction:column;text-align:center}
+  .result-actions{flex-direction:column}
 }
 </style>
 </head>
 <body>
+<div class="bg-grid"></div>
 
-<!-- ════════════════════════════════════
-     GLOBAL NAV — visible on all pages
-════════════════════════════════════ -->
-<nav id="global-nav">
-  <a class="nav-logo" href="#" onclick="showPage('page-landing')">
-    <div class="nav-logo-icon" style="width:38px;height:38px;background:linear-gradient(135deg,#1a56db,#06b6d4);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">🎓</div>
-    Smart Academy AI
-  </a>
-  <div class="nav-links" id="nav-links">
-    <a href="#how" onclick="closeMenu()">How It Works</a>
-    <a href="#features" onclick="closeMenu()">Features</a>
-    <a href="#pricing" onclick="closeMenu()">Pricing</a>
-    <a href="#contact" onclick="closeMenu()">Contact</a>
-    <button class="nav-adm" onclick="document.getElementById('admin-overlay').style.display='flex';document.getElementById('admin-overlay').style.zIndex='99999';">⚙️ Admin</button>
-    <a href="#" class="nav-cta" onclick="
-      document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');p.style.display='none';});
-      var t=document.getElementById('page-access');
-      t.classList.add('active');t.style.display='block';
-      window.scrollTo(0,0);
-      closeMenu();
-      return false;
-    ">🚀 Start Learning</a>
-  </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
-    <span></span>
-    <span></span>
-    <span></span>
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Green<span>Rock</span> AI</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portal">Platform</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><button class="nav-admin" onclick="openAdmin()">Admin ⚙</button></li>
+  </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
   </button>
 </nav>
 
-<!-- ════════════════════════════════════
-     PAGE: LANDING
-════════════════════════════════════ -->
-<div class="page active" id="page-landing">
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#services" onclick="closeMenu()">Services</a>
+  <a href="#portal" onclick="closeMenu()">Platform</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <button onclick="closeMenu();openAdmin()">Admin ⚙</button>
+</div>
 
-  <!-- NAV PLACEHOLDER — keeps spacing -->
-  <div style="height:68px;"></div>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="floating-elements">
-      <div class="float-el">📚</div>
-      <div class="float-el">🔬</div>
-      <div class="float-el">🌍</div>
-      <div class="float-el">🎓</div>
-      <div class="float-el">✏️</div>
-      <div class="float-el">🏛️</div>
-      <div class="float-el">🧪</div>
-      <div class="float-el">📐</div>
-    </div>
-    <div class="hero-content">
-      <div class="hero-tag"><div class="dot"></div>AI-Powered Learning</div>
-      <h1>Your Personal<br><span>AI Study Coach</span></h1>
-      <p class="hero-sub">Upload your notes. Master your subject.</p>
-      <p class="hero-sub2">Smart Academy AI reads your handwritten or typed notes and creates personalised quizzes — in your language, at your level.</p>
-      <div class="hero-btns">
-        <button class="btn-hero-primary" onclick="
-          document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');p.style.display='none';});
-          var t=document.getElementById('page-access');
-          t.classList.add('active');t.style.display='block';
-          window.scrollTo(0,0);
-        ">🚀 Start Learning Now</button>
-        <button class="btn-hero-secondary" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">How It Works ↓</button>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="visual-card"><span class="vc-icon">📚</span><div class="vc-label">Books</div></div>
-      <div class="visual-card"><span class="vc-icon">🎯</span><div class="vc-label">Precision</div></div>
-      <div class="visual-card"><span class="vc-icon">🌍</span><div class="vc-label">Languages</div></div>
-      <div class="visual-card"><span class="vc-icon">🏛️</span><div class="vc-label">Library</div></div>
-      <div class="visual-card featured">
-        <div class="vc-stat">12+</div>
-        <div class="vc-label">Languages Supported</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stat-item"><span class="s-num">10</span><span class="s-label">Questions per Session</span></div>
-    <div class="stat-item"><span class="s-num">12+</span><span class="s-label">Languages</span></div>
-    <div class="stat-item"><span class="s-num">6</span><span class="s-label">Grade Levels</span></div>
-    <div class="stat-item"><span class="s-num">100%</span><span class="s-label">From Your Own Notes</span></div>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-badge"><span class="badge-pulse"></span> AI-Powered Mineral Exploration</div>
+  <h1>Find the <span class="accent">ore.</span><br>Drill with <span class="gold">precision.</span><br>Generate returns.</h1>
+  <p class="hero-sub">GreenRock AI combines geophysics, geochemistry and artificial intelligence to tell you exactly where to drill — before you spend a cent on the rig.</p>
+  <div class="globe-wrap">
+    <div class="globe"><div class="globe-dot"></div><div class="globe-dot"></div><div class="globe-dot"></div></div>
+    <div class="globe-ring"></div>
   </div>
+  <a href="#portal" class="hero-btn">▶ Launch Platform</a>
+</section>
 
-  <!-- HOW IT WORKS -->
-  <div id="how">
-    <div class="section">
-      <div class="section-tag">How It Works</div>
-      <h2>Three Steps to <span>Master Any Subject</span></h2>
-      <p class="section-sub">Smart Academy AI turns your own notes and textbooks into a personalised study session in seconds.</p>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-num">01</div>
-          <span class="step-icon">📸</span>
-          <h3>Upload Your Notes</h3>
-          <p>Take a photo of your handwritten notes or typed textbook pages. Our AI reads both printed and handwritten text with high accuracy.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-num">02</div>
-          <span class="step-icon">🤖</span>
-          <h3>AI Generates Questions</h3>
-          <p>The AI analyses your document and creates 5 or 10 personalised questions — from simple recall to complex reasoning — strictly from your material.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-num">03</div>
-          <span class="step-icon">📊</span>
-          <h3>Learn and Improve</h3>
-          <p>Get instant feedback, worked example explanations, percentage scores, and a detailed report you can share with your teacher or parent.</p>
-        </div>
-      </div>
-    </div>
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label">What We Do</div>
+  <h2 class="section-title">GreenRock <span style="color:var(--blue-bright)">Services</span></h2>
+  <div class="services-grid">
+    <div class="svc-card"><div class="svc-icon">🎯</div><h3>Drill Plan Optimisation</h3><p>Using your existing drillhole data — geochemical assays, lithological logs, and grade intervals — our AI models predict exactly where the next hole should be drilled to intersect high-grade mineralisation.</p><span class="svc-tag">High Precision · Fast · Cost Effective</span></div>
+    <div class="svc-card"><div class="svc-icon">📡</div><h3>Geophysics & New Discovery</h3><p>GreenRock deploys ground geophysics instruments in the field — IP, EM, and Magnetics — then processes datasets through our AI engine to detect and map new mineralisation zones.</p><span class="svc-tag">IP · EM · Magnetics · AI</span></div>
   </div>
+</section>
 
-  <!-- FEATURES -->
-  <div id="features" class="features-bg">
-    <div class="features-inner">
-      <div class="section-tag">Features</div>
-      <h2 style="color:#fff;font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,44px);font-weight:800;margin-bottom:12px;">Everything You Need to <span style="color:#3b82f6;">Excel</span></h2>
-      <p class="section-sub">Designed for learners, parents and teachers across all levels and subjects.</p>
-      <div class="features-grid">
-        <div class="feature-card"><div class="feature-icon">📖</div><h3>Reads Handwriting</h3><p>AI vision reads your handwritten notes directly from photos — no typing needed.</p></div>
-        <div class="feature-card"><div class="feature-icon">🌍</div><h3>12+ Languages</h3><p>Study in English, French, Portuguese, Arabic, Swahili, Zulu, Afrikaans and more.</p></div>
-        <div class="feature-card"><div class="feature-icon">🎯</div><h3>Smart Difficulty</h3><p>Questions progress from simple recall to hard reasoning — always from your document.</p></div>
-        <div class="feature-card"><div class="feature-icon">💡</div><h3>Hint System</h3><p>Request a gentle hint per question without revealing the answer.</p></div>
-        <div class="feature-card"><div class="feature-icon">📊</div><h3>Percentage Grading</h3><p>Every session scored with Distinction, Merit, Credit, Pass or Not Yet grading bands.</p></div>
-        <div class="feature-card"><div class="feature-icon">📋</div><h3>Teacher Reports</h3><p>Generate a printable progress report for your teacher or parent after every session.</p></div>
-        <div class="feature-card"><div class="feature-icon">🔁</div><h3>Retry Mode</h3><p>Retry only the questions you got wrong — with fresh answer options each time.</p></div>
-        <div class="feature-card"><div class="feature-icon">🏅</div><h3>Streak Rewards</h3><p>Build answer streaks and earn milestone celebrations to stay motivated.</p></div>
-        <div class="feature-card"><div class="feature-icon">🔐</div><h3>Access Codes</h3><p>Secure weekly, monthly or yearly access codes — issued by your teacher or admin.</p></div>
-      </div>
-      <div class="subjects-wrap">
-        <div class="subject-chip" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);">📐 Mathematics</div>
-        <div class="subject-chip" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);">🧪 Chemistry</div>
-        <div class="subject-chip" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);">🌿 Biology</div>
-        <div class="subject-chip" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);">⚡ Physics</div>
-        <div class="subject-chip" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);">🌍 Geography</div>
-        <div class="subject-chip" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);">📜 History</div>
-        <div class="subject-chip" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);">⚖️ Law</div>
-        <div class="subject-chip" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);">💰 Accounting</div>
-        <div class="subject-chip" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);">📖 Literature</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PRICING -->
-  <div id="pricing">
-    <div class="section">
-      <div class="section-tag">Pricing</div>
-      <h2>Simple, <span>Transparent Plans</span></h2>
-      <p class="section-sub">Access codes issued by your teacher or administrator. Choose the plan that suits you.</p>
-      <div class="pricing-grid">
-        <div class="pricing-card">
-          <span class="price-icon">📅</span>
-          <div class="price-plan">Weekly</div>
-          <div class="price-amount">$2<span>/wk</span></div>
-          <div class="price-period">7-day access · Code starts with W</div>
-          <ul class="price-features">
-            <li>Full quiz access</li>
-            <li>All subjects & languages</li>
-            <li>Session reports</li>
-            <li>Retry mode</li>
-            <li>1 learner</li>
-          </ul>
-          <button class="btn-pricing outline" onclick="showPage('page-access')">Get Access Code</button>
-        </div>
-        <div class="pricing-card featured">
-          <span class="price-icon">🗓️</span>
-          <div class="price-plan">Monthly</div>
-          <div class="price-amount">$7<span>/mo</span></div>
-          <div class="price-period">30-day access · Code starts with M</div>
-          <ul class="price-features">
-            <li>Full quiz access</li>
-            <li>All subjects & languages</li>
-            <li>Session reports</li>
-            <li>Retry mode</li>
-            <li>Progress tracking</li>
-          </ul>
-          <button class="btn-pricing primary" onclick="showPage('page-access')">Get Access Code</button>
-        </div>
-        <div class="pricing-card">
-          <span class="price-icon">📆</span>
-          <div class="price-plan">Yearly</div>
-          <div class="price-amount">$50<span>/yr</span></div>
-          <div class="price-period">365-day access · Code starts with Y</div>
-          <ul class="price-features">
-            <li>Full quiz access</li>
-            <li>All subjects & languages</li>
-            <li>Session reports</li>
-            <li>Retry mode</li>
-            <li>Priority support</li>
-          </ul>
-          <button class="btn-pricing outline" onclick="showPage('page-access')">Get Access Code</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CONTACT -->
-  <div id="contact" class="contact-bg">
-    <div class="contact-inner">
-      <div class="section-tag" style="background:rgba(59,130,246,0.15);color:#3b82f6;border-color:rgba(59,130,246,0.3);">Contact Us</div>
-      <h2>Get in Touch</h2>
-      <p>Have questions about access codes, school plans, or how Smart Academy AI works? We are here to help.</p>
-      <div class="contact-cards" style="grid-template-columns:1fr;max-width:360px;margin:0 auto 36px;">
-        <div class="contact-card">
-          <span class="cc-icon">📧</span>
-          <div class="cc-label">Email Us</div>
-          <div class="cc-val"><a href="mailto:info@smartacademy-ai.com">info@smartacademy-ai.com</a></div>
-        </div>
-      </div>
-      <button class="btn-hero-primary" onclick="showPage('page-access')">🎓 Start Learning Today</button>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">🎓 Smart Academy AI</div>
-    <div class="footer-copy">© 2026 Smart Academy AI · smartacademy-ai.com</div>
-    <div class="footer-links">
-      <a href="#how">How It Works</a>
-      <a href="#pricing">Pricing</a>
-      <a href="mailto:info@smartacademy-ai.com">Contact</a>
-    </div>
-  </footer>
-
-
-</div><!-- /page-landing -->
-
-<!-- ════════════════════════════════════
-     ADMIN OVERLAY
-════════════════════════════════════ -->
-<div class="admin-overlay" id="admin-overlay">
-  <div class="admin-box">
-    <button class="admin-close" onclick="document.getElementById('admin-overlay').style.display='none';">✕</button>
-    <div class="admin-logo">🎓 Smart Academy AI</div>
-    <div class="admin-sub">Administrator Panel</div>
-
-    <!-- LOGIN FORM -->
-    <div id="admin-login-form">
-      <div class="admin-section">
-        <div class="admin-section-title">Admin Login</div>
-        <div class="a-field">
-          <label>Access Password</label>
-          <input type="password" id="admin-pw" placeholder="Enter admin password"
-            onkeydown="if(event.key==='Enter'){
-              var pw=document.getElementById('admin-pw').value;
-              if(pw==='Johnny22'){
-                document.getElementById('admin-login-form').style.display='none';
-                document.getElementById('admin-dashboard').style.display='block';
-              } else {
-                document.getElementById('admin-err').style.display='block';
-                document.getElementById('admin-pw').value='';
-              }
-            }">
-        </div>
-        <button class="btn-admin" onclick="
-          var pw=document.getElementById('admin-pw').value;
-          if(pw==='Johnny22'){
-            document.getElementById('admin-login-form').style.display='none';
-            document.getElementById('admin-dashboard').style.display='block';
-          } else {
-            document.getElementById('admin-err').style.display='block';
-            document.getElementById('admin-pw').value='';
-          }
-        ">🔓 Login to Admin Panel</button>
-        <div class="admin-error" id="admin-err">❌ Incorrect password. Please try again.</div>
-      </div>
-    </div>
-
-    <!-- DASHBOARD -->
-    <div id="admin-dashboard">
-
-      <!-- API KEY -->
-      <div class="admin-section">
-        <div class="admin-section-title">API Key (OpenAI ChatGPT)</div>
-        <div class="api-row">
-          <input type="password" class="api-input" id="api-key-input" placeholder="Paste your OpenAI API key here (sk-...)">
-          <button class="btn-small btn-save" id="btn-save-key">💾 Save</button>
-          <button class="btn-small btn-clear" id="btn-clear-key">✕</button>
-        </div>
-        <div style="margin-top:8px;font-size:11px;color:rgba(255,255,255,0.3);">
-          Key stored locally. Never shared.
-          <span id="api-status" style="color:#10b981;margin-left:8px;"></span>
-        </div>
-      </div>
-
-      <!-- CODE GENERATOR -->
-      <div class="admin-section">
-        <div class="admin-section-title">Generate Access Code</div>
-        <div class="code-gen-grid">
-          <div class="code-type-btn active" id="ctype-W" onclick="document.querySelectorAll('.code-type-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');window._codeType='W';">
-            <span class="ct-icon">📅</span>
-            <strong>WEEKLY</strong><br>
-            <span style="font-size:11px;opacity:0.6;">7 days · W-XXXXXXX</span>
-          </div>
-          <div class="code-type-btn" id="ctype-M" onclick="document.querySelectorAll('.code-type-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');window._codeType='M';">
-            <span class="ct-icon">🗓️</span>
-            <strong>MONTHLY</strong><br>
-            <span style="font-size:11px;opacity:0.6;">30 days · M-XXXXXXX</span>
-          </div>
-          <div class="code-type-btn" id="ctype-Y" onclick="document.querySelectorAll('.code-type-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');window._codeType='Y';">
-            <span class="ct-icon">📆</span>
-            <strong>YEARLY</strong><br>
-            <span style="font-size:11px;opacity:0.6;">365 days · Y-XXXXXXX</span>
-          </div>
-        </div>
-        <button id="btn-gen-code" style="width:100%;padding:14px;margin-top:12px;background:linear-gradient(135deg,#1a56db,#06b6d4);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;" onclick="doGenerateCode()">⚡ Generate Access Code</button>
-        <div class="generated-codes" id="generated-codes">
-          <div class="no-codes">No codes generated yet</div>
-        </div>
-        <div style="margin-top:12px;text-align:right;">
-          <button id="btn-clear-codes" class="btn-small btn-clear" onclick="doClearCodes()">🗑️ Clear All Codes</button>
-        </div>
-      </div>
-
-      <!-- VALID CODES LIST -->
-      <div class="admin-section">
-        <div class="admin-section-title">All Generated Codes This Session</div>
-        <div id="all-codes-list">
-          <div class="no-codes">No codes generated this session</div>
-        </div>
-      </div>
-
-      <!-- PROMPT OVERRIDE -->
-      <div class="admin-section">
-        <div class="admin-section-title">System Prompt Override (Optional)</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-bottom:10px;">
-          The full v6.0 prompt is already embedded. Use this ONLY if you want to override it temporarily.
-          Use {{NAME}}, {{SUBJECT}}, {{LANG}}, {{LEVEL}}, {{QCOUNT}} as placeholders.
-          Leave empty to use the embedded v6.0 prompt.
-        </div>
-        <textarea id="prompt-override" rows="4" style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px;color:rgba(255,255,255,0.7);font-family:'JetBrains Mono',monospace;font-size:12px;resize:vertical;outline:none;" placeholder="Paste custom prompt override here (optional)..."></textarea>
-        <div style="display:flex;gap:8px;margin-top:8px;">
-          <button class="btn-small btn-save" onclick="savePromptOverride()" style="flex:1;">💾 Save Override</button>
-          <button class="btn-small btn-clear" onclick="clearPromptOverride()" style="flex:1;">✕ Clear — Use Embedded v6.0</button>
-        </div>
-        <div style="margin-top:6px;font-size:11px;" id="prompt-status"></div>
-      </div>
-
-      <button class="btn-admin" style="background:rgba(255,255,255,0.06);margin-top:8px;" onclick="
-        document.getElementById('admin-dashboard').style.display='none';
-        document.getElementById('admin-login-form').style.display='block';
-        document.getElementById('admin-pw').value='';
-        document.getElementById('admin-err').style.display='none';
-        document.getElementById('admin-overlay').style.display='none';
-      ">← Logout</button>
-
-    </div>
+<!-- MINERALS -->
+<div class="minerals">
+  <div class="section-label">Commodity Coverage</div>
+  <div class="mineral-chips">
+    <div class="mchip"><span class="dot" style="background:#c8753a"></span>Copper</div>
+    <div class="mchip"><span class="dot" style="background:#f0d080"></span>Gold</div>
+    <div class="mchip"><span class="dot" style="background:#6090e0"></span>Cobalt</div>
+    <div class="mchip"><span class="dot" style="background:#a0c080"></span>Nickel</div>
+    <div class="mchip"><span class="dot" style="background:#d0a0f0"></span>Zinc</div>
+    <div class="mchip"><span class="dot" style="background:#e0e0e0"></span>PGMs</div>
+    <div class="mchip"><span class="dot" style="background:#80c0d0"></span>Lead</div>
+    <div class="mchip"><span class="dot" style="background:#f09060"></span>Uranium</div>
+    <div class="mchip"><span class="dot" style="background:#90e090"></span>REEs</div>
+    <div class="mchip"><span class="dot" style="background:#f0f060"></span>Manganese</div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════
-     PAGE: ACCESS CODE
-════════════════════════════════════ -->
-<div class="page" id="page-access">
-  <div style="min-height:100vh;background:linear-gradient(160deg,#0f2044,#1a3460);display:flex;align-items:center;justify-content:center;padding:40px 20px;">
-    <div class="access-card">
-      <div class="access-logo">Smart <span>Academy AI</span></div>
-      <div class="access-tagline">Your Personal AI Study Coach</div>
-      <div class="access-icon">🔐</div>
-      <h2>Enter Your Access Code</h2>
-      <p>Your code was provided by your teacher or administrator. Codes start with W, M, or Y.</p>
-      <div class="access-field">
-        <label>Access Code</label>
-        <input type="text" id="code-input" placeholder="e.g. W-5KDY77" maxlength="11"
-          oninput="this.value=this.value.toUpperCase()"
-          onkeydown="if(event.key==='Enter')validateCode()">
+<!-- PORTAL -->
+<section id="portal">
+  <div class="section-label">Client Platform</div>
+  <h2 class="section-title" style="margin-bottom:1.5rem">Upload data. <span style="color:var(--blue-bright)">Get answers.</span></h2>
+  <div class="portal-box">
+    <div class="portal-head">
+      <div class="portal-head-left">
+        <div class="portal-head-icon">🧠</div>
+        <div><h3>GreenRock AI Platform</h3><p>Secure · Real-time · Powered by AI</p></div>
       </div>
-      <div class="access-error" id="code-error"></div>
-      <button class="btn-access" onclick="validateCode()" id="btn-verify">🚀 Verify & Continue to Setup →</button>
-      <br>
-      <button class="access-back" onclick="showPage('page-landing')">← Back to Home</button>
+      <button class="portal-close" onclick="resetAll()" title="Exit">✕</button>
+    </div>
+    <div class="portal-body">
+
+      <!-- CODE ENTRY -->
+      <div class="code-entry" id="code-entry">
+        <h4>Enter Access Code</h4>
+        <p>Enter your 10-digit access code provided by GreenRock AI</p>
+        <div class="code-row">
+          <input type="text" id="access-code" maxlength="10" placeholder="0000000000" oninput="this.value=this.value.replace(/\D/g,'')">
+          <button class="btn-p" onclick="verifyCode()">Enter →</button>
+        </div>
+        <div id="code-error" style="color:#ff8080;font-size:0.8rem;margin-top:0.4rem;display:none"></div>
+        <p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.8rem">Contact <a href="mailto:kimba@greenrock-ai.com" style="color:var(--blue-bright)">kimba@greenrock-ai.com</a> to get your code.</p>
+      </div>
+
+      <!-- ANALYSIS AREA -->
+      <div id="analysis-area">
+        <div class="uses-badge" id="uses-badge"></div>
+        <div class="expiry-badge" id="expiry-badge"></div>
+        <div class="steps-bar">
+          <div class="step-dot" id="step-0">Collar</div>
+          <div class="step-dot" id="step-1">Survey</div>
+          <div class="step-dot" id="step-2">Assay</div>
+          <div class="step-dot" id="step-3">Litho</div>
+          <div class="step-dot" id="step-4">Geology</div>
+          <div class="step-dot" id="step-5">Target</div>
+        </div>
+        <div class="file-cards">
+          <div class="file-card" id="fc-0"><div class="file-card-icon">📍</div><div class="file-card-info"><h4>1. Collar Coordinates</h4><p>Drillhole locations (Easting, Northing, Elevation)</p></div><input type="file" id="fi-0" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(0,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-0').click()">Upload</button><div class="file-card-status" id="fs-0">Pending</div></div>
+          <div class="file-card" id="fc-1"><div class="file-card-icon">📐</div><div class="file-card-info"><h4>2. Downhole Survey</h4><p>Inclination and azimuth measurements</p></div><input type="file" id="fi-1" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(1,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-1').click()">Upload</button><div class="file-card-status" id="fs-1">Pending</div></div>
+          <div class="file-card" id="fc-2"><div class="file-card-icon">🧪</div><div class="file-card-info"><h4>3. Assay Results</h4><p>Cu grades and geochemical data</p></div><input type="file" id="fi-2" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(2,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-2').click()">Upload</button><div class="file-card-status" id="fs-2">Pending</div></div>
+          <div class="file-card" id="fc-3"><div class="file-card-icon">🪨</div><div class="file-card-info"><h4>4. Lithological Logs</h4><p>Rock types linked by Hole ID</p></div><input type="file" id="fi-3" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(3,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-3').click()">Upload</button><div class="file-card-status" id="fs-3">Pending</div></div>
+          <div class="file-card" id="fc-4"><div class="file-card-icon">🗺️</div><div class="file-card-info"><h4>5. Geological Context</h4><p>Structural and geological interpretation</p></div><input type="file" id="fi-4" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(4,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-4').click()">Upload</button><div class="file-card-status" id="fs-4">Pending</div></div>
+          <div class="file-card" id="fc-5"><div class="file-card-icon">🎯</div><div class="file-card-info"><h4>6. Target Area</h4><p>Polygon coordinates of exploration target</p></div><input type="file" id="fi-5" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(5,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-5').click()">Upload</button><div class="file-card-status" id="fs-5">Pending</div></div>
+        </div>
+        <div class="options-row">
+          <div class="opt-group"><label>Cu Cut-off Grade</label><select id="cutoff-grade"><option value="0.4">0.4% Cu</option><option value="0.5" selected>0.5% Cu</option><option value="0.6">0.6% Cu</option><option value="0.7">0.7% Cu</option><option value="0.8">0.8% Cu</option><option value="1.0">1.0% Cu</option><option value="1.2">1.2% Cu</option><option value="1.5">1.5% Cu</option><option value="2.0">2.0% Cu</option><option value="2.5">2.5% Cu</option><option value="3.0">3.0% Cu</option><option value="3.5">3.5% Cu</option><option value="4.0">4.0% Cu</option><option value="5.0">5.0% Cu</option><option value="6.0">6.0% Cu</option><option value="7.0">7.0% Cu</option></select></div>
+          <div class="opt-group"><label>Report Language</label><select id="report-lang"><option value="English">English</option><option value="French">Français</option></select></div>
+          <div class="opt-group"><label>Report Format</label><select id="report-format"><option value="pdf">PDF</option><option value="word">Word (.doc)</option></select></div>
+        </div>
+        <button class="run-btn" id="run-btn" onclick="runAnalysis()" disabled>▶ Upload all 6 files (0/6)</button>
+        <div class="progress-wrap" id="progress-wrap"><div class="progress-label" id="progress-label">Integrating datasets...</div><div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div></div>
+        <div id="err-box"></div>
+        <div id="result-area">
+          <div class="result-box" id="result-content"></div>
+          <div class="result-actions">
+            <button class="btn-o" onclick="downloadReport()">⬇ Download Report</button>
+            <button class="btn-o" onclick="resetAnalysis()">↺ New Analysis</button>
+            <button class="btn-o red" onclick="resetAll()">✕ Exit</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Get In Touch</div>
+  <h2 class="section-title">Ready to find <span style="color:var(--blue-bright)">your next orebody?</span></h2>
+  <div class="contact-grid">
+    <div class="citem"><div class="citem-icon">📞</div><div class="citem-label">Phone</div><div class="citem-val"><a href="tel:+27662998028">+27 66 299 8028</a></div></div>
+    <div class="citem"><div class="citem-icon">✉️</div><div class="citem-label">Email</div><div class="citem-val"><a href="mailto:kimba@greenrock-ai.com">kimba@greenrock-ai.com</a></div></div>
+    <div class="citem"><div class="citem-icon">🌐</div><div class="citem-label">Website</div><div class="citem-val"><a href="http://www.greenrock-ai.com">www.greenrock-ai.com</a></div></div>
+    <div class="citem"><div class="citem-icon">📍</div><div class="citem-label">Address</div><div class="citem-val" style="font-size:0.75rem">114 Nicholson Rd, Unit 10<br>Sunward Park, Boksburg<br>Gauteng, South Africa</div></div>
+  </div>
+</section>
+
+<footer>
+  <span class="logo">Green<span>Rock</span> AI</span>
+  <p>© 2026 GreenRock AI · Boksburg, South Africa</p>
+</footer>
+
+<!-- ADMIN MODAL -->
+<div class="modal-overlay" id="admin-modal">
+  <div class="modal">
+    <div id="admin-login">
+      <div class="modal-header">
+        <h2>Admin Access</h2>
+        <button class="modal-close-btn" onclick="closeAdmin()">✕</button>
+      </div>
+      <p class="modal-sub">Enter your admin password</p>
+      <div class="fg"><label>Password</label><input type="password" id="admin-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkAdminPass()"></div>
+      <button class="btn-p" style="width:100%" onclick="checkAdminPass()">Login →</button>
+      <div id="pass-error" style="color:#ff8080;font-size:0.8rem;margin-top:0.6rem;display:none">Incorrect password</div>
+    </div>
+    <div id="admin-panel">
+      <div class="modal-header">
+        <h2>Admin Panel</h2>
+        <button class="modal-close-btn" onclick="closeAdmin()">✕</button>
+      </div>
+      <p class="modal-sub">Manage Cloudflare Worker URL and client codes</p>
+
+      <div class="a-section">
+        <h3>🔗 Cloudflare Worker URL</h3>
+        <div class="worker-info">Your API key and prompt are stored securely in your Cloudflare Worker. Paste your Worker URL below.</div>
+        <div class="fg"><label>Worker URL (saved permanently)</label><input type="text" id="worker-url" placeholder="https://greenrock-worker.YOUR-NAME.workers.dev"></div>
+      </div>
+
+      <button class="save-btn" onclick="saveSettings()">💾 Save Worker URL</button>
+      <div class="save-confirm" id="save-confirm">✅ Saved successfully!</div>
+
+      <div class="a-section" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+        <h3>🎫 Client Access Codes</h3>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.8rem">Each code: <strong>2 uses</strong> within <strong>24 hours</strong>.</p>
+        <button class="btn-p" onclick="generateCode()">+ Generate New Code</button>
+        <div id="codes-list" style="margin-top:0.8rem"></div>
+      </div>
+
+      <button class="btn-o red" style="width:100%;margin-top:1rem" onclick="adminLogout()">Logout</button>
     </div>
   </div>
 </div>
-
-<!-- ════════════════════════════════════
-     PAGE: PROFILE SETUP
-════════════════════════════════════ -->
-<div class="page" id="page-profile">
-  <div id="page-profile-inner" style="padding:30px 20px 60px;">
-    <div class="profile-wrap">
-      <div class="profile-header">
-        <h2>🎓 Set Up Your Session</h2>
-        <p>Tell us about yourself so we can personalise your quiz</p>
-      </div>
-
-      <div class="pcard">
-        <div class="pcard-title">👤 Personal Details</div>
-        <div class="pgrid2">
-          <div class="pfield">
-            <label>Your First Name</label>
-            <input type="text" id="pf-name" placeholder="e.g. Amara">
-          </div>
-          <div class="pfield">
-            <label>Grade / Level</label>
-            <div class="select-wrap">
-              <select id="pf-level">
-                <option value="">Select level...</option>
-                <option>Primary School (Grades 1–7)</option>
-                <option>Junior High School (Grades 8–9)</option>
-                <option>Senior High School (Grades 10–12)</option>
-                <option>College / University</option>
-                <option>Postgraduate</option>
-                <option>Professional / Adult Learning</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="pgrid2">
-          <div class="pfield">
-            <label>Subject</label>
-            <input type="text" id="pf-subject" placeholder="e.g. Biology, Pure Mathematics...">
-          </div>
-          <div class="pfield">
-            <label>Language</label>
-            <div class="select-wrap">
-              <select id="pf-lang">
-                <option value="">Select language...</option>
-                <option>English</option>
-                <option>French (Français)</option>
-                <option>Portuguese (Português)</option>
-                <option>Arabic (العربية)</option>
-                <option>Swahili (Kiswahili)</option>
-                <option>Zulu (isiZulu)</option>
-                <option>Sotho (Sesotho)</option>
-                <option>Afrikaans</option>
-                <option>Spanish (Español)</option>
-                <option>German (Deutsch)</option>
-                <option>Mandarin (普通话)</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="pcard">
-        <div class="pcard-title">📝 Number of Questions</div>
-        <div class="qcount-grid">
-          <div class="qopt active" id="qopt-5" onclick="selectQ(5)">
-            <div class="qnum">5</div>
-            <div class="qlbl">Questions</div>
-            <div class="qdesc">Complex topics · Limited time<br>Split: 2 Simple · 2 Average · 1 Hard</div>
-          </div>
-          <div class="qopt" id="qopt-10" onclick="selectQ(10)">
-            <div class="qnum">10</div>
-            <div class="qlbl">Questions</div>
-            <div class="qdesc">Full chapter revision · Exam prep<br>Split: 5 Simple · 3 Average · 2 Hard</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="pcard">
-        <div class="pcard-title">📄 Upload Document</div>
-
-        <!-- UPLOAD TYPE TABS -->
-        <div style="display:flex;gap:10px;margin-bottom:16px;">
-          <button class="upload-tab active" id="tab-img" onclick="switchUploadTab('img')">
-            📸 Images (JPG/PNG)
-          </button>
-          <button class="upload-tab" id="tab-pdf" onclick="switchUploadTab('pdf')">
-            📑 PDF Document
-          </button>
-        </div>
-
-        <!-- IMAGE UPLOAD -->
-        <div id="upload-img-section">
-          <div class="upload-zone" id="upload-zone">
-            <input type="file" id="file-input" accept="image/*" multiple onchange="handleFiles(this.files)">
-            <span class="uz-icon">📸</span>
-            <div class="uz-title">Tap to upload or drag & drop images</div>
-            <div class="uz-sub">JPG, PNG, HEIC, WEBP · Maximum 10 pages · One page per image</div>
-            <div id="upload-counter" style="margin-top:8px;font-size:13px;font-weight:700;color:#1a56db;">0 / 10 pages uploaded</div>
-          </div>
-          <div class="upload-thumbs" id="upload-thumbs"></div>
-        </div>
-
-        <!-- PDF UPLOAD -->
-        <div id="upload-pdf-section" style="display:none;">
-
-          <!-- PDF DROP ZONE -->
-          <div class="upload-zone" id="pdf-zone"
-            ondragover="event.preventDefault();this.classList.add('drag')"
-            ondragleave="this.classList.remove('drag')"
-            ondrop="event.preventDefault();this.classList.remove('drag');handlePDF(event.dataTransfer.files[0])">
-            <input type="file" id="pdf-input"
-              accept=".pdf,application/pdf"
-              onchange="handlePDF(this.files[0])">
-            <span class="uz-icon">📑</span>
-            <div class="uz-title">Tap to upload your PDF</div>
-            <div class="uz-sub">PDF files only · Up to 100 pages supported</div>
-            <div id="pdf-status" style="margin-top:8px;font-size:13px;font-weight:700;color:#1a56db;"></div>
-          </div>
-
-          <!-- MANUAL BUTTON FALLBACK -->
-          <button onclick="document.getElementById('pdf-input').click()"
-            style="width:100%;margin-top:10px;padding:11px;background:var(--offwhite);border:2px solid var(--blue2);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:#1a56db;cursor:pointer;">
-            📂 Click Here to Browse for PDF
-          </button>
-
-          <!-- PDF PAGE RANGE SELECTOR -->
-          <div id="pdf-range-section" style="display:none;margin-top:16px;">
-            <div style="background:var(--offwhite);border:1px solid var(--border);border-radius:12px;padding:18px;">
-              <div style="font-size:11px;font-weight:700;color:#1a56db;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;">
-                📖 Select Page Range for Questions
-              </div>
-
-              <!-- PDF THUMBNAILS STRIP -->
-              <div id="pdf-thumb-strip" style="display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:16px;"></div>
-
-              <!-- PAGE RANGE INPUTS -->
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-                <div>
-                  <label style="font-size:12px;font-weight:600;color:#64748b;display:block;margin-bottom:6px;">From Page</label>
-                  <input type="number" id="pdf-from" min="1" value="1"
-                    style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;color:#1a56db;background:white;outline:none;"
-                    onchange="validatePageRange()">
-                </div>
-                <div>
-                  <label style="font-size:12px;font-weight:600;color:#64748b;display:block;margin-bottom:6px;">To Page</label>
-                  <input type="number" id="pdf-to" min="1" value="10"
-                    style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;color:#1a56db;background:white;outline:none;"
-                    onchange="validatePageRange()">
-                </div>
-              </div>
-
-              <div id="pdf-range-info" style="font-size:13px;color:#64748b;margin-bottom:14px;padding:10px;background:rgba(37,99,235,0.05);border-radius:8px;border:1px solid rgba(37,99,235,0.15);">
-                📌 Select up to 10 pages for best results
-              </div>
-
-              <button onclick="extractPDFPages()"
-                style="width:100%;padding:12px;background:linear-gradient(135deg,#1a56db,#3b82f6);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">
-                ✅ Use Selected Pages for Quiz
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- PHOTO TIPS -->
-        <div style="margin-top:14px;padding:14px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:10px;">
-          <div style="font-size:11px;font-weight:700;color:#f59e0b;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">💡 Tips for Best Results</div>
-          <div style="font-size:12px;color:#64748b;line-height:1.8;">
-            ✓ Images: Good lighting, camera directly above, page flat, sharp focus<br>
-            ✓ PDF: Select only the pages covering the topic you want to be tested on<br>
-            ✓ Best results: 3–5 focused pages rather than entire chapters
-          </div>
-        </div>
-      </div>
-
-      <button class="btn-start" onclick="startSession()">🚀 Start My Session</button>
-      <button onclick="showPage('page-landing')"
-        style="width:100%;max-width:480px;display:block;margin:10px auto 0;padding:12px;background:transparent;border:1px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;">
-        ← Back to Home
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════════════════════════════
-     PAGE: QUIZ
-════════════════════════════════════ -->
-<div class="page" id="page-quiz">
-  <div style="padding:20px 20px 60px;">
-    <div class="quiz-wrap">
-
-      <!-- TOP BAR WITH EXIT BUTTON -->
-      <div class="quiz-topbar">
-        <div class="progress-track">
-          <div class="progress-fill" id="prog-fill" style="width:0%"></div>
-        </div>
-        <div class="progress-lbl" id="prog-lbl">0 / 0</div>
-        <div class="streak-badge" id="streak-badge">🔥 <span id="streak-num">0</span></div>
-        <button onclick="exitToHome()"
-          style="flex-shrink:0;padding:6px 12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:#ef4444;cursor:pointer;white-space:nowrap;">
-          🏠 Exit
-        </button>
-      </div>
-      <div class="chips-row" id="quiz-chips"></div>
-      <div class="chat-card">
-        <div id="chat-box"></div>
-      </div>
-      <div id="question-ui"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════════════════════════════
-     PAGE: RESULTS
-════════════════════════════════════ -->
-<div class="page" id="page-results">
-  <div style="padding:30px 20px 60px;">
-    <div class="results-wrap">
-      <div class="score-card">
-        <div class="score-ring" id="score-ring">
-          <div class="score-inner">
-            <div class="score-num" id="res-score">0/0</div>
-            <div class="score-pct" id="res-pct">0%</div>
-          </div>
-        </div>
-        <div class="grade-pill" id="grade-pill">–</div>
-        <p class="score-feedback" id="res-feedback"></p>
-        <div class="breakdown-grid">
-          <div class="bc"><div class="bc-num" id="bc-correct" style="color:#10b981">0</div><div class="bc-lbl">✅ Correct</div></div>
-          <div class="bc"><div class="bc-num" id="bc-wrong" style="color:#ef4444">0</div><div class="bc-lbl">❌ Wrong</div></div>
-          <div class="bc"><div class="bc-num" id="bc-streak" style="color:#f59e0b">0</div><div class="bc-lbl">🏅 Streak</div></div>
-        </div>
-      </div>
-      <div class="detail-card" id="detail-card"></div>
-      <div class="menu-card">
-        <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#1a56db;margin-bottom:14px;">What next?</div>
-        <div class="menu-grid">
-          <button class="btn-menu primary" onclick="retryWrong()">🔁 Retry Wrong Questions</button>
-          <button class="btn-menu secondary" onclick="restartFull()">🔄 Full Restart</button>
-          <button class="btn-menu secondary" onclick="showReport()">📋 Generate Report</button>
-          <button class="btn-menu ghost" onclick="exitToHome()">🏠 Back to Home</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════════════════════════════
-     PAGE: REPORT
-════════════════════════════════════ -->
-<div class="page" id="page-report">
-  <div style="padding:30px 20px 60px;">
-    <div class="report-wrap">
-      <div class="report-card" id="report-body"></div>
-      <div style="text-align:center;margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-        <button class="btn-print" onclick="downloadReport()" id="btn-download">⬇️ Download Report</button>
-        <button class="btn-print" onclick="saveAsPDF()" id="btn-pdf" style="background:linear-gradient(135deg,#10b981,#059669);">📄 Save as PDF</button>
-        <button class="btn-back" onclick="showPage('page-results')">← Back to Results</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- FLOATING ADMIN BUTTON REMOVED — Admin accessible via nav only -->
-
-<!-- ADMIN PANEL SCRIPTS -->
-<script>
-// Wire up generate code button after DOM loads
-document.addEventListener('DOMContentLoaded', function(){
-
-  // Generate Code button
-  var genBtn = document.getElementById('btn-gen-code');
-  if(genBtn){
-    genBtn.addEventListener('click', function(){
-      var type = window._codeType || 'W';
-      var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-      var rand = '';
-      for(var i=0;i<7;i++) rand += chars[Math.floor(Math.random()*chars.length)];
-      var code = type + '-' + rand;
-      var days = type==='W' ? 7 : type==='M' ? 30 : 365;
-      var label = type==='W' ? 'Weekly' : type==='M' ? 'Monthly' : 'Yearly';
-      var exp = new Date();
-      exp.setDate(exp.getDate() + days);
-      var expStr = exp.toLocaleDateString('en-GB');
-
-      // Save to localStorage
-      var stored = JSON.parse(localStorage.getItem('saa_codes') || '[]');
-      stored.push({code:code, type:label, expiry:expStr});
-      localStorage.setItem('saa_codes', JSON.stringify(stored));
-
-      // Display latest code
-      var box = document.getElementById('generated-codes');
-      var item = document.createElement('div');
-      item.style.cssText = 'display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 14px;margin-top:8px;';
-      item.innerHTML = '<div><div style="font-family:monospace;font-size:18px;font-weight:700;color:#3b82f6;letter-spacing:2px;">'+code+'</div><div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;">'+label+' · Expires '+expStr+'</div></div>';
-      var copyBtn = document.createElement('button');
-      copyBtn.textContent = '📋 Copy';
-      copyBtn.style.cssText = 'background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.4);color:#3b82f6;padding:8px 16px;border-radius:6px;font-weight:700;cursor:pointer;font-size:13px;font-family:DM Sans,sans-serif;';
-      copyBtn.onclick = function(){
-        navigator.clipboard.writeText(code);
-        copyBtn.textContent = '✅ Copied!';
-        setTimeout(function(){ copyBtn.textContent = '📋 Copy'; }, 2000);
-      };
-      item.appendChild(copyBtn);
-      box.innerHTML = '';
-      box.appendChild(item);
-
-      // Update all codes list
-      var allBox = document.getElementById('all-codes-list');
-      if(allBox){
-        allBox.innerHTML = '';
-        stored.forEach(function(c){
-          var row = document.createElement('div');
-          row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:10px 14px;margin-bottom:6px;';
-          row.innerHTML = '<div><div style="font-family:monospace;font-size:14px;font-weight:700;color:#3b82f6;">'+c.code+'</div><div style="font-size:11px;color:rgba(255,255,255,0.35);">'+c.type+' · Expires '+c.expiry+'</div></div>';
-          var cb = document.createElement('button');
-          cb.textContent = '📋';
-          cb.style.cssText = 'background:transparent;border:none;color:#3b82f6;cursor:pointer;font-size:16px;';
-          cb.onclick = function(){ navigator.clipboard.writeText(c.code); cb.textContent='✅'; setTimeout(function(){cb.textContent='📋';},1500); };
-          row.appendChild(cb);
-          allBox.appendChild(row);
-        });
-      }
-    });
-  }
-
-  // Clear codes button
-  var clearBtn = document.getElementById('btn-clear-codes');
-  if(clearBtn){
-    clearBtn.addEventListener('click', function(){
-      localStorage.removeItem('saa_codes');
-      var box = document.getElementById('generated-codes');
-      if(box) box.innerHTML = '<div class="no-codes">No codes generated yet</div>';
-      var allBox = document.getElementById('all-codes-list');
-      if(allBox) allBox.innerHTML = '<div class="no-codes">No codes generated this session</div>';
-    });
-  }
-
-});
-</script>
-
-<!-- TOAST -->
-<div id="toast"></div>
 
 <script>
-// ════════════════════════════════════════════════
-// STATE
-// ════════════════════════════════════════════════
-const S = {
-  code:'', codeType:'', codeExpiry:null,
-  name:'', level:'', subject:'', lang:'', qCount:5,
-  images:[], questions:[], answers:[],
-  streak:0, maxStreak:0, hints:[],
-  currentQ:0, retryMode:false,
-  date: new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})
-};
+// ── WORKER URL ──
+// IMPORTANT: Change this to your actual Cloudflare Worker URL after deploying
+const DEFAULT_WORKER_URL = "https://greenrock-worker.YOUR-NAME.workers.dev";
 
-let selectedOpt = null, selectedConf = null, hintUsed = false;
-let selectedCodeType = 'W';
-let generatedCodes = [];
-let adminLoggedIn = false;
-
-// ════════════════════════════════════════════════
-// GENERATE ACCESS CODE — Admin Panel
-// ════════════════════════════════════════════════
-function doGenerateCode(){
-  var type  = window._codeType || 'W';
-  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  var rand  = '';
-  for(var i=0;i<7;i++) rand += chars[Math.floor(Math.random()*chars.length)];
-  var code  = type + '-' + rand;
-  var days  = type==='W' ? 7 : type==='M' ? 30 : 365;
-  var label = type==='W' ? 'Weekly' : type==='M' ? 'Monthly' : 'Yearly';
-  var exp   = new Date();
-  exp.setDate(exp.getDate() + days);
-  var expStr = exp.toLocaleDateString('en-GB');
-
-  // Save to localStorage
-  var stored = JSON.parse(localStorage.getItem('saa_codes') || '[]');
-  stored.push({code:code, type:label, expiry:expStr});
-  localStorage.setItem('saa_codes', JSON.stringify(stored));
-
-  // Display generated code
-  var box = document.getElementById('generated-codes');
-  box.innerHTML = [
-    '<div style="display:flex;align-items:center;justify-content:space-between;',
-    'background:rgba(255,255,255,0.05);border:1px solid rgba(59,130,246,0.3);',
-    'border-radius:8px;padding:12px 14px;margin-top:8px;">',
-    '<div>',
-    '<div id="gen-code-val" style="font-family:monospace;font-size:20px;font-weight:700;',
-    'color:#3b82f6;letter-spacing:3px;">' + code + '</div>',
-    '<div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;">',
-    label + ' · Expires ' + expStr + '</div>',
-    '</div>',
-    '<button id="btn-copy-code" style="background:rgba(59,130,246,0.2);',
-    'border:1px solid rgba(59,130,246,0.4);color:#3b82f6;',
-    'padding:8px 16px;border-radius:6px;font-weight:700;cursor:pointer;',
-    'font-family:DM Sans,sans-serif;font-size:13px;">📋 Copy</button>',
-    '</div>'
-  ].join('');
-
-  // Attach copy button event
-  document.getElementById('btn-copy-code').addEventListener('click', function(){
-    navigator.clipboard.writeText(code).then(function(){
-      document.getElementById('btn-copy-code').textContent = '✅ Copied!';
-      setTimeout(function(){
-        document.getElementById('btn-copy-code').textContent = '📋 Copy';
-      }, 2000);
-    });
-  });
+function getWorkerUrl(){
+  const s=getSettings();
+  return s.workerUrl||DEFAULT_WORKER_URL;
 }
 
-// Clear all codes
-function doClearCodes(){
-  localStorage.removeItem('saa_codes');
-  var box = document.getElementById('generated-codes');
-  if(box) box.innerHTML = '<div class="no-codes">No codes generated yet</div>';
-}
-function switchUploadTab(tab){
-  document.getElementById('tab-img').classList.toggle('active', tab==='img');
-  document.getElementById('tab-pdf').classList.toggle('active', tab==='pdf');
-  document.getElementById('upload-img-section').style.display = tab==='img'?'block':'none';
-  document.getElementById('upload-pdf-section').style.display = tab==='pdf'?'block':'none';
-  // Clear opposite uploads
-  if(tab==='img'){ pdfDoc=null; document.getElementById('pdf-range-section').style.display='none'; }
-  if(tab==='pdf'){ S.images=[]; renderThumbs(); }
-}
+// ── STORAGE ──
+function getCodes(){try{return JSON.parse(localStorage.getItem('gr_codes4')||'{}')}catch(e){return{}}}
+function saveCodes(c){localStorage.setItem('gr_codes4',JSON.stringify(c))}
+function getSettings(){try{return JSON.parse(localStorage.getItem('gr_settings4')||'{}')}catch(e){return{}}}
 
-// ════════════════════════════════════════════════
-// PDF HANDLING
-// ════════════════════════════════════════════════
-let pdfDoc = null;
-let pdfTotalPages = 0;
-
-async function handlePDF(file){
-  if(!file){
-    toast('No file selected','err');
-    return;
-  }
-
-  // Accept by extension OR mime type
-  const isPDF = file.type === 'application/pdf' ||
-                file.name.toLowerCase().endsWith('.pdf');
-
-  if(!isPDF){
-    toast('Please select a PDF file (.pdf)','err');
-    return;
-  }
-
-  const status = document.getElementById('pdf-status');
-  status.textContent = '⏳ Loading PDF — please wait...';
-  status.style.color = '#1a56db';
-
-  try{
-    // Load PDF.js from CDN
-    if(!window.pdfjsLib){
-      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc =
-        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    }
-
-    const arrayBuffer = await file.arrayBuffer();
-    pdfDoc = await window.pdfjsLib.getDocument({data: arrayBuffer}).promise;
-    pdfTotalPages = pdfDoc.numPages;
-
-    status.textContent = `✅ PDF loaded — ${pdfTotalPages} pages found`;
-    status.style.color = '#10b981';
-
-    // Set page range defaults
-    document.getElementById('pdf-from').max = pdfTotalPages;
-    document.getElementById('pdf-to').max = pdfTotalPages;
-    document.getElementById('pdf-from').value = 1;
-    document.getElementById('pdf-to').value = Math.min(10, pdfTotalPages);
-
-    // Show range section
-    document.getElementById('pdf-range-section').style.display = 'block';
-
-    // Render preview thumbnails for first 20 pages
-    await renderPDFThumbs(Math.min(20, pdfTotalPages));
-    validatePageRange();
-
-  } catch(err){
-    status.textContent = '❌ Could not read PDF. Please try again.';
-    status.style.color = '#ef4444';
-    console.error(err);
-  }
-}
-
-async function renderPDFThumbs(count){
-  const strip = document.getElementById('pdf-thumb-strip');
-  strip.innerHTML = '<div style="font-size:12px;color:#64748b;padding:10px;">Loading previews...</div>';
-
-  const thumbs = [];
-  for(let i=1; i<=count; i++){
-    const page = await pdfDoc.getPage(i);
-    const viewport = page.getViewport({scale:0.3});
-    const canvas = document.createElement('canvas');
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
-    await page.render({canvasContext:canvas.getContext('2d'), viewport}).promise;
-
-    thumbs.push(`
-      <div class="pdf-thumb" id="pthumb-${i}" onclick="toggleThumbSelect(${i})">
-        <img src="${canvas.toDataURL()}">
-        <div class="pg-num">P${i}</div>
-        <div class="pg-check">✓</div>
-      </div>`);
-  }
-
-  strip.innerHTML = thumbs.join('');
-  if(count < pdfTotalPages){
-    strip.innerHTML += `<div style="flex-shrink:0;width:70px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#64748b;text-align:center;padding:8px;">+${pdfTotalPages-count} more pages</div>`;
-  }
-}
-
-function toggleThumbSelect(pageNum){
-  // Update from/to range based on thumb click
-  const from = parseInt(document.getElementById('pdf-from').value);
-  const to   = parseInt(document.getElementById('pdf-to').value);
-  if(pageNum < from) document.getElementById('pdf-from').value = pageNum;
-  if(pageNum > to)   document.getElementById('pdf-to').value = pageNum;
-  validatePageRange();
-}
-
-function validatePageRange(){
-  let from = parseInt(document.getElementById('pdf-from').value) || 1;
-  let to   = parseInt(document.getElementById('pdf-to').value) || 10;
-
-  // Clamp values
-  from = Math.max(1, Math.min(from, pdfTotalPages));
-  to   = Math.max(from, Math.min(to, pdfTotalPages));
-
-  document.getElementById('pdf-from').value = from;
-  document.getElementById('pdf-to').value   = to;
-
-  const count = to - from + 1;
-  const info  = document.getElementById('pdf-range-info');
-
-  // Highlight selected thumbs
-  for(let i=1; i<=pdfTotalPages; i++){
-    const t = document.getElementById(`pthumb-${i}`);
-    if(t) t.classList.toggle('selected', i>=from && i<=to);
-  }
-
-  if(count > 10){
-    info.style.background = 'rgba(37,99,235,0.05)';
-    info.style.borderColor = 'rgba(37,99,235,0.15)';
-    info.style.color = '#64748b';
-    info.textContent = `✅ ${count} page(s) selected (Pages ${from} to ${to}) — ready to extract`;
-  } else {
-    info.style.background = 'rgba(37,99,235,0.05)';
-    info.style.borderColor = 'rgba(37,99,235,0.15)';
-    info.style.color = '#64748b';
-    info.textContent = `✅ ${count} page(s) selected (Pages ${from} to ${to}) — ready to extract`;
-  }
-}
-
-async function extractPDFPages(){
-  const from  = parseInt(document.getElementById('pdf-from').value);
-  const to    = parseInt(document.getElementById('pdf-to').value);
-  const count = to - from + 1;
-
-  if(count < 1){
-    toast('Please select at least 1 page','err');
-    return;
-  }
-
-  // No upper limit on PDF pages — ChatGPT handles what it can
-  const info = document.getElementById('pdf-range-info');
-  info.textContent = `⏳ Extracting pages ${from} to ${to}...`;
-  info.style.color = '#1a56db';
-
-  S.images = [];
-
-  for(let i=from; i<=to; i++){
-    const page     = await pdfDoc.getPage(i);
-    const viewport = page.getViewport({scale:2.0}); // high res for AI
-    const canvas   = document.createElement('canvas');
-    canvas.width   = viewport.width;
-    canvas.height  = viewport.height;
-    await page.render({canvasContext:canvas.getContext('2d'), viewport}).promise;
-    const dataUrl  = canvas.toDataURL('image/jpeg', 0.92);
-    S.images.push({
-      name: `pdf-page-${i}.jpg`,
-      data: dataUrl,
-      b64:  dataUrl.split(',')[1]
-    });
-  }
-
-  info.style.background = 'rgba(16,185,129,0.06)';
-  info.style.borderColor = 'rgba(16,185,129,0.2)';
-  info.style.color = '#10b981';
-  info.textContent = `✅ ${count} pages extracted successfully! Ready to start your quiz.`;
-
-  toast(`✅ ${count} pages ready from PDF`,'ok');
-}
-
-function loadScript(src){
-  return new Promise((resolve,reject)=>{
-    const s = document.createElement('script');
-    s.src = src; s.onload = resolve; s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
-
-// ════════════════════════════════════════════════
-// EXIT TO HOME
-// ════════════════════════════════════════════════
-function exitToHome(){
-  const inProgress = S.questions.length > 0 && S.answers.length < S.questions.length;
-  if(inProgress){
-    if(!confirm(`⚠️ Are you sure you want to exit?\n\nYour current quiz progress will be lost.\nScore: ${S.answers.filter(a=>a.correct).length} / ${S.answers.length} so far.`)) return;
-  }
-
-  // Reset ALL session state
-  S.questions  = [];
-  S.answers    = [];
-  S.streak     = 0;
-  S.maxStreak  = 0;
-  S.hints      = [];
-  S.currentQ   = 0;
-  S.images     = [];
-  pdfDoc       = null;
-  pdfTotalPages = 0;
-
-  // Clear chat and question UI
-  const chatBox = document.getElementById('chat-box');
-  const qui     = document.getElementById('question-ui');
-  if(chatBox) chatBox.innerHTML = '';
-  if(qui)     qui.innerHTML = '';
-
-  // Reset image upload zone
-  renderThumbs();
-  const counter = document.getElementById('upload-counter');
-  if(counter) counter.textContent = '0 / 10 pages uploaded';
-  counter.style.color = '#1a56db';
-
-  // Reset PDF upload zone
-  const pdfStatus = document.getElementById('pdf-status');
-  if(pdfStatus) pdfStatus.textContent = '';
-  const pdfRange = document.getElementById('pdf-range-section');
-  if(pdfRange) pdfRange.style.display = 'none';
-  const pdfThumbStrip = document.getElementById('pdf-thumb-strip');
-  if(pdfThumbStrip) pdfThumbStrip.innerHTML = '';
-  const pdfRangeInfo = document.getElementById('pdf-range-info');
-  if(pdfRangeInfo) pdfRangeInfo.textContent = '📌 Select up to 10 pages for best results';
-
-  // Reset file input fields so same file can be re-uploaded
-  const fileInput = document.getElementById('file-input');
-  if(fileInput) fileInput.value = '';
-  const pdfInput = document.getElementById('pdf-input');
-  if(pdfInput) pdfInput.value = '';
-
-  // Switch back to image tab
-  switchUploadTab('img');
-
-  showPage('page-landing');
-  toast('👋 Session ended — uploads cleared','ok');
-}
+// ── HAMBURGER ──
 function toggleMenu(){
-  const nav   = document.getElementById('nav-links');
-  const btn   = document.getElementById('hamburger');
-  const open  = nav.classList.toggle('open');
-  btn.classList.toggle('open', open);
-  // Close menu when clicking outside
-  if(open){
-    setTimeout(()=>{
-      document.addEventListener('click', closeOnOutside);
-    }, 100);
-  }
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobile-menu').classList.toggle('open');
 }
-
 function closeMenu(){
-  const nav = document.getElementById('nav-links');
-  const btn = document.getElementById('hamburger');
-  nav.classList.remove('open');
-  btn.classList.remove('open');
-  document.removeEventListener('click', closeOnOutside);
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobile-menu').classList.remove('open');
 }
 
-function closeOnOutside(e){
-  const nav = document.getElementById('nav-links');
-  const btn = document.getElementById('hamburger');
-  if(!nav.contains(e.target) && !btn.contains(e.target)){
-    closeMenu();
-  }
-}
-
-// ════════════════════════════════════════════════
-// PAGE NAVIGATION — bulletproof version
-// ════════════════════════════════════════════════
-function showPage(id){
-  // Hide all pages
-  document.querySelectorAll('.page').forEach(p=>{
-    p.classList.remove('active');
-    p.style.display = 'none';
-  });
-  // Show target page
-  const target = document.getElementById(id);
-  target.classList.add('active');
-  target.style.display = 'block';
-  // Force scroll to very top
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
-  window.scrollTo(0,0);
-}
-
-// ════════════════════════════════════════════════
-// ADMIN PANEL
-// ════════════════════════════════════════════════
+// ── ADMIN ──
 function openAdmin(){
-  const overlay = document.getElementById('admin-overlay');
-  overlay.style.display = 'flex';
-  overlay.style.zIndex = '99999';
-  overlay.classList.add('open');
+  document.getElementById('admin-modal').classList.add('open');
+  document.getElementById('admin-pass').value='';
+  document.getElementById('pass-error').style.display='none';
 }
-
 function closeAdmin(){
-  const overlay = document.getElementById('admin-overlay');
-  overlay.style.display = 'none';
-  overlay.classList.remove('open');
+  document.getElementById('admin-modal').classList.remove('open');
+  adminLogout();
 }
-
-// ════════════════════════════════════════════════
-// ADMIN EVENT LISTENERS — clean, no inline JS
-// ════════════════════════════════════════════════
-window.addEventListener('load', function(){
-
-  // Code type buttons
-  ['W','M','Y'].forEach(function(t){
-    var el = document.getElementById('ctype-'+t);
-    if(!el) return;
-    el.addEventListener('click', function(){
-      document.querySelectorAll('.code-type-btn').forEach(function(b){ b.classList.remove('active'); });
-      el.classList.add('active');
-      window._codeType = t;
-    });
-  });
-
-  // API Key Save
-  var btnSaveKey = document.getElementById('btn-save-key');
-  if(btnSaveKey) btnSaveKey.addEventListener('click', function(){
-    var k = document.getElementById('api-key-input').value.trim();
-    if(k){
-      localStorage.setItem('saa_api_key', k);
-      document.getElementById('api-key-input').value = '••••••••••••';
-      document.getElementById('api-status').textContent = '✅ Key saved';
-    }
-  });
-
-  // API Key Clear
-  var btnClearKey = document.getElementById('btn-clear-key');
-  if(btnClearKey) btnClearKey.addEventListener('click', function(){
-    localStorage.removeItem('saa_api_key');
-    document.getElementById('api-key-input').value = '';
-    document.getElementById('api-status').textContent = '';
-  });
-
-  // Generate Code
-  var btnGen = document.getElementById('btn-gen-code');
-  if(btnGen) btnGen.addEventListener('click', function(){
-    var type = window._codeType || 'W';
-    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    var rand = '';
-    for(var i=0; i<7; i++) rand += chars[Math.floor(Math.random()*chars.length)];
-    var code = type+'-'+rand;
-    var days = type==='W'?7:type==='M'?30:365;
-    var label = type==='W'?'Weekly':type==='M'?'Monthly':'Yearly';
-    var exp = new Date(); exp.setDate(exp.getDate()+days);
-    var expStr = exp.toLocaleDateString('en-GB');
-
-    var stored = JSON.parse(localStorage.getItem('saa_codes')||'[]');
-    stored.push({code:code,type:label,expiry:expStr});
-    localStorage.setItem('saa_codes', JSON.stringify(stored));
-
-    var box = document.getElementById('generated-codes');
-    var div = document.createElement('div');
-    div.style.cssText = 'display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 14px;margin-top:8px;';
-    var info = document.createElement('div');
-    info.innerHTML = '<div style="font-family:monospace;font-size:16px;font-weight:700;color:#3b82f6;letter-spacing:1px;">'+code+'</div><div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;">'+label+' · Expires '+expStr+'</div>';
-    var copyBtn = document.createElement('button');
-    copyBtn.textContent = '📋 Copy';
-    copyBtn.style.cssText = 'background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.4);color:#3b82f6;padding:6px 14px;border-radius:6px;font-weight:600;cursor:pointer;font-size:12px;white-space:nowrap;';
-    copyBtn.addEventListener('click', function(){
-      navigator.clipboard.writeText(code).then(function(){
-        copyBtn.textContent = '✅ Copied!';
-        setTimeout(function(){ copyBtn.textContent = '📋 Copy'; }, 2000);
-      });
-    });
-    div.appendChild(info);
-    div.appendChild(copyBtn);
-    if(box.querySelector('.no-codes')) box.innerHTML = '';
-    box.appendChild(div);
-    toast('✅ Code generated: '+code,'ok');
-  });
-
-  // Clear All Codes
-  var btnClearCodes = document.getElementById('btn-clear-codes');
-  if(btnClearCodes) btnClearCodes.addEventListener('click', function(){
-    localStorage.removeItem('saa_codes');
-    var box = document.getElementById('generated-codes');
-    if(box) box.innerHTML = '<div class="no-codes">No codes generated yet</div>';
-  });
-
-});
-
-function adminLogin(){
-  const pw = document.getElementById('admin-pw').value;
-  if(pw === 'Johnny22'){
-    adminLoggedIn = true;
-    document.getElementById('admin-login-form').style.display = 'none';
-    document.getElementById('admin-dashboard').style.display = 'block';
-    checkApiKeyStatus();
-    checkPromptStatus();
-    loadGeneratedCodes();
-    renderAllCodes();
-    toast('✅ Admin access granted','ok');
-  } else {
-    document.getElementById('admin-err').style.display = 'block';
-    document.getElementById('admin-pw').value = '';
+function checkAdminPass(){
+  if(document.getElementById('admin-pass').value==='Johnny22'){
+    document.getElementById('admin-login').style.display='none';
+    document.getElementById('admin-panel').style.display='block';
+    loadAdminPanel();
+  }else{
+    document.getElementById('pass-error').style.display='block';
   }
 }
-
 function adminLogout(){
-  adminLoggedIn = false;
-  document.getElementById('admin-login-form').style.display = 'block';
-  document.getElementById('admin-dashboard').style.display = 'none';
-  document.getElementById('admin-pw').value = '';
-  document.getElementById('admin-err').style.display = 'none';
+  document.getElementById('admin-login').style.display='block';
+  document.getElementById('admin-panel').style.display='none';
+}
+function loadAdminPanel(){
+  const s=getSettings();
+  if(s.workerUrl)document.getElementById('worker-url').value=s.workerUrl;
+  renderCodes();
+}
+function saveSettings(){
+  localStorage.setItem('gr_settings4',JSON.stringify({
+    workerUrl:document.getElementById('worker-url').value.trim()
+  }));
+  const c=document.getElementById('save-confirm');
+  c.style.display='block';
+  setTimeout(()=>c.style.display='none',2500);
 }
 
-// API KEY
-function saveApiKey(){
-  const key = document.getElementById('api-key-input').value.trim();
-  if(!key){ toast('Please paste your API key first','err'); return; }
-  localStorage.setItem('saa_api_key', key);
-  document.getElementById('api-status').textContent = '✅ Key saved';
-  document.getElementById('api-key-input').value = '••••••••••••••••••••';
-  toast('API key saved successfully','ok');
-}
-
-function clearApiKey(){
-  localStorage.removeItem('saa_api_key');
-  document.getElementById('api-key-input').value = '';
-  document.getElementById('api-status').textContent = '';
-  toast('API key cleared','inf');
-}
-
-// PROMPT OVERRIDE
-function savePromptOverride(){
-  const val = document.getElementById('prompt-override').value.trim();
-  if(!val){ toast('Nothing to save — field is empty','err'); return; }
-  localStorage.setItem('saa_prompt_override', val);
-  document.getElementById('prompt-status').innerHTML = '<span style="color:#f59e0b">⚠️ Override active — embedded v6.0 prompt is bypassed</span>';
-  toast('Prompt override saved','ok');
-}
-
-function clearPromptOverride(){
-  localStorage.removeItem('saa_prompt_override');
-  document.getElementById('prompt-override').value = '';
-  document.getElementById('prompt-status').innerHTML = '<span style="color:#10b981">✅ Using embedded v6.0 prompt</span>';
-  toast('Override cleared — using full embedded v6.0 prompt','ok');
-}
-
-function checkPromptStatus(){
-  const ov = localStorage.getItem('saa_prompt_override');
-  const el = document.getElementById('prompt-status');
-  if(el){
-    el.innerHTML = ov
-      ? '<span style="color:#f59e0b">⚠️ Override active — embedded v6.0 prompt is bypassed</span>'
-      : '<span style="color:#10b981">✅ Using embedded v6.0 prompt</span>';
-    if(ov) document.getElementById('prompt-override').value = ov;
-  }
-}
-
-function checkApiKeyStatus(){
-  const k = localStorage.getItem('saa_api_key');
-  document.getElementById('api-status').textContent = k ? '✅ Key is saved' : '⚠️ No key saved yet';
-}
-
-function getApiKey(){ return localStorage.getItem('saa_api_key') || ''; }
-
-// CODE TYPE
-function selectCodeType(t){
-  selectedCodeType = t;
-  ['W','M','Y'].forEach(x=>{
-    document.getElementById('ctype-'+x).classList.toggle('active', x===t);
-  });
-}
-
-// GENERATE CODE
+// ── CODES ──
 function generateCode(){
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let rand = '';
-  for(let i=0;i<7;i++) rand += chars[Math.floor(Math.random()*chars.length)];
-  const code = selectedCodeType + '-' + rand;
-  const days = selectedCodeType==='W'?7:selectedCodeType==='M'?30:365;
-  const expiry = new Date();
-  expiry.setDate(expiry.getDate()+days);
-  const label = selectedCodeType==='W'?'Weekly':selectedCodeType==='M'?'Monthly':'Yearly';
-
-  generatedCodes.push({code, type:label, expiry:expiry.toLocaleDateString('en-GB')});
-  saveGeneratedCodes();
-  renderGeneratedCodes();
-  renderAllCodes();
-  toast(`✅ Code generated: ${code}`,'ok');
+  const code=Array.from({length:10},()=>Math.floor(Math.random()*10)).join('');
+  const codes=getCodes();
+  codes[code]={uses:0,created:Date.now(),expires:Date.now()+86400000};
+  saveCodes(codes);renderCodes();
 }
-
-function renderGeneratedCodes(){
-  const el = document.getElementById('generated-codes');
-  if(!generatedCodes.length){
-    el.innerHTML = '<div class="no-codes">No codes generated yet</div>';
-    return;
-  }
-  const last = generatedCodes[generatedCodes.length-1];
-  el.innerHTML = `
-    <div class="code-item">
-      <div>
-        <div class="code-val">${last.code}</div>
-        <div class="code-meta">${last.type} · Expires ${last.expiry}</div>
-      </div>
-      <button class="btn-copy" onclick="copyCode('${last.code}')">📋 Copy</button>
+function renderCodes(){
+  const codes=getCodes();const list=document.getElementById('codes-list');const now=Date.now();
+  const entries=Object.entries(codes).reverse();
+  if(!entries.length){list.innerHTML='<p style="font-size:0.78rem;color:var(--text-muted)">No codes yet.</p>';return}
+  list.innerHTML=entries.map(([code,data])=>{
+    const expired=now>data.expires;const usedUp=data.uses>=2;const dead=expired||usedUp;
+    const r=2-data.uses;const hoursLeft=Math.max(0,Math.ceil((data.expires-now)/3600000));
+    const label=dead?'EXPIRED':`${r} use${r!==1?'s':''} · ${hoursLeft}h left`;
+    const cls=dead?'dead':r===1?'warn':'';
+    return`<div class="code-chip">
+      <span>${code.replace(/(\d{5})(\d{5})/,'$1 $2')}</span>
+      <span class="cu ${cls}">${label}</span>
+      <button class="cc" onclick="copyCode('${code}')">Copy</button>
     </div>`;
+  }).join('');
+}
+function copyCode(code){navigator.clipboard.writeText(code).then(()=>alert('Code copied: '+code))}
+
+// ── CLIENT VERIFICATION ──
+let currentCode=null;
+function verifyCode(){
+  const input=document.getElementById('access-code').value.trim();
+  const err=document.getElementById('code-error');
+  const codes=getCodes();const now=Date.now();
+  if(!codes[input]){err.textContent='❌ Invalid code. Contact kimba@greenrock-ai.com';err.style.display='block';return}
+  if(now>codes[input].expires){err.textContent='❌ Code expired (24h). Request a new code.';err.style.display='block';return}
+  if(codes[input].uses>=2){err.textContent='❌ Code fully used (2/2). Request a new code.';err.style.display='block';return}
+  currentCode=input;err.style.display='none';
+  document.getElementById('code-entry').style.display='none';
+  document.getElementById('analysis-area').style.display='block';
+  updateBadges();
+}
+function updateBadges(){
+  const codes=getCodes();if(!currentCode||!codes[currentCode])return;
+  const r=2-codes[currentCode].uses;
+  const hoursLeft=Math.max(0,Math.ceil((codes[currentCode].expires-Date.now())/3600000));
+  document.getElementById('uses-badge').innerHTML=`Code: <span>${r} analysis use${r!==1?'s':''} remaining</span>`;
+  document.getElementById('expiry-badge').innerHTML=`Expires in: <span>${hoursLeft} hour${hoursLeft!==1?'s':''}</span>`;
 }
 
-function renderAllCodes(){
-  const el = document.getElementById('all-codes-list');
-  if(!generatedCodes.length){
-    el.innerHTML = '<div class="no-codes">No codes generated this session</div>';
-    return;
-  }
-  el.innerHTML = generatedCodes.map(c=>`
-    <div class="code-item">
-      <div>
-        <div class="code-val">${c.code}</div>
-        <div class="code-meta">${c.type} · Expires ${c.expiry}</div>
-      </div>
-      <button class="btn-copy" onclick="copyCode('${c.code}')">📋 Copy</button>
-    </div>`).join('');
+// ── FILE HANDLING ──
+const uploadedFiles={};
+const fileNames=['Collar','Survey','Assay','Lithology','Geology','Target'];
+function handleFileUpload(index,input){
+  const file=input.files[0];if(!file)return;
+  uploadedFiles[index]=file;
+  const short=file.name.length>18?file.name.substring(0,15)+'...':file.name;
+  document.getElementById('fs-'+index).textContent='✓ '+short;
+  document.getElementById('fs-'+index).className='file-card-status ok';
+  document.getElementById('fc-'+index).classList.add('uploaded');
+  document.querySelector('#fc-'+index+' .upload-btn-small').textContent='Change';
+  document.querySelector('#fc-'+index+' .upload-btn-small').classList.add('done');
+  document.getElementById('step-'+index).classList.add('done');
+  updateRunBtn();
 }
-
-function clearCodes(){
-  generatedCodes = [];
-  localStorage.removeItem('saa_codes');
-  renderGeneratedCodes();
-  renderAllCodes();
-  toast('All codes cleared','inf');
+function updateRunBtn(){
+  const count=Object.keys(uploadedFiles).length;
+  const btn=document.getElementById('run-btn');
+  btn.disabled=count<6;
+  btn.textContent=count>=6?'▶ GENERATE AI REPORT':'▶ Upload all 6 files ('+count+'/6)';
 }
-
-function copyCode(code){
-  navigator.clipboard.writeText(code).then(()=>toast(`Copied: ${code}`,'ok'));
-}
-
-// ════════════════════════════════════════════════
-// ACCESS CODE VALIDATION
-// ════════════════════════════════════════════════
-let failAttempts = 0;
-
-function saveGeneratedCodes(){
-  localStorage.setItem('saa_codes', JSON.stringify(generatedCodes));
-}
-
-function loadGeneratedCodes(){
-  try{
-    const stored = localStorage.getItem('saa_codes');
-    if(stored) generatedCodes = JSON.parse(stored);
-  }catch(e){ generatedCodes = []; }
-}
-
-function validateCode(){
-  const raw = document.getElementById('code-input').value.trim().toUpperCase();
-  const errEl = document.getElementById('code-error');
-
-  if(failAttempts >= 3){
-    showErr(errEl,'🔒 Too many attempts. Contact your administrator.');
-    return;
-  }
-  if(!raw){ showErr(errEl,'Please enter your access code.'); return; }
-
-  // Load stored codes from localStorage (persists across sessions)
-  loadGeneratedCodes();
-
-  // Validate format: W/M/Y - then 6 or 7 alphanumeric chars (e.g. W-A3F7K2 or W-5KDY77)
-  const pattern = /^([WMY])-([A-Z0-9]{6,7})$/;
-  const matchesFormat = pattern.test(raw);
-
-  // Check against admin-generated codes stored in localStorage
-  const isAdminCode = generatedCodes.find(c => c.code === raw);
-
-  // Accept if it matches the correct format OR is a known admin-generated code
-  if(!matchesFormat && !isAdminCode){
-    failAttempts++;
-    const left = 3 - failAttempts;
-    showErr(errEl, `❌ Code not recognised. ${left > 0 ? left + ' attempt(s) remaining.' : 'Account locked — contact your administrator.'}`);
-    return;
-  }
-
-  // Valid — clear error and proceed
-  errEl.style.display = 'none';
-  S.code = raw;
-  S.codeType = raw[0]==='W' ? 'Weekly' : raw[0]==='M' ? 'Monthly' : 'Yearly';
-  const days = raw[0]==='W' ? 7 : raw[0]==='M' ? 30 : 365;
-  const exp = new Date();
-  exp.setDate(exp.getDate() + days);
-  S.codeExpiry = exp;
-  failAttempts = 0;
-
-  // Show success message on the access page
-  const btn = document.getElementById('btn-verify');
-  btn.textContent = '✅ Verified! Loading your session...';
-  btn.style.background = '#10b981';
-  btn.disabled = true;
-
-  // Show inline success message
-  errEl.style.display = 'block';
-  errEl.style.color = '#10b981';
-  errEl.style.background = 'rgba(16,185,129,0.1)';
-  errEl.style.border = '1px solid rgba(16,185,129,0.3)';
-  errEl.style.borderRadius = '8px';
-  errEl.style.padding = '12px';
-  errEl.textContent = `✅ Code verified — ${S.codeType} access granted. Taking you to setup now...`;
-
-  // Redirect after short pause so learner sees the success message
-  setTimeout(()=>{
-    showPage('page-profile');
-    // Reset button for next time
-    btn.textContent = '🚀 Verify & Continue to Setup →';
-    btn.style.background = '';
-    btn.disabled = false;
-    errEl.style.display = 'none';
-    errEl.style.color = '';
-    errEl.style.background = '';
-    errEl.style.border = '';
-  }, 1500);
-}
-
-function showErr(el, msg){
-  el.textContent = msg;
-  el.style.display = 'block';
-}
-
-// ════════════════════════════════════════════════
-// PROFILE SETUP
-// ════════════════════════════════════════════════
-function selectQ(n){
-  S.qCount = n;
-  document.getElementById('qopt-5').classList.toggle('active', n===5);
-  document.getElementById('qopt-10').classList.toggle('active', n===10);
-}
-
-// FILE UPLOAD
-function handleFiles(files){
-  const MAX_IMAGES = 10;
-  const remaining = MAX_IMAGES - S.images.length;
-
-  if(remaining <= 0){
-    toast('Maximum 10 pages allowed per session','err');
-    return;
-  }
-
-  const toAdd = Array.from(files).slice(0, remaining);
-  const skipped = Array.from(files).length - toAdd.length;
-
-  if(skipped > 0){
-    toast(`Only ${remaining} more page(s) allowed — ${skipped} file(s) skipped`,'err');
-  }
-
-  toAdd.forEach(f=>{
-    // Check file size — warn if over 4MB
-    if(f.size > 4 * 1024 * 1024){
-      toast(`⚠️ ${f.name} is large — compress for best results`,'inf');
-    }
-    const r = new FileReader();
-    r.onload = e=>{
-      S.images.push({name:f.name, data:e.target.result, b64:e.target.result.split(',')[1]});
-      renderThumbs();
-      // Update upload zone counter
-      const counter = document.getElementById('upload-counter');
-      if(counter) counter.textContent = `${S.images.length} / 10 pages uploaded`;
-    };
-    r.readAsDataURL(f);
+function readFileAsText(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    if(file.name.toLowerCase().endsWith('.csv')){reader.onload=e=>resolve(e.target.result);reader.onerror=reject;reader.readAsText(file)}
+    else{reader.onload=e=>{try{const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});let t='';wb.SheetNames.forEach(sn=>{t+=`Sheet: ${sn}\n${XLSX.utils.sheet_to_csv(wb.Sheets[sn])}\n\n`});resolve(t)}catch(err){reject(err)}};reader.onerror=reject;reader.readAsArrayBuffer(file)}
   });
 }
 
-function renderThumbs(){
-  const w = document.getElementById('upload-thumbs');
-  w.innerHTML = S.images.map((img,i)=>`
-    <div class="uthumb">
-      <img src="${img.data}" alt="Page ${i+1}">
-      <button class="urm" onclick="removeImg(${i})">✕</button>
-    </div>`).join('');
-  // Update counter
-  const counter = document.getElementById('upload-counter');
-  if(counter){
-    counter.textContent = `${S.images.length} / 10 pages uploaded`;
-    counter.style.color = S.images.length >= 10 ? '#ef4444' : '#1a56db';
+// ── RUN ANALYSIS via Cloudflare Worker ──
+let lastResult='',lastLang='English',lastFormat='pdf';
+async function runAnalysis(){
+  const eb=document.getElementById('err-box');const ra=document.getElementById('result-area');
+  const pw=document.getElementById('progress-wrap');const pf=document.getElementById('progress-fill');const pl=document.getElementById('progress-label');
+  eb.style.display='none';ra.style.display='none';
+  const workerUrl=getWorkerUrl();
+  if(!workerUrl||workerUrl.includes('YOUR-NAME')){
+    eb.textContent='⚠️ Worker URL not configured. Please ask your GreenRock AI administrator to set up the Cloudflare Worker.';
+    eb.style.display='block';return;
   }
-}
-
-function removeImg(i){
-  S.images.splice(i,1);
-  renderThumbs();
-}
-
-const uz = document.getElementById('upload-zone');
-uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag');});
-uz.addEventListener('dragleave',()=>uz.classList.remove('drag'));
-uz.addEventListener('drop',e=>{e.preventDefault();uz.classList.remove('drag');handleFiles(e.dataTransfer.files);});
-
-// START SESSION
-function startSession(){
-  const name = document.getElementById('pf-name').value.trim();
-  const level = document.getElementById('pf-level').value;
-  const subject = document.getElementById('pf-subject').value.trim();
-  const lang = document.getElementById('pf-lang').value;
-  if(!name){toast('Please enter your name','err');return;}
-  if(!level){toast('Please select your grade level','err');return;}
-  if(!subject){toast('Please enter your subject','err');return;}
-  if(!lang){toast('Please select a language','err');return;}
-  if(!S.images.length){
-    const pdfActive = document.getElementById('tab-pdf').classList.contains('active');
-    if(pdfActive && pdfDoc){
-      toast('Please click "Use Selected Pages for Quiz" to extract PDF pages first','err');
-    } else {
-      toast('Please upload at least one image or PDF document','err');
-    }
-    return;
-  }
-
-  S.name=name; S.level=level; S.subject=subject; S.lang=lang;
-  S.questions=[]; S.answers=[]; S.streak=0; S.maxStreak=0;
-  S.hints=[]; S.currentQ=0; S.retryMode=false;
-
-  showPage('page-quiz');
-  buildChips();
-  updateProg();
-  initQuiz();
-}
-
-function buildChips(){
-  const days = Math.ceil((S.codeExpiry-new Date())/(1000*60*60*24));
-  document.getElementById('quiz-chips').innerHTML = [
-    ['👤',S.name],['📚',S.subject],['🌍',S.lang],
-    ['📝',S.qCount+' Qs'],['🔐',days+'d left']
-  ].map(([e,v])=>`<div class="chip">${e} <strong>${v}</strong></div>`).join('');
-}
-
-// ════════════════════════════════════════════════
-// QUIZ ENGINE
-// ════════════════════════════════════════════════
-async function initQuiz(){
-  addAI(`👋 Welcome, **${S.name}**! I've received your ${S.images.length} page(s).\n\nReading your document now...`);
-  showTyping();
-
-  const sys = buildSystem();
-  const usr = buildUserMsg();
-
-  try {
-    const WORKER_URL = 'https://smartacademy-ai.kasongokimba.workers.dev';
-
-    const res = await fetch(WORKER_URL,{
+  if(Object.keys(uploadedFiles).length<6){eb.textContent='⚠️ Please upload all 6 files.';eb.style.display='block';return}
+  const cutoff=document.getElementById('cutoff-grade').value;
+  lastLang=document.getElementById('report-lang').value;
+  lastFormat=document.getElementById('report-format').value;
+  const btn=document.getElementById('run-btn');btn.disabled=true;btn.textContent='⏳ ANALYSING...';
+  pw.style.display='block';pf.style.width='5%';
+  const steps=['Reading collar data...','Reading survey data...','Reading assay data...','Reading lithology...','Reading geological context...','Reading target area...','Sending to AI...','Generating report...'];
+  let si=0;
+  const sv=setInterval(()=>{if(si<steps.length-1){si++;pl.textContent=steps[si];pf.style.width=Math.min(85,(si+1)/steps.length*85)+'%'}},2500);
+  try{
+    const texts=await Promise.all([0,1,2,3,4,5].map(i=>readFileAsText(uploadedFiles[i])));
+    const datasets=fileNames.map((name,i)=>`=== ${name.toUpperCase()} DATA ===\n${texts[i].substring(0,5000)}`).join('\n\n');
+    const response=await fetch(workerUrl,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        // Learner profile — Cloudflare uses this to build the prompt
-        name:     S.name,
-        level:    S.level,
-        subject:  S.subject,
-        lang:     S.lang,
-        qCount:   S.qCount,
-        code:     S.code,
-        codeType: S.codeType,
-        max_tokens: 2000,
-        // Only the user message with images — NO prompt sent from browser
-        messages: [{role:'user', content: usr}]
-      })
+      body:JSON.stringify({datasets,cutoff,language:lastLang})
     });
-    const data = await res.json();
-    removeTyping();
-
-    // Handle OpenAI errors (wrong key, quota, etc.)
-    if(data.error){
-      addAI(`❌ API Error: ${data.error.message}\n\nPlease check your API key in the Admin panel.`);
-      return;
-    }
-
-    const txt = data.choices?.[0]?.message?.content || '';
-    let parsed;
-    try{ parsed = JSON.parse(txt.replace(/```json|```/g,'').trim()); }
-    catch{ addAI('⚠️ I had trouble reading the document. Please ensure images are clear and try again.'); return; }
-
-    // Handle image quality feedback
-    if(parsed.imageQuality === 'rejected'){
-      addAI(`❌ **${S.name}, I cannot read this image reliably.**\n\n${parsed.qualityNote || 'The image appears too dark, blurry, or angled.'}\n\nPlease retake using these tips:\n✔ Good lighting, no shadows\n✔ Camera directly above the page\n✔ Page completely flat\n✔ Image in sharp focus\n\nUpload your new image and restart the session.`);
-      return;
-    }
-    if(parsed.imageQuality === 'marginal'){
-      addAI(`⚠️ **Image quality note:** ${parsed.qualityNote || 'This image is usable but not ideal. Some words may have been misread.'}\n\nI will proceed — but please review extracted content carefully.`);
-    }
-
-    // Flag uncertain sections if any
-    if(parsed.uncertainSections && parsed.uncertainSections.length > 0){
-      addAI(`🔍 **Uncertain sections detected:**\n${parsed.uncertainSections.map(s=>`• ${s}`).join('\n')}\n\nIf any of these look wrong, please restart and correct your image.`);
-    }
-
-    S.questions = parsed.questions||[];
-    const topic = parsed.topic||S.subject;
-    addAI(`✅ Document locked, **${S.name}**!\n\n📄 **Topic:** ${topic}\n📝 **Questions:** ${S.questions.length}\n\nLet's begin — starting easy and building up! 🎯`);
-    setTimeout(()=>presentQ(0),1000);
-  } catch(err){
-    removeTyping();
-    addAI(`❌ Connection error. Check your internet and try again.\n\n_${err.message}_`);
-  }
-}
-
-function buildSystem(){
-  // System Prompt v6.0 is now hidden on Cloudflare Worker
-  // Browser only sends learner profile and images
-  return '';
-}
-
-function buildUserMsg(){
-  // OpenAI vision format — content array with text and image_url blocks
-  const content = [
-    {
-      type:'text',
-      text:`Please read the following ${S.images.length} document image(s) carefully and generate exactly ${S.qCount} questions for ${S.subject} at ${S.level} level. Respond in ${S.lang}. Return ONLY valid JSON as specified in the system prompt — no markdown, no extra text.`
-    }
-  ];
-
-  S.images.forEach((img,i)=>{
-    content.push({
-      type:'text',
-      text:`--- Page ${i+1} of ${S.images.length} ---`
-    });
-    content.push({
-      type:'image_url',
-      image_url:{
-        url: img.data,
-        detail:'high'
-      }
-    });
-  });
-
-  return content;
-}
-
-// PRESENT QUESTION
-
-function presentQ(idx){
-  if(idx>=S.questions.length){endQuiz();return;}
-  S.currentQ=idx;
-  selectedOpt=null; selectedConf=null; hintUsed=false;
-  updateProg();
-  const q = S.questions[idx];
-  const dc = {Simple:'simple',Average:'average',Hard:'hard'}[q.difficulty]||'simple';
-  const qn = S.retryMode?`Retry ${idx+1}`:`${idx+1} of ${S.qCount}`;
-  const ui = document.getElementById('question-ui');
-  ui.innerHTML = `
-    <div class="q-card">
-      <div class="q-meta">
-        <span class="qbadge ${dc}">${q.difficulty}</span>
-        <span class="qbadge info">📘 Q${qn}</span>
-      </div>
-      <div class="q-text">${q.text}</div>
-      <div class="options" id="opts">
-        ${Object.entries(q.options).map(([l,t])=>`
-          <button class="opt-btn" id="opt-${l}" onclick="selectOpt('${l}')">
-            <span class="opt-letter">${l}</span><span>${t}</span>
-          </button>`).join('')}
-      </div>
-      <div class="conf-row">
-        <button class="conf-btn" id="cf-sure" onclick="setConf('SURE')" disabled>✅ SURE</button>
-        <button class="conf-btn" id="cf-guess" onclick="setConf('GUESS')" disabled>🤔 GUESS</button>
-      </div>
-      <div class="act-row">
-        <button class="btn-hint" onclick="reqHint()" id="btn-hint">💡 Hint</button>
-        <button class="btn-challenge" onclick="challengeQ()" id="btn-chal">❓ Challenge</button>
-        <button class="btn-submit" onclick="submitAns()" id="btn-sub" disabled>Submit Answer →</button>
-      </div>
-    </div>`;
-  setTimeout(()=>ui.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
-}
-
-function selectOpt(l){
-  if(document.getElementById('btn-sub').disabled===false&&document.getElementById(`opt-${l}`).disabled)return;
-  selectedOpt=l;
-  document.querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('selected'));
-  document.getElementById(`opt-${l}`).classList.add('selected');
-  document.getElementById('cf-sure').disabled=false;
-  document.getElementById('cf-guess').disabled=false;
-  document.getElementById('btn-sub').disabled=false;
-}
-
-function setConf(c){
-  selectedConf=c;
-  document.getElementById('cf-sure').classList.toggle('active',c==='SURE');
-  document.getElementById('cf-guess').classList.toggle('active',c==='GUESS');
-}
-
-async function reqHint(){
-  if(hintUsed){toast('Only one hint per question!','err');return;}
-  hintUsed=true;
-  document.getElementById('btn-hint').disabled=true;
-  document.getElementById('btn-hint').textContent='💡 Used';
-  S.hints.push(S.currentQ);
-  const q = S.questions[S.currentQ];
-  const apiKey = getApiKey();
-  showTyping();
-  try{
-    const res = await callAPI(`The learner needs a hint for: "${q.text}". Subject: ${S.subject}. Give a gentle 1-2 sentence hint in ${S.lang} that guides without revealing the answer.`);
-    removeTyping();
-    addAI(`💡 **Hint for ${S.name}:**\n\n${res}`);
-  }catch{
-    removeTyping();
-    addAI('💡 Review the key definitions in your document for this topic.');
-  }
-}
-
-async function challengeQ(){
-  const q = S.questions[S.currentQ];
-  addUser('❓ I want to challenge this question.');
-  showTyping();
-  try{
-    const res = await callAPI(`A learner challenges: "${q.text}" with options ${JSON.stringify(q.options)}. Correct: ${q.correct}. Is this question fair and from the document? Respond in ${S.lang}. If flawed start with QUESTION_FLAWED.`);
-    removeTyping();
-    if(res.startsWith('QUESTION_FLAWED')){
-      addAI(`Great catch, **${S.name}**! 🎯 Replacing this question...`);
-      await replaceQ();
-    } else {
-      addAI(`I've re-checked, **${S.name}**. The question stands:\n\n${res}`);
-    }
-  }catch{removeTyping();addAI('Unable to re-check. Please proceed with your best answer.');}
-}
-
-async function replaceQ(){
-  try{
-    const res = await callAPI(`Generate one replacement ${S.questions[S.currentQ].difficulty} difficulty question for ${S.subject} at ${S.level} in ${S.lang}. Return ONLY JSON: {"text":"...","difficulty":"...","options":{"A":"...","B":"...","C":"...","D":"...","E":"..."},"correct":"A","explanation":"...","wrongExplanation":"..."}`);
-    const newQ = JSON.parse(res.replace(/```json|```/g,'').trim());
-    S.questions[S.currentQ]=newQ;
-    presentQ(S.currentQ);
-  }catch{addAI('Unable to replace. Moving to next question.');moveNext();}
-}
-
-async function submitAns(){
-  if(!selectedOpt){toast('Please select an answer','err');return;}
-  const q = S.questions[S.currentQ];
-  const correct = selectedOpt===q.correct;
-  const conf = selectedConf||'not stated';
-
-  // Disable all buttons
-  document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
-  ['cf-sure','cf-guess','btn-sub','btn-hint','btn-chal'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.disabled=true;
-  });
-
-  // Highlight correct and wrong options
-  document.getElementById(`opt-${q.correct}`).classList.add('correct');
-  if(!correct) document.getElementById(`opt-${selectedOpt}`).classList.add('wrong');
-
-  // Record answer
-  S.answers.push({qIdx:S.currentQ,chosen:selectedOpt,correct,conf,hint:S.hints.includes(S.currentQ)});
-
-  // Update streak
-  if(correct){S.streak++;S.maxStreak=Math.max(S.maxStreak,S.streak);}
-  else{
-    const prev=S.streak;S.streak=0;
-    if(prev>=3)addAI(`Your ${prev}-answer streak ends here — but understanding this is worth more! 💪`);
-  }
-  updateStreak();
-
-  // ── RUNNING SCORE CALCULATION ──────────────────
-  const totalAnswered = S.answers.length;
-  const totalCorrect  = S.answers.filter(a=>a.correct).length;
-  const totalQ        = S.questions.length;
-  const pct           = Math.round((totalCorrect / totalAnswered) * 100);
-  const result        = correct ? 'CORRECT' : 'FAIL';
-  const resultColor   = correct ? '#10b981' : '#ef4444';
-  const resultEmoji   = correct ? '✅' : '❌';
-
-  // Show answer result badge on the question card
-  const ui = document.getElementById('question-ui');
-  const badge = document.createElement('div');
-  badge.style.cssText = `
-    display:flex;align-items:center;justify-content:space-between;
-    margin-top:14px;padding:14px 18px;
-    background:${correct?'rgba(16,185,129,0.08)':'rgba(239,68,68,0.08)'};
-    border:2px solid ${resultColor};
-    border-radius:12px;
-    flex-wrap:wrap;gap:10px;
-  `;
-  badge.innerHTML = `
-    <div style="display:flex;align-items:center;gap:10px;">
-      <span style="font-size:28px;">${resultEmoji}</span>
-      <div>
-        <div style="font-size:20px;font-weight:800;color:${resultColor};letter-spacing:1px;">${result}</div>
-        <div style="font-size:12px;color:#64748b;margin-top:2px;">
-          Answer: <strong>${selectedOpt}</strong> — ${q.options[selectedOpt]}
-        </div>
-      </div>
-    </div>
-    <div style="text-align:right;">
-      <div style="font-size:22px;font-weight:800;color:#1a56db;">${totalCorrect} / ${totalQ}</div>
-      <div style="font-size:13px;color:#64748b;">Score so far</div>
-      <div style="font-size:18px;font-weight:700;color:${pct>=50?'#10b981':'#ef4444'};margin-top:2px;">${pct}%</div>
-    </div>
-  `;
-  ui.querySelector('.q-card').appendChild(badge);
-
-  // Add user message to chat
-  addUser(`My answer: **${selectedOpt}** — ${q.options[selectedOpt]}\nConfidence: ${conf}`);
-
-  // Build AI feedback
-  showTyping();
-  await buildFeedback(q,correct,conf);
-  removeTyping();
-  checkMilestone();
-
-  // Move to next question after delay — tripled for reading time
-  const delay = correct ? 2200 : 12000;
-  setTimeout(()=>{
-    const next = S.currentQ+1;
-    if(next<S.questions.length){presentQ(next);}
-    else{document.getElementById('question-ui').innerHTML='';endQuiz();}
-  },delay);
-}
-
-async function buildFeedback(q,correct,conf){
-  const totalCorrect = S.answers.filter(a=>a.correct).length;
-  const totalQ       = S.questions.length;
-  const pct          = Math.round((totalCorrect / S.answers.length) * 100);
-  const scoreLine    = `\n\n📊 **Score: ${totalCorrect} / ${totalQ} — ${pct}%**`;
-
-  if(correct && conf==='SURE'){
-    addAI(`✅ **CORRECT, ${S.name}!** You knew it — great work! 💪${scoreLine}`);
-    return;
-  }
-  if(correct && conf==='GUESS'){
-    const ref = q.documentReference ? `\n\n📄 **Document reference:** ${q.documentReference}` : '';
-    addAI(`✅ **CORRECT, ${S.name}!** But you weren't fully sure — let's lock this in:\n\n📖 **Why this is right:** ${q.explanation}${ref}${scoreLine}`);
-    return;
-  }
-
-  // FAIL — incorrect answer
-  const ref     = q.documentReference ? `\n\n📄 **From your document:** ${q.documentReference}` : '';
-  const concept = q.conceptTag ? `\n\n🔁 **Concept to review:** ${q.conceptTag}` : '';
-  try{
-    const res = await callAPI(`The learner ${S.name} answered incorrectly.
-Question: "${q.text}"
-Their answer: ${selectedOpt} — ${q.options[selectedOpt]||'?'}
-Correct answer: ${q.correct} — ${q.options[q.correct]}
-Explanation: ${q.explanation}
-Wrong explanation: ${q.wrongExplanation||''}
-Document reference: ${q.documentReference||''}
-Write a warm, clear explanation in ${S.lang} for a ${S.level} student:
-1. One sentence: why their answer is wrong
-2. Why the correct answer is right
-3. Walk through a worked example step by step if relevant
-Keep it encouraging and under 150 words.`);
-    addAI(`❌ **FAIL, ${S.name}.** The correct answer is **${q.correct}**: ${q.options[q.correct]}\n\n${res}${ref}${concept}${scoreLine}\n\n📌 Remember this — it may reappear in retry! 💪`);
-  }catch{
-    addAI(`❌ **FAIL, ${S.name}.** The correct answer is **${q.correct}**: ${q.options[q.correct]}\n\n📖 **Explanation:** ${q.explanation}${ref}${concept}${scoreLine}\n\n📌 Keep going! 💪`);
-  }
-}
-
-function checkMilestone(){
-  const msgs={3:`🔥 3 correct in a row, ${S.name}! On fire!`,5:`⚡ 5 straight correct! Incredible, ${S.name}!`,7:`🌟 7 in a row! You're mastering this, ${S.name}!`};
-  if(msgs[S.streak])setTimeout(()=>addAI(msgs[S.streak]),200);
-}
-
-function endQuiz(){
-  const c=S.answers.filter(a=>a.correct).length;
-  const t=S.answers.length;
-  const p=Math.round((c/t)*100);
-  addAI(`🎉 **Session complete, ${S.name}!**\n\n**Score: ${c}/${t} — ${p}%**\n\nGenerating your results...`);
-  setTimeout(()=>{showPage('page-results');buildResults(c,t,p);},1500);
-}
-
-// ════════════════════════════════════════════════
-// RESULTS
-// ════════════════════════════════════════════════
-function buildResults(c,t,p){
-  const ring=document.getElementById('score-ring');
-  ring.style.setProperty('--pct',`${p*3.6}deg`);
-  document.getElementById('res-score').textContent=`${c}/${t}`;
-  document.getElementById('res-pct').textContent=`${p}%`;
-  const g=getGrade(p);
-  const pill=document.getElementById('grade-pill');
-  pill.textContent=g.label;pill.className=`grade-pill ${g.cls}`;
-  document.getElementById('res-feedback').textContent=getFeedback(p);
-  const wrong=S.answers.filter(a=>!a.correct).length;
-  document.getElementById('bc-correct').textContent=c;
-  document.getElementById('bc-wrong').textContent=wrong;
-  document.getElementById('bc-streak').textContent=S.maxStreak;
-
-  const conf=S.answers.filter(a=>a.correct&&a.conf==='SURE');
-  const guessed=S.answers.filter(a=>a.correct&&a.conf==='GUESS');
-  const inc=S.answers.filter(a=>!a.correct);
-  const hints=S.answers.filter(a=>a.hint);
-
-  document.getElementById('detail-card').innerHTML=`
-    <div class="dc-title">Performance Breakdown</div>
-    ${rrow('✅ Correct + Confident',conf.map(a=>`Q${a.qIdx+1}`).join(', ')||'—','green')}
-    ${rrow('⚠️ Correct + Guessed',guessed.map(a=>`Q${a.qIdx+1}`).join(', ')||'—','gold')}
-    ${rrow('❌ Incorrect',inc.map(a=>`Q${a.qIdx+1}`).join(', ')||'—','red')}
-    ${rrow('💡 Hints Used',hints.map(a=>`Q${a.qIdx+1}`).join(', ')||'None','')}
-    ${rrow('🏅 Best Streak',S.maxStreak+' in a row','gold')}
-    ${rrow('Final Score',`${c} / ${t}`,'green')}
-    ${rrow('Percentage',`${p}%`,p>=75?'green':p>=50?'gold':'red')}
-    ${rrow('Grade',g.label,'')}`;
-}
-
-function rrow(l,v,c){return `<div class="rrow"><span class="rl">${l}</span><span class="rv ${c}">${v}</span></div>`;}
-
-function getGrade(p){
-  if(p>=90)return{label:'🏆 DISTINCTION',cls:'gd'};
-  if(p>=80)return{label:'🥇 MERIT',cls:'gm'};
-  if(p>=70)return{label:'✅ CREDIT',cls:'gc'};
-  if(p>=60)return{label:'📘 SATISFACTORY',cls:'gs'};
-  if(p>=50)return{label:'👍 PASS',cls:'gp'};
-  return{label:'🔁 NOT YET',cls:'gn'};
-}
-
-function getFeedback(p){
-  const n=S.name;
-  if(p===100)return`🏆 PERFECT, ${n}! Complete mastery. Truly outstanding!`;
-  if(p>=90)return`🏆 DISTINCTION, ${n}! ${p}% is exceptional. You've demonstrated complete mastery!`;
-  if(p>=80)return`🥇 MERIT, ${n}! ${p}% is excellent. A little more and you'll reach Distinction!`;
-  if(p>=70)return`✅ CREDIT, ${n}! ${p}% is solid. Review the flagged areas to push higher.`;
-  if(p>=60)return`📘 SATISFACTORY, ${n}. ${p}% shows real understanding building. A retry will push you higher.`;
-  if(p>=50)return`👍 PASS, ${n}. ${p}% — you have the basics. Review and try again soon.`;
-  return`🔁 ${n}, ${p}% means this topic needs more time — and that's okay. Review your document and retry. You will improve! 💪`;
-}
-
-function retryWrong(){
-  const idxs = S.answers.filter(a=>!a.correct||a.conf==='GUESS').map(a=>a.qIdx);
-  if(!idxs.length){ toast('Nothing to retry — you got them all!','ok'); return; }
-
-  S.retryMode = true;
-  S.questions = idxs.map(i=>S.questions[i]);
-  S.answers   = [];
-  S.streak    = 0;
-  S.maxStreak = 0;
-  S.hints     = [];
-  S.currentQ  = 0;
-
-  // Clear UI
-  document.getElementById('chat-box').innerHTML = '';
-  document.getElementById('question-ui').innerHTML = '';
-
-  // Reset progress bar
-  document.getElementById('prog-fill').style.width = '0%';
-  document.getElementById('prog-lbl').textContent = `0 / ${S.questions.length}`;
-
-  // Hide streak badge
-  const badge = document.getElementById('streak-badge');
-  if(badge) badge.style.display = 'none';
-
-  showPage('page-quiz');
-  updateProg();
-  addAI(`🔁 **Retry mode, ${S.name}!** ${S.questions.length} question(s) to retry. Fresh start — score reset to zero. Let's go! 💪`);
-  setTimeout(()=>presentQ(0),1000);
-}
-
-function restartFull(){
-  if(!confirm('Restart the full quiz with new questions?'))return;
-
-  // Reset ALL state to zero — clean slate
-  S.retryMode  = false;
-  S.questions  = [];
-  S.answers    = [];
-  S.streak     = 0;
-  S.maxStreak  = 0;
-  S.hints      = [];
-  S.currentQ   = 0;
-
-  // Clear chat and question UI
-  document.getElementById('chat-box').innerHTML = '';
-  document.getElementById('question-ui').innerHTML = '';
-
-  // Reset progress bar
-  document.getElementById('prog-fill').style.width = '0%';
-  document.getElementById('prog-lbl').textContent = '0 / 0';
-
-  // Hide streak badge
-  const badge = document.getElementById('streak-badge');
-  if(badge) badge.style.display = 'none';
-
-  showPage('page-quiz');
-  buildChips();
-  updateProg();
-  initQuiz();
-}
-
-// ════════════════════════════════════════════════
-// REPORT
-// ════════════════════════════════════════════════
-function showReport(){
-  const c=S.answers.filter(a=>a.correct).length;
-  const t=S.answers.length;
-  const p=Math.round((c/t)*100);
-  const g=getGrade(p);
-  const days=Math.ceil((S.codeExpiry-new Date())/(1000*60*60*24));
-  const inc=S.answers.filter(a=>!a.correct);
-  const guessed=S.answers.filter(a=>a.correct&&a.conf==='GUESS');
-  const conf=S.answers.filter(a=>a.correct&&a.conf==='SURE');
-  const renewal=days<=7
-    ?`<div style="color:#f59e0b;padding:10px;background:rgba(245,158,11,0.08);border-radius:8px;border:1px solid rgba(245,158,11,0.2);margin-top:10px;">⚠️ Access code expires in ${days} day(s). Please renew.</div>`
-    :`<span style="color:#10b981">✅ Access valid — ${days} days remaining</span>`;
-
-  document.getElementById('report-body').innerHTML=`
-    <div class="report-header">
-      <div class="rh-tag">📋 Official Learner Progress Report</div>
-      <h2>Smart Academy AI · smartacademy-ai.com</h2>
-    </div>
-    <div class="report-grid">
-      ${rcell('👤 Learner',S.name)}
-      ${rcell('🎒 Level',S.level)}
-      ${rcell('📚 Subject',S.subject)}
-      ${rcell('🌍 Language',S.lang)}
-      ${rcell('📝 Questions',t)}
-      ${rcell('📅 Date',S.date)}
-      ${rcell('🔐 Access Code',S.code)}
-      ${rcell('📋 Code Type',S.codeType)}
-    </div>
-    <div class="report-score-center">
-      <div class="rs-num">${p}%</div>
-      <div class="rs-label">${c} / ${t} correct</div>
-      <div class="grade-pill ${g.cls}" style="margin:12px auto;display:inline-block;">${g.label}</div>
-    </div>
-    <div class="report-3grid">
-      <div class="r3c"><div class="r3n" style="color:#10b981">${conf.length}</div><div class="r3l">Mastered</div></div>
-      <div class="r3c"><div class="r3n" style="color:#f59e0b">${guessed.length}</div><div class="r3l">Developing</div></div>
-      <div class="r3c"><div class="r3n" style="color:#ef4444">${inc.length}</div><div class="r3l">Needs Attention</div></div>
-    </div>
-    <div class="report-section">
-      <h3>Questions Needing Attention</h3>
-      <p>${inc.length?inc.map(a=>`Q${a.qIdx+1}: ${S.questions[a.qIdx]?.text||'–'}`).join('<br>'):'None — excellent performance!'}</p>
-    </div>
-    <div class="report-section">
-      <h3>Educator Recommendation</h3>
-      <p>${getRecommendation(p,inc.length,guessed.length)}</p>
-    </div>
-    <div class="report-section">
-      <h3>Session Statistics</h3>
-      <p>Longest Streak: ${S.maxStreak} consecutive correct answers<br>
-      Hints Used: ${S.hints.length}<br>
-      Best Streak Milestone: ${S.maxStreak>=7?'🌟 7+':S.maxStreak>=5?'⚡ 5+':S.maxStreak>=3?'🔥 3+':'–'}</p>
-    </div>
-    <div class="report-section">
-      <h3>Access Code Status</h3>
-      <p>${renewal}</p>
-    </div>
-    <div class="report-footer">
-      Generated by Smart Academy AI v6.0 · ${S.date}<br>
-      info@smartacademy-ai.com · smartacademy-ai.com<br>
-      Prepared for Educator / Parent Review
-    </div>`;
-  showPage('page-report');
-}
-
-function downloadReport(){
-  const content = document.getElementById('report-body').innerHTML;
-  const c = S.answers.filter(a=>a.correct).length;
-  const t = S.answers.length;
-  const p = Math.round((c/t)*100);
-
-  // Build a complete standalone HTML report for download
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Smart Academy AI Report — ${S.name} — ${S.date}</title>
-<style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    font-family: Arial, sans-serif;
-    background: #f8fafc;
-    color: #1e293b;
-    padding: 20px;
-  }
-  .report-card {
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 28px;
-    max-width: 680px;
-    margin: 0 auto;
-  }
-  .report-header {
-    border-bottom: 3px solid #1a56db;
-    padding-bottom: 16px;
-    margin-bottom: 20px;
-  }
-  .rh-tag {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: #1a56db;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-  h2 { font-size: 20px; font-weight: 800; color: #0f2044; }
-  .report-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 20px;
-  }
-  .rg-cell { padding: 8px 0; border-bottom: 1px solid #e2e8f0; }
-  .rgc-l {
-    font-size: 10px; color: #64748b;
-    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px;
-  }
-  .rgc-v { font-size: 14px; font-weight: 600; color: #1e293b; }
-  .report-score-center { text-align: center; padding: 20px 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 16px; }
-  .rs-num { font-size: 52px; font-weight: 900; color: #1a56db; line-height: 1; }
-  .rs-label { font-size: 16px; font-weight: 600; color: #0f2044; margin: 8px 0; }
-  .grade-pill {
-    display: inline-block; padding: 7px 20px;
-    border-radius: 999px; font-size: 14px;
-    font-weight: 700; letter-spacing: 1px;
-    text-transform: uppercase; margin-top: 8px;
-    background: rgba(26,86,219,0.1);
-    color: #1a56db; border: 1px solid rgba(26,86,219,0.3);
-  }
-  .report-3grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 16px; }
-  .r3c { background: #f8fafc; border-radius: 8px; padding: 12px; text-align: center; }
-  .r3n { font-size: 22px; font-weight: 800; line-height: 1; }
-  .r3l { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
-  .report-section { margin-bottom: 16px; }
-  .report-section h3 {
-    font-size: 11px; font-weight: 700; color: #0f2044;
-    letter-spacing: 1px; text-transform: uppercase;
-    margin-bottom: 8px; padding-bottom: 6px;
-    border-bottom: 1px solid #e2e8f0;
-  }
-  .report-section p { font-size: 14px; color: #64748b; line-height: 1.7; }
-  .report-footer {
-    text-align: center; padding-top: 14px;
-    border-top: 1px solid #e2e8f0;
-    font-size: 11px; color: #94a3b8;
-  }
-</style>
-</head>
-<body>
-<div class="report-card">${content}</div>
-</body>
-</html>`;
-
-  // Create download link
-  const blob = new Blob([html], {type:'text/html'});
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href     = url;
-  a.download = `SmartAcademy_Report_${S.name}_${S.subject}_${S.date.replace(/ /g,'_')}.html`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-
-  toast('✅ Report downloaded successfully','ok');
-}
-
-async function saveAsPDF(){
-  const btn = document.getElementById('btn-pdf');
-  btn.textContent = '⏳ Generating PDF...';
-  btn.disabled = true;
-
-  try{
-    // Load html2pdf library if not already loaded
-    if(!window.html2pdf){
-      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js');
-    }
-
-    const element  = document.getElementById('report-body');
-    const filename = `SmartAcademy_Report_${S.name}_${S.subject}_${S.date.replace(/ /g,'_')}.pdf`;
-
-    const options = {
-      margin:      [10, 10, 10, 10],
-      filename:    filename,
-      image:       { type:'jpeg', quality:0.98 },
-      html2canvas: { scale:2, useCORS:true, backgroundColor:'#ffffff' },
-      jsPDF:       { unit:'mm', format:'a4', orientation:'portrait' }
-    };
-
-    await html2pdf().set(options).from(element).save();
-
-    btn.textContent = '✅ PDF Saved!';
-    toast('✅ PDF saved to your Downloads folder','ok');
-
-    setTimeout(()=>{
-      btn.textContent = '📄 Save as PDF';
-      btn.disabled = false;
-    }, 3000);
-
+    clearInterval(sv);
+    const data=await response.json();
+    if(!response.ok||data.error)throw new Error(data.error||'Worker error');
+    lastResult=data.result;
+    const codes=getCodes();codes[currentCode].uses++;saveCodes(codes);updateBadges();
+    pf.style.width='100%';pl.textContent='✅ Analysis complete!';
+    setTimeout(()=>pw.style.display='none',2000);
+    document.getElementById('result-content').textContent=lastResult;
+    ra.style.display='block';ra.scrollIntoView({behavior:'smooth'});
   }catch(err){
-    btn.textContent = '📄 Save as PDF';
-    btn.disabled = false;
-    toast('❌ PDF failed — try Download button instead','err');
-    console.error(err);
-  }
+    clearInterval(sv);pw.style.display='none';
+    eb.textContent='❌ Error: '+err.message;eb.style.display='block';
+  }finally{btn.disabled=false;updateRunBtn()}
 }
 
-function getRecommendation(p,w,g){
-  if(p===100)return`${S.name} achieved a perfect score. Consider introducing the next chapter or an advanced extension activity.`;
-  if(p>=80)return`${S.name} shows strong understanding. Focus revision on ${w} incorrect question(s) before the next assessment.`;
-  if(p>=60)return`${S.name} has a working understanding but requires targeted revision of the weak areas identified above. A retry session is recommended.`;
-  return`${S.name} needs additional support on this topic. Recommend revisiting the document together, then attempting a retry session.`;
+// ── DOWNLOAD ──
+function downloadReport(){if(lastFormat==='pdf')downloadPDF();else downloadWord()}
+function downloadPDF(){
+  const w=window.open('','_blank');const fr=lastLang==='French';
+  w.document.write(`<!DOCTYPE html><html><head><title>GreenRock AI Report</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:2rem;color:#111;font-size:11pt;line-height:1.6}.header{border-bottom:3px solid #007ba7;padding-bottom:1rem;margin-bottom:2rem}.logo{font-size:1.8rem;font-weight:900;color:#007ba7}.meta{font-size:9pt;color:#666;margin-top:0.5rem}pre{white-space:pre-wrap;font-size:10pt;line-height:1.7}.footer{margin-top:3rem;border-top:1px solid #ccc;padding-top:1rem;font-size:8pt;color:#999;text-align:center}.conf{background:#fff3cd;border:1px solid #ffc107;padding:0.5rem 1rem;font-size:9pt;margin-bottom:1rem;text-align:center}@media print{.footer{position:fixed;bottom:0}}</style></head><body><div class="header"><div class="logo">GREENROCK AI</div><div class="meta">${fr?'Rapport d\'Exploration':'Exploration Report'} · ${new Date().toLocaleDateString()} · ${fr?'Confidentiel':'Confidential'}</div></div><div class="conf">⚠️ ${fr?'Document confidentiel':'Confidential Document'}</div><div class="meta">Cu Cut-off: ${document.getElementById('cutoff-grade').value}% | ${lastLang} | ${new Date().toLocaleString()}</div><pre>${lastResult}</pre><div class="footer">GreenRock AI · www.greenrock-ai.com · kimba@greenrock-ai.com · +27 66 299 8028</div><script>window.onload=function(){window.print()}<\/script></body></html>`);
+  w.document.close();
+}
+function downloadWord(){
+  const content=`GREENROCK AI - MINERAL EXPLORATION REPORT\n${'='.repeat(50)}\nDate: ${new Date().toLocaleDateString()}\nCu Cut-off: ${document.getElementById('cutoff-grade').value}%\nLanguage: ${lastLang}\nCONFIDENTIAL\n\n${lastResult}\n\n--\nGreenRock AI | www.greenrock-ai.com | kimba@greenrock-ai.com | +27 66 299 8028`;
+  const blob=new Blob([content],{type:'application/msword'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download='GreenRock_AI_Report_'+new Date().toISOString().split('T')[0]+'.doc';
+  a.click();URL.revokeObjectURL(url);
 }
 
-// ════════════════════════════════════════════════
-// CHAT HELPERS
-// ════════════════════════════════════════════════
-function addAI(md){
-  const box=document.getElementById('chat-box');
-  const d=document.createElement('div');
-  d.className='msg ai';
-  d.innerHTML=`<div class="msg-av">🤖</div><div class="msg-bub">${md2html(md)}</div>`;
-  box.appendChild(d);box.scrollTop=box.scrollHeight;
-}
-function addUser(md){
-  const box=document.getElementById('chat-box');
-  const d=document.createElement('div');
-  d.className='msg user';
-  d.innerHTML=`<div class="msg-av">👤</div><div class="msg-bub">${md2html(md)}</div>`;
-  box.appendChild(d);box.scrollTop=box.scrollHeight;
-}
-function showTyping(){
-  const box=document.getElementById('chat-box');
-  const d=document.createElement('div');
-  d.className='msg ai';d.id='typing-el';
-  d.innerHTML=`<div class="msg-av">🤖</div><div class="typing-ind"><span></span><span></span><span></span></div>`;
-  box.appendChild(d);box.scrollTop=box.scrollHeight;
-}
-function removeTyping(){const el=document.getElementById('typing-el');if(el)el.remove();}
-function md2html(t){
-  return t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-          .replace(/\*(.+?)\*/g,'<em>$1</em>')
-          .replace(/_(.+?)_/g,'<em>$1</em>')
-          .replace(/\n/g,'<br>');
-}
-
-// ════════════════════════════════════════════════
-// PROGRESS & STREAK
-// ════════════════════════════════════════════════
-function updateProg(){
-  const t=S.questions.length||S.qCount;
-  const d=S.answers.length;
-  document.getElementById('prog-fill').style.width=(t?(d/t)*100:0)+'%';
-  document.getElementById('prog-lbl').textContent=`${d} / ${t}`;
-}
-function updateStreak(){
-  const b=document.getElementById('streak-badge');
-  if(S.streak>=2){b.style.display='flex';document.getElementById('streak-num').textContent=S.streak;}
-  else b.style.display='none';
-}
-
-// ════════════════════════════════════════════════
-// API CALL HELPER — via Cloudflare Worker (secure)
-// Prompt is hidden on Cloudflare — never sent from browser
-// ════════════════════════════════════════════════
-async function callAPI(prompt){
-  const WORKER_URL = 'https://smartacademy-ai.kasongokimba.workers.dev';
-
-  const res = await fetch(WORKER_URL,{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      name:    S.name,
-      level:   S.level,
-      subject: S.subject,
-      lang:    S.lang,
-      qCount:  S.qCount,
-      max_tokens: 800,
-      messages:[{role:'user', content:prompt}]
-    })
+// ── RESET ──
+function resetAnalysis(){
+  Object.keys(uploadedFiles).forEach(k=>delete uploadedFiles[k]);
+  [0,1,2,3,4,5].forEach(i=>{
+    document.getElementById('fs-'+i).textContent='Pending';
+    document.getElementById('fs-'+i).className='file-card-status';
+    document.getElementById('fc-'+i).classList.remove('uploaded');
+    document.querySelector('#fc-'+i+' .upload-btn-small').textContent='Upload';
+    document.querySelector('#fc-'+i+' .upload-btn-small').classList.remove('done');
+    document.getElementById('step-'+i).className='step-dot';
+    document.getElementById('fi-'+i).value='';
   });
-
-  const data = await res.json();
-  if(data.error) throw new Error(data.error.message);
-  return data.choices?.[0]?.message?.content || '';
+  document.getElementById('result-area').style.display='none';
+  document.getElementById('err-box').style.display='none';
+  lastResult='';updateRunBtn();updateBadges();
 }
-
-// ════════════════════════════════════════════════
-// TOAST
-// ════════════════════════════════════════════════
-function toast(msg,type=''){
-  const el=document.getElementById('toast');
-  el.textContent=msg;el.className=`show ${type}`;
-  clearTimeout(window._tt);
-  window._tt=setTimeout(()=>el.className='',3000);
+function resetAll(){
+  resetAnalysis();
+  document.getElementById('analysis-area').style.display='none';
+  document.getElementById('code-entry').style.display='block';
+  document.getElementById('access-code').value='';
+  document.getElementById('code-error').style.display='none';
+  currentCode=null;
 }
-
-// ════════════════════════════════════════════════
-// INPUT FORMATTING
-// ════════════════════════════════════════════════
-document.getElementById('code-input').addEventListener('keydown',e=>{if(e.key==='Enter')validateCode();});
-document.getElementById('admin-pw').addEventListener('keydown',e=>{if(e.key==='Enter')adminLogin();});
 </script>
 </body>
 </html>

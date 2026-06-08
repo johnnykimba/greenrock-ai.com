@@ -185,13 +185,13 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
   </a>
   <div class="nav-right">
     <select class="lang-select" id="lang-select">
-      <option value="English">EN</option>
-      <option value="French">FR</option>
-      <option value="Chinese">中文</option>
-      <option value="Portuguese">PT</option>
-      <option value="Swahili">SW</option>
-      <option value="Arabic">AR</option>
-      <option value="Spanish">ES</option>
+      <option value="English">English</option>
+      <option value="French">Français</option>
+      <option value="Chinese">中文 Chinese</option>
+      <option value="Portuguese">Português</option>
+      <option value="Swahili">Kiswahili</option>
+      <option value="Arabic">العربية Arabic</option>
+      <option value="Spanish">Español</option>
     </select>
     <button class="nav-btn" onclick="location.href='index.html'">Home</button>
   </div>
@@ -206,7 +206,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
     <input class="access-input" id="code-input" type="text" placeholder="ACCESS CODE" maxlength="20" autocomplete="off">
     <button class="access-submit" id="code-submit">Activate DualMind</button>
     <div class="access-error" id="code-error">Invalid or expired code</div>
-    <div class="access-demo">Demo access: <a onclick="enterDemo()">use code JOHNNY11</a></div>
+    <div class="access-demo" style="color:rgba(255,255,255,0.2);font-size:11px;margin-top:14px;">Access codes are issued by GreenRock AI</div>
   </div>
 </div>
 
@@ -369,7 +369,7 @@ function updateCompleteness(){
 document.getElementById('code-submit').addEventListener('click', validateCode);
 document.getElementById('code-input').addEventListener('keydown',function(e){ if(e.key==='Enter') validateCode(); });
 
-function enterDemo(){ document.getElementById('code-input').value='JOHNNY11'; validateCode(); }
+function enterDemo(){} // disabled
 
 function validateCode(){
   var code = document.getElementById('code-input').value.trim().toUpperCase();

@@ -1,227 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" type="text/css" href="cid:css-5f2fcc62-7b08-4ae4-9d58-8a1b2a4470ae@mhtml.blink" />
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="6qaDK9WfePT3KPsbkW4ocp8ywbCRqfJLv0Q_syjZCr8">
 <title>GreenRock AI | AI-Powered Mineral Exploration</title>
 <meta name="description" content="GreenRock AI uses artificial intelligence and geophysics to optimise drill plans and discover new mineralisation across Africa and globally.">
 <meta name="keywords" content="AI mineral exploration, drill plan optimisation, geophysics AI, copper exploration Africa, drillhole prediction, Copperbelt mining AI">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://www.greenrock-ai.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<style>
-:root{--blue-deep:#020b18;--blue-mid:#0a2a4a;--blue-bright:#00b4d8;--cyan:#00f5ff;--gold:#f0c040;--surface:#071e33;--surface2:#0d2a42;--text:#e0f4ff;--text-muted:#5a8fa8;--border:rgba(0,180,216,0.15);--red:#ff4444}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Exo 2',sans-serif;background:var(--blue-deep);color:var(--text);overflow-x:hidden}
-.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,180,216,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,180,216,0.03) 1px,transparent 1px);background-size:50px 50px}
+<link rel="canonical" href="https://www.greenrock-ai.com/">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&amp;family=Exo+2:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(2,11,24,0.97);border-bottom:1px solid var(--border)}
-.logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.1rem;color:var(--text);text-decoration:none}
-.logo span{color:var(--blue-bright)}
-.nav-links{display:flex;gap:1.5rem;list-style:none;align-items:center}
-.nav-links a{color:var(--text-muted);text-decoration:none;font-size:0.85rem;transition:color 0.2s}
-.nav-links a:hover{color:var(--blue-bright)}
-.nav-admin{background:transparent;border:1px solid var(--border);color:var(--text-muted);padding:0.4rem 0.9rem;border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:'Exo 2',sans-serif;transition:all 0.2s}
-.nav-admin:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
 
-/* HAMBURGER */
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:5px;background:none;border:none}
-.hamburger span{display:block;width:24px;height:2px;background:var(--text-muted);border-radius:2px;transition:all 0.3s}
-.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
-.hamburger.open span:nth-child(2){opacity:0}
-.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
-.mobile-menu{display:none;position:fixed;top:60px;left:0;right:0;background:rgba(2,11,24,0.98);border-bottom:1px solid var(--border);padding:1.5rem 2rem;z-index:99;flex-direction:column;gap:1rem}
-.mobile-menu.open{display:flex}
-.mobile-menu a{color:var(--text-muted);text-decoration:none;font-size:1rem;padding:0.5rem 0;border-bottom:1px solid var(--border)}
-.mobile-menu a:hover{color:var(--blue-bright)}
-.mobile-menu button{background:var(--blue-bright);color:var(--blue-deep);border:none;border-radius:8px;padding:0.7rem;font-family:'Orbitron',monospace;font-weight:700;font-size:0.82rem;cursor:pointer;margin-top:0.5rem}
-
-/* HERO */
-#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 4rem;position:relative;z-index:1}
-.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(0,180,216,0.08);border:1px solid rgba(0,180,216,0.25);border-radius:100px;padding:0.4rem 1.2rem;font-size:0.75rem;color:var(--blue-bright);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.5rem}
-.badge-pulse{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-h1{font-family:'Orbitron',monospace;font-size:clamp(1.8rem,5vw,3.8rem);font-weight:900;line-height:1.1;margin-bottom:1.2rem}
-h1 .accent{color:var(--blue-bright)}
-h1 .gold{color:var(--gold)}
-.hero-sub{font-size:1rem;color:var(--text-muted);line-height:1.8;max-width:540px;margin:0 auto 2.5rem}
-.globe-wrap{position:relative;width:200px;height:200px;margin:0 auto 2.5rem}
-.globe{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 35% 35%,#0d4a7a,#020b18);border:1px solid rgba(0,180,216,0.3);box-shadow:0 0 60px rgba(0,180,216,0.15);position:relative;overflow:hidden}
-.globe::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 18px,rgba(0,180,216,0.05) 18px,rgba(0,180,216,0.05) 19px)}
-.globe::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 18px,rgba(0,180,216,0.05) 18px,rgba(0,180,216,0.05) 19px)}
-.globe-ring{position:absolute;inset:-15px;border-radius:50%;border:1px dashed rgba(0,180,216,0.2);animation:spin 20s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.globe-dot{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:dotP 2s ease-in-out infinite}
-.globe-dot:nth-child(1){top:30%;left:40%}
-.globe-dot:nth-child(2){top:55%;left:60%;animation-delay:0.7s}
-.globe-dot:nth-child(3){top:70%;left:35%;animation-delay:1.4s}
-@keyframes dotP{0%,100%{transform:scale(1)}50%{transform:scale(1.6)}}
-.hero-btn{display:inline-flex;align-items:center;gap:0.5rem;background:var(--blue-bright);color:var(--blue-deep);padding:0.85rem 2.2rem;border-radius:8px;font-family:'Orbitron',monospace;font-weight:700;font-size:0.82rem;text-decoration:none;letter-spacing:0.08em;box-shadow:0 4px 30px rgba(0,180,216,0.3);transition:all 0.2s}
-.hero-btn:hover{background:var(--cyan);transform:translateY(-2px)}
-
-/* SERVICES */
-#services{padding:5rem 2rem;position:relative;z-index:1;max-width:900px;margin:0 auto}
-.section-label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.2em;color:var(--blue-bright);margin-bottom:0.8rem;text-align:center}
-.section-title{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,3vw,2rem);font-weight:700;text-align:center;margin-bottom:2.5rem}
-.services-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
-.svc-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.8rem;transition:all 0.3s}
-.svc-card:hover{transform:translateY(-4px);border-color:rgba(0,180,216,0.3)}
-.svc-icon{font-size:2rem;margin-bottom:1rem}
-.svc-card h3{font-family:'Orbitron',monospace;font-size:0.85rem;font-weight:700;margin-bottom:0.8rem;color:#90e0ef}
-.svc-card p{font-size:0.85rem;color:var(--text-muted);line-height:1.7}
-.svc-tag{display:inline-block;margin-top:1rem;background:rgba(0,180,216,0.08);border:1px solid rgba(0,180,216,0.2);border-radius:100px;padding:0.2rem 0.8rem;font-size:0.68rem;color:var(--blue-bright);font-weight:600}
-
-/* MINERALS */
-.minerals{text-align:center;padding:1rem 2rem 4rem;position:relative;z-index:1}
-.mineral-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:0.7rem;margin-top:1.2rem}
-.mchip{background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:0.4rem 1rem;font-size:0.8rem;transition:all 0.2s;cursor:default}
-.mchip:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
-.mchip .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:0.4rem}
-
-/* PORTAL */
-#portal{padding:4rem 2rem;position:relative;z-index:1;max-width:700px;margin:0 auto}
-.portal-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden}
-.portal-head{background:linear-gradient(135deg,var(--blue-mid),var(--surface2));padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.portal-head-left{display:flex;align-items:center;gap:1rem}
-.portal-head-icon{width:44px;height:44px;background:rgba(0,180,216,0.12);border:1px solid rgba(0,180,216,0.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
-.portal-head h3{font-family:'Orbitron',monospace;font-size:0.95rem;font-weight:700}
-.portal-head p{font-size:0.78rem;color:var(--text-muted)}
-.portal-close{background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.3);color:#ff8080;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
-.portal-close:hover{background:rgba(255,68,68,0.2)}
-.portal-body{padding:1.8rem}
-
-/* CODE ENTRY */
-.code-entry{text-align:center}
-.code-entry h4{font-family:'Orbitron',monospace;font-size:0.95rem;margin-bottom:0.5rem}
-.code-entry p{font-size:0.82rem;color:var(--text-muted);margin-bottom:1.2rem}
-.code-row{display:flex;gap:0.5rem;max-width:360px;margin:0 auto 0.8rem}
-.code-row input{flex:1;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.8rem 1rem;color:var(--text);font-family:'Orbitron',monospace;font-size:1rem;letter-spacing:0.15em;text-align:center;outline:none;transition:border-color 0.2s}
-.code-row input:focus{border-color:var(--blue-bright)}
-.btn-p{background:var(--blue-bright);color:var(--blue-deep);border:none;border-radius:8px;padding:0.8rem 1.2rem;font-family:'Orbitron',monospace;font-weight:700;font-size:0.78rem;cursor:pointer;white-space:nowrap;transition:all 0.2s}
-.btn-p:hover{background:var(--cyan)}
-.btn-p:disabled{background:var(--surface2);color:var(--text-muted);cursor:not-allowed}
-
-/* ANALYSIS */
-#analysis-area{display:none}
-.steps-bar{display:flex;gap:0.3rem;margin-bottom:1.5rem;overflow-x:auto;padding-bottom:0.3rem}
-.step-dot{flex:1;min-width:60px;text-align:center;padding:0.4rem 0.3rem;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;font-size:0.62rem;color:var(--text-muted);transition:all 0.2s}
-.step-dot.done{border-color:var(--cyan);color:var(--cyan)}
-.file-cards{display:flex;flex-direction:column;gap:0.8rem}
-.file-card{background:var(--blue-deep);border:1px solid var(--border);border-radius:10px;padding:1rem;display:flex;align-items:center;gap:0.8rem;transition:all 0.2s;flex-wrap:wrap}
-.file-card.uploaded{border-color:var(--cyan)}
-.file-card-icon{font-size:1.5rem;min-width:32px;text-align:center}
-.file-card-info{flex:1;min-width:120px}
-.file-card-info h4{font-size:0.82rem;font-weight:600;margin-bottom:0.2rem}
-.file-card-info p{font-size:0.72rem;color:var(--text-muted)}
-.file-card-status{font-size:0.72rem;color:var(--text-muted)}
-.file-card-status.ok{color:var(--cyan)}
-.upload-btn-small{background:rgba(0,180,216,0.1);border:1px solid rgba(0,180,216,0.25);border-radius:6px;color:var(--blue-bright);padding:0.35rem 0.7rem;font-size:0.72rem;cursor:pointer;font-family:'Exo 2',sans-serif;transition:all 0.2s;white-space:nowrap}
-.upload-btn-small:hover{background:rgba(0,180,216,0.2)}
-.upload-btn-small.done{background:rgba(0,245,255,0.08);border-color:var(--cyan);color:var(--cyan)}
-.options-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin:1.2rem 0}
-.opt-group label{display:block;font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;font-weight:600}
-.opt-group select{width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.8rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.82rem;outline:none;cursor:pointer}
-.opt-group select:focus{border-color:var(--blue-bright)}
-.uses-badge{text-align:center;margin:0.8rem 0;font-size:0.72rem;color:var(--text-muted)}
-.uses-badge span{color:var(--gold);font-weight:600}
-.expiry-badge{text-align:center;font-size:0.7rem;color:var(--text-muted);margin-bottom:1rem}
-.expiry-badge span{color:#ff9060;font-weight:600}
-.run-btn{width:100%;background:var(--blue-bright);color:var(--blue-deep);border:none;border-radius:10px;padding:0.9rem;font-family:'Orbitron',monospace;font-weight:700;font-size:0.82rem;cursor:pointer;margin-top:1rem;letter-spacing:0.06em;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.5rem}
-.run-btn:hover{background:var(--cyan)}
-.run-btn:disabled{background:var(--surface2);color:var(--text-muted);cursor:not-allowed}
-.progress-wrap{display:none;margin-top:1rem}
-.progress-label{font-size:0.78rem;color:var(--text-muted);margin-bottom:0.5rem;text-align:center}
-.progress-bar{height:6px;background:var(--blue-deep);border-radius:3px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue-bright),var(--cyan));border-radius:3px;width:0%;transition:width 0.5s ease}
-#result-area{display:none;margin-top:1.5rem}
-.result-box{background:var(--blue-deep);border:1px solid var(--border);border-radius:10px;padding:1.2rem;font-size:0.85rem;line-height:1.8;white-space:pre-wrap;max-height:400px;overflow-y:auto;color:var(--text)}
-.result-actions{display:flex;gap:0.8rem;margin-top:0.8rem;flex-wrap:wrap}
-.btn-o{flex:1;min-width:120px;background:transparent;border:1px solid var(--blue-bright);color:var(--blue-bright);border-radius:8px;padding:0.7rem;font-family:'Orbitron',monospace;font-size:0.68rem;font-weight:700;cursor:pointer;transition:all 0.2s}
-.btn-o:hover{background:rgba(0,180,216,0.1)}
-.btn-o.red{border-color:#ff8080;color:#ff8080}
-.btn-o.red:hover{background:rgba(255,80,80,0.1)}
-#err-box{display:none;margin-top:0.8rem;background:rgba(255,80,80,0.08);border:1px solid rgba(255,80,80,0.2);border-radius:8px;padding:0.8rem;color:#ff8080;font-size:0.82rem}
-
-/* CONTACT */
-#contact{padding:4rem 2rem;position:relative;z-index:1;max-width:700px;margin:0 auto;text-align:center}
-.contact-grid{display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin-top:2rem}
-.citem{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.5rem;min-width:160px;transition:all 0.2s}
-.citem:hover{border-color:rgba(0,180,216,0.3);transform:translateY(-3px)}
-.citem-icon{font-size:1.3rem;margin-bottom:0.5rem}
-.citem-label{font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem}
-.citem-val{font-size:0.82rem}
-.citem-val a{color:var(--blue-bright);text-decoration:none}
-footer{border-top:1px solid var(--border);padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;position:relative;z-index:1}
-footer p{font-size:0.75rem;color:var(--text-muted)}
-
-/* ADMIN MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(2,11,24,0.96);align-items:center;justify-content:center;padding:1rem}
-.modal-overlay.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2rem;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;position:relative}
-.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.3rem}
-.modal-close-btn{background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.3);color:#ff8080;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
-.modal-close-btn:hover{background:rgba(255,68,68,0.2)}
-.modal h2{font-family:'Orbitron',monospace;font-size:1rem;font-weight:700}
-.modal-sub{font-size:0.8rem;color:var(--text-muted);margin-bottom:1.5rem}
-.fg{margin-bottom:1rem}
-.fg label{display:block;font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;font-weight:600}
-.fg input,.fg textarea{width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.7rem 1rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.88rem;outline:none;transition:border-color 0.2s}
-.fg input:focus,.fg textarea:focus{border-color:var(--blue-bright)}
-.fg textarea{resize:vertical;min-height:80px}
-.a-section{margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
-.a-section:last-child{border-bottom:none;margin-bottom:0}
-.a-section h3{font-family:'Orbitron',monospace;font-size:0.8rem;font-weight:700;margin-bottom:0.8rem;color:#90e0ef}
-.save-btn{width:100%;background:var(--blue-bright);color:var(--blue-deep);border:none;border-radius:8px;padding:0.8rem;font-family:'Orbitron',monospace;font-weight:700;font-size:0.82rem;cursor:pointer;margin-top:0.5rem;transition:all 0.2s}
-.save-btn:hover{background:var(--cyan)}
-.save-confirm{display:none;text-align:center;color:var(--cyan);font-size:0.8rem;margin-top:0.5rem}
-.code-chip{display:flex;align-items:center;justify-content:space-between;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.5rem 0.8rem;margin-bottom:0.4rem;font-family:'Orbitron',monospace;font-size:0.72rem;flex-wrap:wrap;gap:0.3rem}
-.cu{font-size:0.65rem;color:var(--text-muted)}
-.cu.warn{color:var(--gold)}
-.cu.dead{color:#ff6060}
-.cc{background:rgba(0,180,216,0.1);border:1px solid rgba(0,180,216,0.2);border-radius:4px;color:var(--blue-bright);padding:0.15rem 0.5rem;font-size:0.65rem;cursor:pointer;font-family:'Exo 2',sans-serif}
-#admin-panel{display:none}
-
-/* WORKER URL INFO */
-.worker-info{background:rgba(0,180,216,0.05);border:1px solid rgba(0,180,216,0.15);border-radius:8px;padding:0.8rem;margin-bottom:1rem;font-size:0.78rem;color:var(--text-muted)}
-.worker-info strong{color:var(--blue-bright)}
-
-@media(max-width:768px){
-  .nav-links{display:none}
-  .hamburger{display:flex}
-  .services-grid{grid-template-columns:1fr}
-  .options-row{grid-template-columns:1fr}
-  footer{flex-direction:column;text-align:center}
-  .result-actions{flex-direction:column}
-}
-</style>
 </head>
 <body>
 <div class="bg-grid"></div>
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="logo">Green<span>Rock</span> AI</a>
+  <a href="https://www.greenrock-ai.com/#" class="logo">Green<span>Rock</span> AI</a>
   <ul class="nav-links">
-    <li><a href="#services">Services</a></li>
-    <li><a href="#portal">Platform</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><button class="nav-admin" onclick="openAdmin()">Admin ⚙</button></li>
+    <li><a href="https://www.greenrock-ai.com/#services">Services</a></li>
+    <li><a href="https://www.greenrock-ai.com/#portal">Platform</a></li>
+    <li><a href="https://www.greenrock-ai.com/#contact">Contact</a></li>
+    <li><button class="nav-admin">Admin ⚙</button></li>
+    <li><a href="geomind.html" style="padding:7px 16px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:8px;color:#fff;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">🧠 GeoMind AI</a></li>
   </ul>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+  <button class="hamburger" id="hamburger">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobile-menu">
-  <a href="#services" onclick="closeMenu()">Services</a>
-  <a href="#portal" onclick="closeMenu()">Platform</a>
-  <a href="#contact" onclick="closeMenu()">Contact</a>
-  <button onclick="closeMenu();openAdmin()">Admin ⚙</button>
+  <a href="https://www.greenrock-ai.com/#services">Services</a>
+  <a href="https://www.greenrock-ai.com/#portal">Platform</a>
+  <a href="https://www.greenrock-ai.com/#contact">Contact</a>
+  <button>Admin ⚙</button>
 </div>
 
 <!-- HERO -->
@@ -233,7 +46,7 @@ footer p{font-size:0.75rem;color:var(--text-muted)}
     <div class="globe"><div class="globe-dot"></div><div class="globe-dot"></div><div class="globe-dot"></div></div>
     <div class="globe-ring"></div>
   </div>
-  <a href="#portal" class="hero-btn">▶ Launch Platform</a>
+  <a href="https://www.greenrock-ai.com/#portal" class="hero-btn">▶ Launch Platform</a>
 </section>
 
 <!-- SERVICES -->
@@ -242,7 +55,7 @@ footer p{font-size:0.75rem;color:var(--text-muted)}
   <h2 class="section-title">GreenRock <span style="color:var(--blue-bright)">Services</span></h2>
   <div class="services-grid">
     <div class="svc-card"><div class="svc-icon">🎯</div><h3>Drill Plan Optimisation</h3><p>Using your existing drillhole data — geochemical assays, lithological logs, and grade intervals — our AI models predict exactly where the next hole should be drilled to intersect high-grade mineralisation.</p><span class="svc-tag">High Precision · Fast · Cost Effective</span></div>
-    <div class="svc-card"><div class="svc-icon">📡</div><h3>Geophysics & New Discovery</h3><p>GreenRock deploys ground geophysics instruments in the field — IP, EM, and Magnetics — then processes datasets through our AI engine to detect and map new mineralisation zones.</p><span class="svc-tag">IP · EM · Magnetics · AI</span></div>
+    <div class="svc-card"><div class="svc-icon">📡</div><h3>Geophysics &amp; New Discovery</h3><p>GreenRock deploys ground geophysics instruments in the field — IP, EM, and Magnetics — then processes datasets through our AI engine to detect and map new mineralisation zones.</p><span class="svc-tag">IP · EM · Magnetics · AI</span></div>
   </div>
 </section>
 
@@ -259,7 +72,13 @@ footer p{font-size:0.75rem;color:var(--text-muted)}
     <div class="mchip"><span class="dot" style="background:#80c0d0"></span>Lead</div>
     <div class="mchip"><span class="dot" style="background:#f09060"></span>Uranium</div>
     <div class="mchip"><span class="dot" style="background:#90e090"></span>REEs</div>
-    <div class="mchip"><span class="dot" style="background:#f0f060"></span>Manganese</div>
+    <div class="mchip"><span class="dot" style="background:#f0f060"></span>Manganese
+    <div class="svc-card" style="border:1.5px solid rgba(16,185,129,0.4);background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(6,182,212,0.05));">
+      <div class="svc-icon">🧠</div>
+      <h3>GeoMind DualMind AI</h3>
+      <p>Dual AI verification pipeline — GPT-4o analyses, Claude verifies. Confidence scorecard with drill recommendations for every interpretation.</p>
+      <a href="geomind.html" style="display:inline-block;margin-top:12px;padding:8px 18px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:8px;color:#fff;font-size:12px;font-weight:700;text-decoration:none;">Launch GeoMind →</a>
+    </div></div>
   </div>
 </div>
 
@@ -273,7 +92,7 @@ footer p{font-size:0.75rem;color:var(--text-muted)}
         <div class="portal-head-icon">🧠</div>
         <div><h3>GreenRock AI Platform</h3><p>Secure · Real-time · Powered by AI</p></div>
       </div>
-      <button class="portal-close" onclick="resetAll()" title="Exit">✕</button>
+      <button class="portal-close" title="Exit">✕</button>
     </div>
     <div class="portal-body">
 
@@ -282,8 +101,8 @@ footer p{font-size:0.75rem;color:var(--text-muted)}
         <h4>Enter Access Code</h4>
         <p>Enter your 10-digit access code provided by GreenRock AI</p>
         <div class="code-row">
-          <input type="text" id="access-code" maxlength="10" placeholder="0000000000" oninput="this.value=this.value.replace(/\D/g,'')">
-          <button class="btn-p" onclick="verifyCode()">Enter →</button>
+          <input type="text" id="access-code" maxlength="10" placeholder="0000000000" wfd-id="id0">
+          <button class="btn-p">Enter →</button>
         </div>
         <div id="code-error" style="color:#ff8080;font-size:0.8rem;margin-top:0.4rem;display:none"></div>
         <p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.8rem">Contact <a href="mailto:kimba@greenrock-ai.com" style="color:var(--blue-bright)">kimba@greenrock-ai.com</a> to get your code.</p>
@@ -302,27 +121,27 @@ footer p{font-size:0.75rem;color:var(--text-muted)}
           <div class="step-dot" id="step-5">Target</div>
         </div>
         <div class="file-cards">
-          <div class="file-card" id="fc-0"><div class="file-card-icon">📍</div><div class="file-card-info"><h4>1. Collar Coordinates</h4><p>Drillhole locations (Easting, Northing, Elevation)</p></div><input type="file" id="fi-0" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(0,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-0').click()">Upload</button><div class="file-card-status" id="fs-0">Pending</div></div>
-          <div class="file-card" id="fc-1"><div class="file-card-icon">📐</div><div class="file-card-info"><h4>2. Downhole Survey</h4><p>Inclination and azimuth measurements</p></div><input type="file" id="fi-1" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(1,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-1').click()">Upload</button><div class="file-card-status" id="fs-1">Pending</div></div>
-          <div class="file-card" id="fc-2"><div class="file-card-icon">🧪</div><div class="file-card-info"><h4>3. Assay Results</h4><p>Cu grades and geochemical data</p></div><input type="file" id="fi-2" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(2,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-2').click()">Upload</button><div class="file-card-status" id="fs-2">Pending</div></div>
-          <div class="file-card" id="fc-3"><div class="file-card-icon">🪨</div><div class="file-card-info"><h4>4. Lithological Logs</h4><p>Rock types linked by Hole ID</p></div><input type="file" id="fi-3" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(3,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-3').click()">Upload</button><div class="file-card-status" id="fs-3">Pending</div></div>
-          <div class="file-card" id="fc-4"><div class="file-card-icon">🗺️</div><div class="file-card-info"><h4>5. Geological Context</h4><p>Structural and geological interpretation</p></div><input type="file" id="fi-4" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(4,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-4').click()">Upload</button><div class="file-card-status" id="fs-4">Pending</div></div>
-          <div class="file-card" id="fc-5"><div class="file-card-icon">🎯</div><div class="file-card-info"><h4>6. Target Area</h4><p>Polygon coordinates of exploration target</p></div><input type="file" id="fi-5" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFileUpload(5,this)"><button class="upload-btn-small" onclick="document.getElementById('fi-5').click()">Upload</button><div class="file-card-status" id="fs-5">Pending</div></div>
+          <div class="file-card" id="fc-0"><div class="file-card-icon">📍</div><div class="file-card-info"><h4>1. Collar Coordinates</h4><p>Drillhole locations (Easting, Northing, Elevation)</p></div><input type="file" id="fi-0" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id1"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-0">Pending</div></div>
+          <div class="file-card" id="fc-1"><div class="file-card-icon">📐</div><div class="file-card-info"><h4>2. Downhole Survey</h4><p>Inclination and azimuth measurements</p></div><input type="file" id="fi-1" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id2"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-1">Pending</div></div>
+          <div class="file-card" id="fc-2"><div class="file-card-icon">🧪</div><div class="file-card-info"><h4>3. Assay Results</h4><p>Cu grades and geochemical data</p></div><input type="file" id="fi-2" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id3"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-2">Pending</div></div>
+          <div class="file-card" id="fc-3"><div class="file-card-icon">🪨</div><div class="file-card-info"><h4>4. Lithological Logs</h4><p>Rock types linked by Hole ID</p></div><input type="file" id="fi-3" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id4"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-3">Pending</div></div>
+          <div class="file-card" id="fc-4"><div class="file-card-icon">🗺️</div><div class="file-card-info"><h4>5. Geological Context</h4><p>Structural and geological interpretation</p></div><input type="file" id="fi-4" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id5"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-4">Pending</div></div>
+          <div class="file-card" id="fc-5"><div class="file-card-icon">🎯</div><div class="file-card-info"><h4>6. Target Area</h4><p>Polygon coordinates of exploration target</p></div><input type="file" id="fi-5" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id6"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-5">Pending</div></div>
         </div>
         <div class="options-row">
-          <div class="opt-group"><label>Cu Cut-off Grade</label><select id="cutoff-grade"><option value="0.4">0.4% Cu</option><option value="0.5" selected>0.5% Cu</option><option value="0.6">0.6% Cu</option><option value="0.7">0.7% Cu</option><option value="0.8">0.8% Cu</option><option value="1.0">1.0% Cu</option><option value="1.2">1.2% Cu</option><option value="1.5">1.5% Cu</option><option value="2.0">2.0% Cu</option><option value="2.5">2.5% Cu</option><option value="3.0">3.0% Cu</option><option value="3.5">3.5% Cu</option><option value="4.0">4.0% Cu</option><option value="5.0">5.0% Cu</option><option value="6.0">6.0% Cu</option><option value="7.0">7.0% Cu</option></select></div>
+          <div class="opt-group"><label>Cu Cut-off Grade</label><select id="cutoff-grade"><option value="0.4">0.4% Cu</option><option value="0.5" selected="">0.5% Cu</option><option value="0.6">0.6% Cu</option><option value="0.7">0.7% Cu</option><option value="0.8">0.8% Cu</option><option value="1.0">1.0% Cu</option><option value="1.2">1.2% Cu</option><option value="1.5">1.5% Cu</option><option value="2.0">2.0% Cu</option><option value="2.5">2.5% Cu</option><option value="3.0">3.0% Cu</option><option value="3.5">3.5% Cu</option><option value="4.0">4.0% Cu</option><option value="5.0">5.0% Cu</option><option value="6.0">6.0% Cu</option><option value="7.0">7.0% Cu</option></select></div>
           <div class="opt-group"><label>Report Language</label><select id="report-lang"><option value="English">English</option><option value="French">Français</option><option value="Chinese">中文</option></select></div>
           <div class="opt-group"><label>Report Format</label><select id="report-format"><option value="pdf">PDF</option><option value="word">Word (.doc)</option></select></div>
         </div>
-        <button class="run-btn" id="run-btn" onclick="runAnalysis()" disabled>▶ Upload all 6 files (0/6)</button>
+        <button class="run-btn" id="run-btn" disabled="">▶ Upload all 6 files (0/6)</button>
         <div class="progress-wrap" id="progress-wrap"><div class="progress-label" id="progress-label">Integrating datasets...</div><div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div></div>
         <div id="err-box"></div>
         <div id="result-area">
           <div class="result-box" id="result-content"></div>
           <div class="result-actions">
-            <button class="btn-o" onclick="downloadReport()">⬇ Download Report</button>
-            <button class="btn-o" onclick="resetAnalysis()">↺ New Analysis</button>
-            <button class="btn-o red" onclick="resetAll()">✕ Exit</button>
+            <button class="btn-o">⬇ Download Report</button>
+            <button class="btn-o">↺ New Analysis</button>
+            <button class="btn-o red">✕ Exit</button>
           </div>
         </div>
       </div>
@@ -338,11 +157,20 @@ footer p{font-size:0.75rem;color:var(--text-muted)}
   <div class="contact-grid">
     <div class="citem"><div class="citem-icon">📞</div><div class="citem-label">Phone</div><div class="citem-val"><a href="tel:+27662998028">+27 66 299 8028</a></div></div>
     <div class="citem"><div class="citem-icon">✉️</div><div class="citem-label">Email</div><div class="citem-val"><a href="mailto:kimba@greenrock-ai.com">kimba@greenrock-ai.com</a></div></div>
-    <div class="citem"><div class="citem-icon">🌐</div><div class="citem-label">Website</div><div class="citem-val"><a href="http://www.greenrock-ai.com">www.greenrock-ai.com</a></div></div>
+    <div class="citem"><div class="citem-icon">🌐</div><div class="citem-label">Website</div><div class="citem-val"><a href="http://www.greenrock-ai.com/">www.greenrock-ai.com</a></div></div>
     <div class="citem"><div class="citem-icon">📍</div><div class="citem-label">Address</div><div class="citem-val" style="font-size:0.75rem">114 Nicholson Rd, Unit 10<br>Sunward Park, Boksburg<br>Gauteng, South Africa</div></div>
   </div>
 </section>
 
+
+<section style="background:linear-gradient(135deg,#060e1a,#0c1829);padding:60px 20px;text-align:center;border-top:1px solid rgba(255,255,255,0.06);">
+  <div style="max-width:600px;margin:0 auto;">
+    <div style="font-size:40px;margin-bottom:12px;">⛏️🧠</div>
+    <h2 style="font-size:28px;font-weight:800;color:#fff;margin-bottom:8px;">GeoMind DualMind</h2>
+    <p style="font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:24px;line-height:1.7;">Upload your geophysical data, drill results, or maps.<br>Two AI models analyse and verify every interpretation.<br>Get a confidence scorecard with drill recommendations.</p>
+    <a href="geomind.html" style="display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:12px;color:#fff;font-size:16px;font-weight:800;text-decoration:none;box-shadow:0 4px 20px rgba(16,185,129,0.3);">🚀 Launch GeoMind AI →</a>
+  </div>
+</section>
 <footer>
   <span class="logo">Green<span>Rock</span> AI</span>
   <p>© 2026 GreenRock AI · Boksburg, South Africa</p>
@@ -354,261 +182,428 @@ footer p{font-size:0.75rem;color:var(--text-muted)}
     <div id="admin-login">
       <div class="modal-header">
         <h2>Admin Access</h2>
-        <button class="modal-close-btn" onclick="closeAdmin()">✕</button>
+        <button class="modal-close-btn">✕</button>
       </div>
       <p class="modal-sub">Enter your admin password</p>
-      <div class="fg"><label>Password</label><input type="password" id="admin-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkAdminPass()"></div>
-      <button class="btn-p" style="width:100%" onclick="checkAdminPass()">Login →</button>
+      <div class="fg"><label>Password</label><input type="password" id="admin-pass" placeholder="••••••••" wfd-id="id7"></div>
+      <button class="btn-p" style="width:100%">Login →</button>
       <div id="pass-error" style="color:#ff8080;font-size:0.8rem;margin-top:0.6rem;display:none">Incorrect password</div>
     </div>
     <div id="admin-panel">
       <div class="modal-header">
         <h2>Admin Panel</h2>
-        <button class="modal-close-btn" onclick="closeAdmin()">✕</button>
+        <button class="modal-close-btn">✕</button>
       </div>
       <p class="modal-sub">Manage Cloudflare Worker URL and client codes</p>
 
       <div class="a-section">
         <h3>🔗 Cloudflare Worker URL</h3>
         <div class="worker-info">Your API key and prompt are stored securely in your Cloudflare Worker. Paste your Worker URL below.</div>
-        <div class="fg"><label>Worker URL (saved permanently)</label><input type="text" id="worker-url" placeholder="https://greenrock-worker.YOUR-NAME.workers.dev"></div>
+        <div class="fg"><label>Worker URL (saved permanently)</label><input type="text" id="worker-url" placeholder="https://greenrock-worker.YOUR-NAME.workers.dev" wfd-id="id8"></div>
       </div>
 
-      <button class="save-btn" onclick="saveSettings()">💾 Save Worker URL</button>
+      <button class="save-btn">💾 Save Worker URL</button>
       <div class="save-confirm" id="save-confirm">✅ Saved successfully!</div>
 
       <div class="a-section" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)">
         <h3>🎫 Client Access Codes</h3>
         <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.8rem">Each code: <strong>2 uses</strong> within <strong>24 hours</strong>.</p>
-        <button class="btn-p" onclick="generateCode()">+ Generate New Code</button>
+        <button class="btn-p">+ Generate New Code</button>
         <div id="codes-list" style="margin-top:0.8rem"></div>
       </div>
 
-      <button class="btn-o red" style="width:100%;margin-top:1rem" onclick="adminLogout()">Logout</button>
+      <button class="btn-o red" style="width:100%;margin-top:1rem">Logout</button>
     </div>
   </div>
 </div>
 
-<script>
-// ── WORKER URL ──
-// IMPORTANT: Change this to your actual Cloudflare Worker URL after deploying
-const DEFAULT_WORKER_URL = "https://greenrock-worker.YOUR-NAME.workers.dev";
 
-function getWorkerUrl(){
-  const s=getSettings();
-  return s.workerUrl||DEFAULT_WORKER_URL;
-}
 
-// ── STORAGE ──
-function getCodes(){try{return JSON.parse(localStorage.getItem('gr_codes4')||'{}')}catch(e){return{}}}
-function saveCodes(c){localStorage.setItem('gr_codes4',JSON.stringify(c))}
-function getSettings(){try{return JSON.parse(localStorage.getItem('gr_settings4')||'{}')}catch(e){return{}}}
 
-// ── HAMBURGER ──
-function toggleMenu(){
-  document.getElementById('hamburger').classList.toggle('open');
-  document.getElementById('mobile-menu').classList.toggle('open');
-}
-function closeMenu(){
-  document.getElementById('hamburger').classList.remove('open');
-  document.getElementById('mobile-menu').classList.remove('open');
-}
+</body></html>
+------MultipartBoundary--Z9GXutaKO7kFmQF42zSwrpmZkdmUSQ9ecmMKD9e7u7----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&display=swap
 
-// ── ADMIN ──
-function openAdmin(){
-  document.getElementById('admin-modal').classList.add('open');
-  document.getElementById('admin-pass').value='';
-  document.getElementById('pass-error').style.display='none';
-}
-function closeAdmin(){
-  document.getElementById('admin-modal').classList.remove('open');
-  adminLogout();
-}
-function checkAdminPass(){
-  if(document.getElementById('admin-pass').value==='Johnny22'){
-    document.getElementById('admin-login').style.display='none';
-    document.getElementById('admin-panel').style.display='block';
-    loadAdminPanel();
-  }else{
-    document.getElementById('pass-error').style.display='block';
-  }
-}
-function adminLogout(){
-  document.getElementById('admin-login').style.display='block';
-  document.getElementById('admin-panel').style.display='none';
-}
-function loadAdminPanel(){
-  const s=getSettings();
-  if(s.workerUrl)document.getElementById('worker-url').value=s.workerUrl;
-  renderCodes();
-}
-function saveSettings(){
-  localStorage.setItem('gr_settings4',JSON.stringify({
-    workerUrl:document.getElementById('worker-url').value.trim()
-  }));
-  const c=document.getElementById('save-confirm');
-  c.style.display='block';
-  setTimeout(()=>c.style.display='none',2500);
-}
+@charset "utf-8";
 
-// ── CODES ──
-function generateCode(){
-  const code=Array.from({length:10},()=>Math.floor(Math.random()*10)).join('');
-  const codes=getCodes();
-  codes[code]={uses:0,created:Date.now(),expires:Date.now()+86400000};
-  saveCodes(codes);renderCodes();
-}
-function renderCodes(){
-  const codes=getCodes();const list=document.getElementById('codes-list');const now=Date.now();
-  const entries=Object.entries(codes).reverse();
-  if(!entries.length){list.innerHTML='<p style="font-size:0.78rem;color:var(--text-muted)">No codes yet.</p>';return}
-  list.innerHTML=entries.map(([code,data])=>{
-    const expired=now>data.expires;const usedUp=data.uses>=2;const dead=expired||usedUp;
-    const r=2-data.uses;const hoursLeft=Math.max(0,Math.ceil((data.expires-now)/3600000));
-    const label=dead?'EXPIRED':`${r} use${r!==1?'s':''} · ${hoursLeft}h left`;
-    const cls=dead?'dead':r===1?'warn':'';
-    return`<div class="code-chip">
-      <span>${code.replace(/(\d{5})(\d{5})/,'$1 $2')}</span>
-      <span class="cu ${cls}">${label}</span>
-      <button class="cc" onclick="copyCode('${code}')">Copy</button>
-    </div>`;
-  }).join('');
-}
-function copyCode(code){navigator.clipboard.writeText(code).then(()=>alert('Code copied: '+code))}
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 300; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYlK-4E4Q.woff2") format("woff2"); unicode-range: U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
 
-// ── CLIENT VERIFICATION ──
-let currentCode=null;
-function verifyCode(){
-  const input=document.getElementById('access-code').value.trim();
-  const err=document.getElementById('code-error');
-  const codes=getCodes();const now=Date.now();
-  if(!codes[input]){err.textContent='❌ Invalid code. Contact kimba@greenrock-ai.com';err.style.display='block';return}
-  if(now>codes[input].expires){err.textContent='❌ Code expired (24h). Request a new code.';err.style.display='block';return}
-  if(codes[input].uses>=2){err.textContent='❌ Code fully used (2/2). Request a new code.';err.style.display='block';return}
-  currentCode=input;err.style.display='none';
-  document.getElementById('code-entry').style.display='none';
-  document.getElementById('analysis-area').style.display='block';
-  updateBadges();
-}
-function updateBadges(){
-  const codes=getCodes();if(!currentCode||!codes[currentCode])return;
-  const r=2-codes[currentCode].uses;
-  const hoursLeft=Math.max(0,Math.ceil((codes[currentCode].expires-Date.now())/3600000));
-  document.getElementById('uses-badge').innerHTML=`Code: <span>${r} analysis use${r!==1?'s':''} remaining</span>`;
-  document.getElementById('expiry-badge').innerHTML=`Expires in: <span>${hoursLeft} hour${hoursLeft!==1?'s':''}</span>`;
-}
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 300; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYsK-4E4Q.woff2") format("woff2"); unicode-range: U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116; }
 
-// ── FILE HANDLING ──
-const uploadedFiles={};
-const fileNames=['Collar','Survey','Assay','Lithology','Geology','Target'];
-function handleFileUpload(index,input){
-  const file=input.files[0];if(!file)return;
-  uploadedFiles[index]=file;
-  const short=file.name.length>18?file.name.substring(0,15)+'...':file.name;
-  document.getElementById('fs-'+index).textContent='✓ '+short;
-  document.getElementById('fs-'+index).className='file-card-status ok';
-  document.getElementById('fc-'+index).classList.add('uploaded');
-  document.querySelector('#fc-'+index+' .upload-btn-small').textContent='Change';
-  document.querySelector('#fc-'+index+' .upload-btn-small').classList.add('done');
-  document.getElementById('step-'+index).classList.add('done');
-  updateRunBtn();
-}
-function updateRunBtn(){
-  const count=Object.keys(uploadedFiles).length;
-  const btn=document.getElementById('run-btn');
-  btn.disabled=count<6;
-  btn.textContent=count>=6?'▶ GENERATE AI REPORT':'▶ Upload all 6 files ('+count+'/6)';
-}
-function readFileAsText(file){
-  return new Promise((resolve,reject)=>{
-    const reader=new FileReader();
-    if(file.name.toLowerCase().endsWith('.csv')){reader.onload=e=>resolve(e.target.result);reader.onerror=reject;reader.readAsText(file)}
-    else{reader.onload=e=>{try{const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});let t='';wb.SheetNames.forEach(sn=>{t+=`Sheet: ${sn}\n${XLSX.utils.sheet_to_csv(wb.Sheets[sn])}\n\n`});resolve(t)}catch(err){reject(err)}};reader.onerror=reject;reader.readAsArrayBuffer(file)}
-  });
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 300; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYnK-4E4Q.woff2") format("woff2"); unicode-range: U+102-103, U+110-111, U+128-129, U+168-169, U+1A0-1A1, U+1AF-1B0, U+300-301, U+303-304, U+308-309, U+323, U+329, U+1EA0-1EF9, U+20AB; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 300; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYmK-4E4Q.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 300; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYoK-4.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYlK-4E4Q.woff2") format("woff2"); unicode-range: U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYsK-4E4Q.woff2") format("woff2"); unicode-range: U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYnK-4E4Q.woff2") format("woff2"); unicode-range: U+102-103, U+110-111, U+128-129, U+168-169, U+1A0-1A1, U+1AF-1B0, U+300-301, U+303-304, U+308-309, U+323, U+329, U+1EA0-1EF9, U+20AB; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYmK-4E4Q.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYoK-4.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 500; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYlK-4E4Q.woff2") format("woff2"); unicode-range: U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 500; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYsK-4E4Q.woff2") format("woff2"); unicode-range: U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 500; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYnK-4E4Q.woff2") format("woff2"); unicode-range: U+102-103, U+110-111, U+128-129, U+168-169, U+1A0-1A1, U+1AF-1B0, U+300-301, U+303-304, U+308-309, U+323, U+329, U+1EA0-1EF9, U+20AB; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 500; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYmK-4E4Q.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 500; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYoK-4.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 600; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYlK-4E4Q.woff2") format("woff2"); unicode-range: U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 600; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYsK-4E4Q.woff2") format("woff2"); unicode-range: U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 600; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYnK-4E4Q.woff2") format("woff2"); unicode-range: U+102-103, U+110-111, U+128-129, U+168-169, U+1A0-1A1, U+1AF-1B0, U+300-301, U+303-304, U+308-309, U+323, U+329, U+1EA0-1EF9, U+20AB; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 600; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYmK-4E4Q.woff2") format("woff2"); unicode-range: U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+
+@font-face { font-family: "Exo 2"; font-style: normal; font-weight: 600; font-display: swap; src: url("https://fonts.gstatic.com/s/exo2/v26/7cHmv4okm5zmbtYoK-4.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+@font-face { font-family: Orbitron; font-style: normal; font-weight: 400; font-display: swap; src: url("https://fonts.gstatic.com/s/orbitron/v35/yMJRMIlzdpvBhQQL_Qq7dy0.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+@font-face { font-family: Orbitron; font-style: normal; font-weight: 600; font-display: swap; src: url("https://fonts.gstatic.com/s/orbitron/v35/yMJRMIlzdpvBhQQL_Qq7dy0.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+@font-face { font-family: Orbitron; font-style: normal; font-weight: 700; font-display: swap; src: url("https://fonts.gstatic.com/s/orbitron/v35/yMJRMIlzdpvBhQQL_Qq7dy0.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+@font-face { font-family: Orbitron; font-style: normal; font-weight: 900; font-display: swap; src: url("https://fonts.gstatic.com/s/orbitron/v35/yMJRMIlzdpvBhQQL_Qq7dy0.woff2") format("woff2"); unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+------MultipartBoundary--Z9GXutaKO7kFmQF42zSwrpmZkdmUSQ9ecmMKD9e7u7----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-5f2fcc62-7b08-4ae4-9d58-8a1b2a4470ae@mhtml.blink
+
+@charset "utf-8";
+
+:root { --blue-deep: #020b18; --blue-mid: #0a2a4a; --blue-bright: #00b4d8; --cyan: #00f5ff; --gold: #f0c040; --surface: #071e33; --surface2: #0d2a42; --text: #e0f4ff; --text-muted: #5a8fa8; --border: rgba(0,180,216,0.15); --red: #ff4444; }
+
+*, ::before, ::after { box-sizing: border-box; margin: 0px; padding: 0px; }
+
+html { scroll-behavior: smooth; }
+
+body { font-family: "Exo 2", sans-serif; background: var(--blue-deep); color: var(--text); overflow-x: hidden; }
+
+.bg-grid { position: fixed; inset: 0px; z-index: 0; pointer-events: none; background-image: linear-gradient(rgba(0, 180, 216, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 180, 216, 0.03) 1px, transparent 1px); background-size: 50px 50px; }
+
+nav { position: fixed; top: 0px; left: 0px; right: 0px; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: rgba(2, 11, 24, 0.97); border-bottom: 1px solid var(--border); }
+
+.logo { font-family: Orbitron, monospace; font-weight: 900; font-size: 1.1rem; color: var(--text); text-decoration: none; }
+
+.logo span { color: var(--blue-bright); }
+
+.nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
+
+.nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+
+.nav-links a:hover { color: var(--blue-bright); }
+
+.nav-admin { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 0.4rem 0.9rem; border-radius: 6px; font-size: 0.78rem; cursor: pointer; font-family: "Exo 2", sans-serif; transition: 0.2s; }
+
+.nav-admin:hover { border-color: var(--blue-bright); color: var(--blue-bright); }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 5px; background: none; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; }
+
+.hamburger span { display: block; width: 24px; height: 2px; background: var(--text-muted); border-radius: 2px; transition: 0.3s; }
+
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+
+.hamburger.open span:nth-child(2) { opacity: 0; }
+
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+.mobile-menu { display: none; position: fixed; top: 60px; left: 0px; right: 0px; background: rgba(2, 11, 24, 0.98); border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; z-index: 99; flex-direction: column; gap: 1rem; }
+
+.mobile-menu.open { display: flex; }
+
+.mobile-menu a { color: var(--text-muted); text-decoration: none; font-size: 1rem; padding: 0.5rem 0px; border-bottom: 1px solid var(--border); }
+
+.mobile-menu a:hover { color: var(--blue-bright); }
+
+.mobile-menu button { background: var(--blue-bright); color: var(--blue-deep); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 8px; padding: 0.7rem; font-family: Orbitron, monospace; font-weight: 700; font-size: 0.82rem; cursor: pointer; margin-top: 0.5rem; }
+
+#hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 6rem 2rem 4rem; position: relative; z-index: 1; }
+
+.hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0, 180, 216, 0.08); border: 1px solid rgba(0, 180, 216, 0.25); border-radius: 100px; padding: 0.4rem 1.2rem; font-size: 0.75rem; color: var(--blue-bright); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem; }
+
+.badge-pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); animation: 2s ease 0s infinite normal none running pulse; }
+
+@keyframes pulse { 
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
-// ── RUN ANALYSIS via Cloudflare Worker ──
-let lastResult='',lastLang='English',lastFormat='pdf';
-async function runAnalysis(){
-  const eb=document.getElementById('err-box');const ra=document.getElementById('result-area');
-  const pw=document.getElementById('progress-wrap');const pf=document.getElementById('progress-fill');const pl=document.getElementById('progress-label');
-  eb.style.display='none';ra.style.display='none';
-  const workerUrl=getWorkerUrl();
-  if(!workerUrl||workerUrl.includes('YOUR-NAME')){
-    eb.textContent='⚠️ Worker URL not configured. Please ask your GreenRock AI administrator to set up the Cloudflare Worker.';
-    eb.style.display='block';return;
-  }
-  if(Object.keys(uploadedFiles).length<6){eb.textContent='⚠️ Please upload all 6 files.';eb.style.display='block';return}
-  const cutoff=document.getElementById('cutoff-grade').value;
-  lastLang=document.getElementById('report-lang').value;
-  lastFormat=document.getElementById('report-format').value;
-  const btn=document.getElementById('run-btn');btn.disabled=true;btn.textContent='⏳ ANALYSING...';
-  pw.style.display='block';pf.style.width='5%';
-  const steps=['Reading collar data...','Reading survey data...','Reading assay data...','Reading lithology...','Reading geological context...','Reading target area...','Sending to AI...','Generating report...'];
-  let si=0;
-  const sv=setInterval(()=>{if(si<steps.length-1){si++;pl.textContent=steps[si];pf.style.width=Math.min(85,(si+1)/steps.length*85)+'%'}},2500);
-  try{
-    const texts=await Promise.all([0,1,2,3,4,5].map(i=>readFileAsText(uploadedFiles[i])));
-    const datasets=fileNames.map((name,i)=>`=== ${name.toUpperCase()} DATA ===\n${texts[i].substring(0,5000)}`).join('\n\n');
-    const response=await fetch(workerUrl,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({datasets,cutoff,language:lastLang})
-    });
-    clearInterval(sv);
-    const data=await response.json();
-    if(!response.ok||data.error)throw new Error(data.error||'Worker error');
-    lastResult=data.result;
-    const codes=getCodes();codes[currentCode].uses++;saveCodes(codes);updateBadges();
-    pf.style.width='100%';pl.textContent='✅ Analysis complete!';
-    setTimeout(()=>pw.style.display='none',2000);
-    document.getElementById('result-content').textContent=lastResult;
-    ra.style.display='block';ra.scrollIntoView({behavior:'smooth'});
-  }catch(err){
-    clearInterval(sv);pw.style.display='none';
-    eb.textContent='❌ Error: '+err.message;eb.style.display='block';
-  }finally{btn.disabled=false;updateRunBtn()}
+h1 { font-family: Orbitron, monospace; font-size: clamp(1.8rem, 5vw, 3.8rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.2rem; }
+
+h1 .accent { color: var(--blue-bright); }
+
+h1 .gold { color: var(--gold); }
+
+.hero-sub { font-size: 1rem; color: var(--text-muted); line-height: 1.8; max-width: 540px; margin: 0px auto 2.5rem; }
+
+.globe-wrap { position: relative; width: 200px; height: 200px; margin: 0px auto 2.5rem; }
+
+.globe { width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle at 35% 35%, rgb(13, 74, 122), rgb(2, 11, 24)); border: 1px solid rgba(0, 180, 216, 0.3); box-shadow: rgba(0, 180, 216, 0.15) 0px 0px 60px; position: relative; overflow: hidden; }
+
+.globe::before { content: ""; position: absolute; inset: 0px; background: repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(0, 180, 216, 0.05) 18px, rgba(0, 180, 216, 0.05) 19px); }
+
+.globe::after { content: ""; position: absolute; inset: 0px; background: repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(0, 180, 216, 0.05) 18px, rgba(0, 180, 216, 0.05) 19px); }
+
+.globe-ring { position: absolute; inset: -15px; border-radius: 50%; border: 1px dashed rgba(0, 180, 216, 0.2); animation: 20s linear 0s infinite normal none running spin; }
+
+@keyframes spin { 
+  100% { transform: rotate(360deg); }
 }
 
-// ── DOWNLOAD ──
-function downloadReport(){if(lastFormat==='pdf')downloadPDF();else downloadWord()}
-function downloadPDF(){
-  const w=window.open('','_blank');const fr=lastLang==='French';
-  w.document.write(`<!DOCTYPE html><html><head><title>GreenRock AI Report</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:2rem;color:#111;font-size:11pt;line-height:1.6}.header{border-bottom:3px solid #007ba7;padding-bottom:1rem;margin-bottom:2rem}.logo{font-size:1.8rem;font-weight:900;color:#007ba7}.meta{font-size:9pt;color:#666;margin-top:0.5rem}pre{white-space:pre-wrap;font-size:10pt;line-height:1.7}.footer{margin-top:3rem;border-top:1px solid #ccc;padding-top:1rem;font-size:8pt;color:#999;text-align:center}.conf{background:#fff3cd;border:1px solid #ffc107;padding:0.5rem 1rem;font-size:9pt;margin-bottom:1rem;text-align:center}@media print{.footer{position:fixed;bottom:0}}</style></head><body><div class="header"><div class="logo">GREENROCK AI</div><div class="meta">${fr?'Rapport d\'Exploration':'Exploration Report'} · ${new Date().toLocaleDateString()} · ${fr?'Confidentiel':'Confidential'}</div></div><div class="conf">⚠️ ${fr?'Document confidentiel':'Confidential Document'}</div><div class="meta">Cu Cut-off: ${document.getElementById('cutoff-grade').value}% | ${lastLang} | ${new Date().toLocaleString()}</div><pre>${lastResult}</pre><div class="footer">GreenRock AI · www.greenrock-ai.com · kimba@greenrock-ai.com · +27 66 299 8028</div><script>window.onload=function(){window.print()}<\/script></body></html>`);
-  w.document.close();
-}
-function downloadWord(){
-  const content=`GREENROCK AI - MINERAL EXPLORATION REPORT\n${'='.repeat(50)}\nDate: ${new Date().toLocaleDateString()}\nCu Cut-off: ${document.getElementById('cutoff-grade').value}%\nLanguage: ${lastLang}\nCONFIDENTIAL\n\n${lastResult}\n\n--\nGreenRock AI | www.greenrock-ai.com | kimba@greenrock-ai.com | +27 66 299 8028`;
-  const blob=new Blob([content],{type:'application/msword'});
-  const url=URL.createObjectURL(blob);const a=document.createElement('a');
-  a.href=url;a.download='GreenRock_AI_Report_'+new Date().toISOString().split('T')[0]+'.doc';
-  a.click();URL.revokeObjectURL(url);
+.globe-dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); animation: 2s ease-in-out 0s infinite normal none running dotP; }
+
+.globe-dot:nth-child(1) { top: 30%; left: 40%; }
+
+.globe-dot:nth-child(2) { top: 55%; left: 60%; animation-delay: 0.7s; }
+
+.globe-dot:nth-child(3) { top: 70%; left: 35%; animation-delay: 1.4s; }
+
+@keyframes dotP { 
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.6); }
 }
 
-// ── RESET ──
-function resetAnalysis(){
-  Object.keys(uploadedFiles).forEach(k=>delete uploadedFiles[k]);
-  [0,1,2,3,4,5].forEach(i=>{
-    document.getElementById('fs-'+i).textContent='Pending';
-    document.getElementById('fs-'+i).className='file-card-status';
-    document.getElementById('fc-'+i).classList.remove('uploaded');
-    document.querySelector('#fc-'+i+' .upload-btn-small').textContent='Upload';
-    document.querySelector('#fc-'+i+' .upload-btn-small').classList.remove('done');
-    document.getElementById('step-'+i).className='step-dot';
-    document.getElementById('fi-'+i).value='';
-  });
-  document.getElementById('result-area').style.display='none';
-  document.getElementById('err-box').style.display='none';
-  lastResult='';updateRunBtn();updateBadges();
+.hero-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--blue-bright); color: var(--blue-deep); padding: 0.85rem 2.2rem; border-radius: 8px; font-family: Orbitron, monospace; font-weight: 700; font-size: 0.82rem; text-decoration: none; letter-spacing: 0.08em; box-shadow: rgba(0, 180, 216, 0.3) 0px 4px 30px; transition: 0.2s; }
+
+.hero-btn:hover { background: var(--cyan); transform: translateY(-2px); }
+
+#services { padding: 5rem 2rem; position: relative; z-index: 1; max-width: 900px; margin: 0px auto; }
+
+.section-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--blue-bright); margin-bottom: 0.8rem; text-align: center; }
+
+.section-title { font-family: Orbitron, monospace; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; text-align: center; margin-bottom: 2.5rem; }
+
+.services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+.svc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.8rem; transition: 0.3s; }
+
+.svc-card:hover { transform: translateY(-4px); border-color: rgba(0, 180, 216, 0.3); }
+
+.svc-icon { font-size: 2rem; margin-bottom: 1rem; }
+
+.svc-card h3 { font-family: Orbitron, monospace; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.8rem; color: rgb(144, 224, 239); }
+
+.svc-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; }
+
+.svc-tag { display: inline-block; margin-top: 1rem; background: rgba(0, 180, 216, 0.08); border: 1px solid rgba(0, 180, 216, 0.2); border-radius: 100px; padding: 0.2rem 0.8rem; font-size: 0.68rem; color: var(--blue-bright); font-weight: 600; }
+
+.minerals { text-align: center; padding: 1rem 2rem 4rem; position: relative; z-index: 1; }
+
+.mineral-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.7rem; margin-top: 1.2rem; }
+
+.mchip { background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 0.4rem 1rem; font-size: 0.8rem; transition: 0.2s; cursor: default; }
+
+.mchip:hover { border-color: var(--blue-bright); color: var(--blue-bright); }
+
+.mchip .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 0.4rem; }
+
+#portal { padding: 4rem 2rem; position: relative; z-index: 1; max-width: 700px; margin: 0px auto; }
+
+.portal-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+
+.portal-head { background: linear-gradient(135deg,var(--blue-mid),var(--surface2)); padding: 1.5rem 2rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+
+.portal-head-left { display: flex; align-items: center; gap: 1rem; }
+
+.portal-head-icon { width: 44px; height: 44px; background: rgba(0, 180, 216, 0.12); border: 1px solid rgba(0, 180, 216, 0.25); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+
+.portal-head h3 { font-family: Orbitron, monospace; font-size: 0.95rem; font-weight: 700; }
+
+.portal-head p { font-size: 0.78rem; color: var(--text-muted); }
+
+.portal-close { background: rgba(255, 68, 68, 0.1); border: 1px solid rgba(255, 68, 68, 0.3); color: rgb(255, 128, 128); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+
+.portal-close:hover { background: rgba(255, 68, 68, 0.2); }
+
+.portal-body { padding: 1.8rem; }
+
+.code-entry { text-align: center; }
+
+.code-entry h4 { font-family: Orbitron, monospace; font-size: 0.95rem; margin-bottom: 0.5rem; }
+
+.code-entry p { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.2rem; }
+
+.code-row { display: flex; gap: 0.5rem; max-width: 360px; margin: 0px auto 0.8rem; }
+
+.code-row input { flex: 1 1 0%; background: var(--blue-deep); border: 1px solid var(--border); border-radius: 8px; padding: 0.8rem 1rem; color: var(--text); font-family: Orbitron, monospace; font-size: 1rem; letter-spacing: 0.15em; text-align: center; outline: none; transition: border-color 0.2s; }
+
+.code-row input:focus { border-color: var(--blue-bright); }
+
+.btn-p { background: var(--blue-bright); color: var(--blue-deep); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 8px; padding: 0.8rem 1.2rem; font-family: Orbitron, monospace; font-weight: 700; font-size: 0.78rem; cursor: pointer; white-space: nowrap; transition: 0.2s; }
+
+.btn-p:hover { background: var(--cyan); }
+
+.btn-p:disabled { background: var(--surface2); color: var(--text-muted); cursor: not-allowed; }
+
+#analysis-area { display: none; }
+
+.steps-bar { display: flex; gap: 0.3rem; margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: 0.3rem; }
+
+.step-dot { flex: 1 1 0%; min-width: 60px; text-align: center; padding: 0.4rem 0.3rem; background: var(--blue-deep); border: 1px solid var(--border); border-radius: 8px; font-size: 0.62rem; color: var(--text-muted); transition: 0.2s; }
+
+.step-dot.done { border-color: var(--cyan); color: var(--cyan); }
+
+.file-cards { display: flex; flex-direction: column; gap: 0.8rem; }
+
+.file-card { background: var(--blue-deep); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 0.8rem; transition: 0.2s; flex-wrap: wrap; }
+
+.file-card.uploaded { border-color: var(--cyan); }
+
+.file-card-icon { font-size: 1.5rem; min-width: 32px; text-align: center; }
+
+.file-card-info { flex: 1 1 0%; min-width: 120px; }
+
+.file-card-info h4 { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.2rem; }
+
+.file-card-info p { font-size: 0.72rem; color: var(--text-muted); }
+
+.file-card-status { font-size: 0.72rem; color: var(--text-muted); }
+
+.file-card-status.ok { color: var(--cyan); }
+
+.upload-btn-small { background: rgba(0, 180, 216, 0.1); border: 1px solid rgba(0, 180, 216, 0.25); border-radius: 6px; color: var(--blue-bright); padding: 0.35rem 0.7rem; font-size: 0.72rem; cursor: pointer; font-family: "Exo 2", sans-serif; transition: 0.2s; white-space: nowrap; }
+
+.upload-btn-small:hover { background: rgba(0, 180, 216, 0.2); }
+
+.upload-btn-small.done { background: rgba(0, 245, 255, 0.08); border-color: var(--cyan); color: var(--cyan); }
+
+.options-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem; margin: 1.2rem 0px; }
+
+.opt-group label { display: block; font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; font-weight: 600; }
+
+.opt-group select { width: 100%; background: var(--blue-deep); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.8rem; color: var(--text); font-family: "Exo 2", sans-serif; font-size: 0.82rem; outline: none; cursor: pointer; }
+
+.opt-group select:focus { border-color: var(--blue-bright); }
+
+.uses-badge { text-align: center; margin: 0.8rem 0px; font-size: 0.72rem; color: var(--text-muted); }
+
+.uses-badge span { color: var(--gold); font-weight: 600; }
+
+.expiry-badge { text-align: center; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 1rem; }
+
+.expiry-badge span { color: rgb(255, 144, 96); font-weight: 600; }
+
+.run-btn { width: 100%; background: var(--blue-bright); color: var(--blue-deep); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 10px; padding: 0.9rem; font-family: Orbitron, monospace; font-weight: 700; font-size: 0.82rem; cursor: pointer; margin-top: 1rem; letter-spacing: 0.06em; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+
+.run-btn:hover { background: var(--cyan); }
+
+.run-btn:disabled { background: var(--surface2); color: var(--text-muted); cursor: not-allowed; }
+
+.progress-wrap { display: none; margin-top: 1rem; }
+
+.progress-label { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.5rem; text-align: center; }
+
+.progress-bar { height: 6px; background: var(--blue-deep); border-radius: 3px; overflow: hidden; }
+
+.progress-fill { height: 100%; background: linear-gradient(90deg,var(--blue-bright),var(--cyan)); border-radius: 3px; width: 0%; transition: width 0.5s; }
+
+#result-area { display: none; margin-top: 1.5rem; }
+
+.result-box { background: var(--blue-deep); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem; font-size: 0.85rem; line-height: 1.8; white-space: pre-wrap; max-height: 400px; overflow-y: auto; color: var(--text); }
+
+.result-actions { display: flex; gap: 0.8rem; margin-top: 0.8rem; flex-wrap: wrap; }
+
+.btn-o { flex: 1 1 0%; min-width: 120px; background: transparent; border: 1px solid var(--blue-bright); color: var(--blue-bright); border-radius: 8px; padding: 0.7rem; font-family: Orbitron, monospace; font-size: 0.68rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+
+.btn-o:hover { background: rgba(0, 180, 216, 0.1); }
+
+.btn-o.red { border-color: rgb(255, 128, 128); color: rgb(255, 128, 128); }
+
+.btn-o.red:hover { background: rgba(255, 80, 80, 0.1); }
+
+#err-box { display: none; margin-top: 0.8rem; background: rgba(255, 80, 80, 0.08); border: 1px solid rgba(255, 80, 80, 0.2); border-radius: 8px; padding: 0.8rem; color: rgb(255, 128, 128); font-size: 0.82rem; }
+
+#contact { padding: 4rem 2rem; position: relative; z-index: 1; max-width: 700px; margin: 0px auto; text-align: center; }
+
+.contact-grid { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-top: 2rem; }
+
+.citem { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem 1.5rem; min-width: 160px; transition: 0.2s; }
+
+.citem:hover { border-color: rgba(0, 180, 216, 0.3); transform: translateY(-3px); }
+
+.citem-icon { font-size: 1.3rem; margin-bottom: 0.5rem; }
+
+.citem-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+
+.citem-val { font-size: 0.82rem; }
+
+.citem-val a { color: var(--blue-bright); text-decoration: none; }
+
+footer { border-top: 1px solid var(--border); padding: 1.2rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; position: relative; z-index: 1; }
+
+footer p { font-size: 0.75rem; color: var(--text-muted); }
+
+.modal-overlay { display: none; position: fixed; inset: 0px; z-index: 200; background: rgba(2, 11, 24, 0.96); align-items: center; justify-content: center; padding: 1rem; }
+
+.modal-overlay.open { display: flex; }
+
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; position: relative; }
+
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.3rem; }
+
+.modal-close-btn { background: rgba(255, 68, 68, 0.1); border: 1px solid rgba(255, 68, 68, 0.3); color: rgb(255, 128, 128); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+
+.modal-close-btn:hover { background: rgba(255, 68, 68, 0.2); }
+
+.modal h2 { font-family: Orbitron, monospace; font-size: 1rem; font-weight: 700; }
+
+.modal-sub { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+.fg { margin-bottom: 1rem; }
+
+.fg label { display: block; font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; font-weight: 600; }
+
+.fg input, .fg textarea { width: 100%; background: var(--blue-deep); border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem 1rem; color: var(--text); font-family: "Exo 2", sans-serif; font-size: 0.88rem; outline: none; transition: border-color 0.2s; }
+
+.fg input:focus, .fg textarea:focus { border-color: var(--blue-bright); }
+
+.fg textarea { resize: vertical; min-height: 80px; }
+
+.a-section { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+
+.a-section:last-child { border-bottom-width: medium; border-bottom-style: none; border-bottom-color: currentcolor; margin-bottom: 0px; }
+
+.a-section h3 { font-family: Orbitron, monospace; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.8rem; color: rgb(144, 224, 239); }
+
+.save-btn { width: 100%; background: var(--blue-bright); color: var(--blue-deep); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 8px; padding: 0.8rem; font-family: Orbitron, monospace; font-weight: 700; font-size: 0.82rem; cursor: pointer; margin-top: 0.5rem; transition: 0.2s; }
+
+.save-btn:hover { background: var(--cyan); }
+
+.save-confirm { display: none; text-align: center; color: var(--cyan); font-size: 0.8rem; margin-top: 0.5rem; }
+
+.code-chip { display: flex; align-items: center; justify-content: space-between; background: var(--blue-deep); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.8rem; margin-bottom: 0.4rem; font-family: Orbitron, monospace; font-size: 0.72rem; flex-wrap: wrap; gap: 0.3rem; }
+
+.cu { font-size: 0.65rem; color: var(--text-muted); }
+
+.cu.warn { color: var(--gold); }
+
+.cu.dead { color: rgb(255, 96, 96); }
+
+.cc { background: rgba(0, 180, 216, 0.1); border: 1px solid rgba(0, 180, 216, 0.2); border-radius: 4px; color: var(--blue-bright); padding: 0.15rem 0.5rem; font-size: 0.65rem; cursor: pointer; font-family: "Exo 2", sans-serif; }
+
+#admin-panel { display: none; }
+
+.worker-info { background: rgba(0, 180, 216, 0.05); border: 1px solid rgba(0, 180, 216, 0.15); border-radius: 8px; padding: 0.8rem; margin-bottom: 1rem; font-size: 0.78rem; color: var(--text-muted); }
+
+.worker-info strong { color: var(--blue-bright); }
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .services-grid { grid-template-columns: 1fr; }
+  .options-row { grid-template-columns: 1fr; }
+  footer { flex-direction: column; text-align: center; }
+  .result-actions { flex-direction: column; }
 }
-function resetAll(){
-  resetAnalysis();
-  document.getElementById('analysis-area').style.display='none';
-  document.getElementById('code-entry').style.display='block';
-  document.getElementById('access-code').value='';
-  document.getElementById('code-error').style.display='none';
-  currentCode=null;
-}
-</script>
-</body>
-</html>
+------MultipartBoundary--Z9GXutaKO7kFmQF42zSwrpmZkdmUSQ9ecmMKD9e7u7------

@@ -187,9 +187,11 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
     <select class="lang-select" id="lang-select">
       <option value="English">EN</option>
       <option value="French">FR</option>
+      <option value="Chinese">中文</option>
       <option value="Portuguese">PT</option>
       <option value="Swahili">SW</option>
       <option value="Arabic">AR</option>
+      <option value="Spanish">ES</option>
     </select>
     <button class="nav-btn" onclick="location.href='index.html'">Home</button>
   </div>
@@ -208,36 +210,16 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
   </div>
 </div>
 
-<!-- MODE SELECTOR -->
-<div id="mode-selector">
-  <div class="mode-card">
-    <div class="mode-title">Select Mode</div>
-    <div class="mode-sub">Choose your analysis type to begin</div>
-    <div class="mode-grid">
-      <div class="mode-btn geo" onclick="selectMode('geo')">
-        <div class="mode-btn-icon">⛏️</div>
-        <div class="mode-btn-title">GeoMind DualMind</div>
-        <div class="mode-btn-desc">Mineral exploration · Drill targeting · Geophysics · Copperbelt geology</div>
-        <span class="mode-tag geo">Geology</span>
-      </div>
-      <div class="mode-btn sci" onclick="selectMode('sci')">
-        <div class="mode-btn-icon">🔬</div>
-        <div class="mode-btn-title">General Science</div>
-        <div class="mode-btn-desc">Engineering · Chemistry · Materials · Cement · Civil · Any technical field</div>
-        <span class="mode-tag sci">Science</span>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- MODE SELECTOR (hidden — replaced by tabs in app) -->
+<div id="mode-selector" style="display:none!important;"></div>
 
 <!-- MAIN APP -->
 <div id="app">
 
-  <!-- MODE BAR -->
+  <!-- MODE TABS -->
   <div class="mode-bar">
-    <div class="mode-pill active geo" id="pill-geo">⛏️ GeoMind DualMind</div>
-    <div class="mode-pill sci" id="pill-sci">🔬 General Science</div>
-    <button class="mode-switch-btn" onclick="switchMode()">Switch Mode</button>
+    <div class="mode-pill active geo" id="pill-geo" onclick="selectMode('geo')" style="cursor:pointer;">&#9874; GeoMind DualMind</div>
+    <div class="mode-pill sci" id="pill-sci" onclick="selectMode('sci')" style="cursor:pointer;">&#128300; General Science</div>
   </div>
 
   <!-- GEOLOGY: FILE UPLOAD SECTION -->
@@ -409,7 +391,9 @@ function validateCode(){
 
 function showModeSelector(){
   document.getElementById('access-gate').style.display='none';
-  document.getElementById('mode-selector').style.display='flex';
+  document.getElementById('app').style.display='flex';
+  // Default to geo mode
+  selectMode('geo');
 }
 
 // ── MODE SELECTION ────────────────────────────────────────
@@ -453,9 +437,17 @@ function addWelcome(mode){
       '<div style="font-size:12px;color:var(--muted);line-height:1.7;">Upload your geological data files above, then ask me to analyse them.<br>'+
       'I use two AI models simultaneously — <span style="color:var(--green)">GPT-4o</span> and <span style="color:#a78bfa">Claude</span> — then merge their analyses into one verified interpretation with a confidence scorecard.</div>'+
       '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">'+
-      '<span style="font-size:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:6px;padding:3px 8px;color:var(--green)">Drill Targeting</span>'+
-      '<span style="font-size:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:6px;padding:3px 8px;color:var(--green)">Confidence Scorecard</span>'+
-      '<span style="font-size:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:6px;padding:3px 8px;color:var(--green)">Copperbelt Geology</span>'+
+      '</div>'+
+      '<div style="margin-top:10px;font-size:10px;color:var(--muted);margin-bottom:6px;">Select analysis mode:</div>'+
+      '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+
+      '<button onclick="setGeoMode(\'Exploration\')" style="font-size:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:6px;padding:4px 10px;color:var(--green);cursor:pointer;font-weight:600;">🔍 Exploration</button>'+
+      '<button onclick="setGeoMode(\'Drill Plan\')" style="font-size:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:6px;padding:4px 10px;color:var(--green);cursor:pointer;font-weight:600;">⛏️ Drill Plan</button>'+
+      '<button onclick="setGeoMode(\'Report\')" style="font-size:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:6px;padding:4px 10px;color:var(--green);cursor:pointer;font-weight:600;">📋 Report</button>'+
+      '</div>'+
+      '<div style="margin-top:8px;font-size:10px;color:rgba(255,255,255,0.25);line-height:1.6;">'+
+      '<strong style="color:var(--muted)">Exploration</strong> — Early stage, recommend drill targets &nbsp;|&nbsp; '+
+      '<strong style="color:var(--muted)">Drill Plan</strong> — Design next holes, spacing, cost &nbsp;|&nbsp; '+
+      '<strong style="color:var(--muted)">Report</strong> — Write JORC-standard report'+
       '</div></div>';
   } else {
     div.innerHTML='<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;">'+
@@ -463,10 +455,17 @@ function addWelcome(mode){
       '<div style="font-size:12px;color:var(--muted);line-height:1.7;">Ask any technical or scientific question. Upload files optionally.<br>'+
       'Two AI models analyse independently, then merge into a verified answer with <span style="color:var(--cyan)">confidence ratings</span> for each conclusion.</div>'+
       '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">'+
-      '<span style="font-size:10px;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:3px 8px;color:var(--cyan)">Cement & Concrete</span>'+
-      '<span style="font-size:10px;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:3px 8px;color:var(--cyan)">Civil Engineering</span>'+
-      '<span style="font-size:10px;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:3px 8px;color:var(--cyan)">Materials Science</span>'+
-      '<span style="font-size:10px;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:3px 8px;color:var(--cyan)">Chemistry</span>'+
+      '</div>'+
+      '<div style="margin-top:10px;font-size:10px;color:var(--muted);margin-bottom:6px;">Click a topic to start — or type your own question:</div>'+
+      '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+
+      '<button onclick="quickAsk(\'Explain the optimal water-cement ratio for high-strength concrete and how it affects workability\')" style="font-size:10px;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:4px 10px;color:var(--cyan);cursor:pointer;transition:0.2s;">🧱 Cement & Concrete</button>'+
+      '<button onclick="quickAsk(\'What are the key structural design principles for reinforced concrete beams under flexural load?\')" style="font-size:10px;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:4px 10px;color:var(--cyan);cursor:pointer;transition:0.2s;">🏗️ Civil Engineering</button>'+
+      '<button onclick="quickAsk(\'Compare the mechanical properties of steel, aluminium, and carbon fibre composites for structural applications\')" style="font-size:10px;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:4px 10px;color:var(--cyan);cursor:pointer;transition:0.2s;">⚗️ Materials Science</button>'+
+      '<button onclick="quickAsk(\'Explain the chemistry of cement hydration and the role of calcium silicate hydrate (C-S-H) in concrete strength\')" style="font-size:10px;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:4px 10px;color:var(--cyan);cursor:pointer;transition:0.2s;">🔬 Chemistry</button>'+
+      '<button onclick="quickAsk(\'What are the main causes of foundation failure in expansive clay soils and how can they be mitigated?\')" style="font-size:10px;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:4px 10px;color:var(--cyan);cursor:pointer;transition:0.2s;">🌍 Geotechnical</button>'+
+      '<button onclick="quickAsk(\'Explain copper metallurgy — from ore processing to refined cathode production\')" style="font-size:10px;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:4px 10px;color:var(--cyan);cursor:pointer;transition:0.2s;">⛏️ Metallurgy</button>'+
+      '<button onclick="quickAsk(\'What environmental impact assessment methods are required for a new mine in Central Africa?\')" style="font-size:10px;background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-radius:6px;padding:4px 10px;color:var(--cyan);cursor:pointer;transition:0.2s;">🌿 Environmental</button>'+
+      '<button onclick="quickAsk(\'Ask your own question...\')" style="font-size:10px;background:rgba(255,255,255,0.05);border:1px dashed rgba(255,255,255,0.2);border-radius:6px;padding:4px 10px;color:var(--muted);cursor:pointer;">+ Other</button>'+
       '</div></div>';
   }
   msgs.appendChild(div);
@@ -852,6 +851,35 @@ function toast(msg){
 }
 
 buildFileGrid();
+
+function quickAsk(text){
+  if(text === 'Ask your own question...'){
+    document.getElementById('chat-input').focus();
+    return;
+  }
+  document.getElementById('chat-input').value = text;
+  sendMessage();
+}
+
+function setGeoMode(mode){
+  var sel = document.getElementById('geo-mode');
+  if(sel) sel.value = mode;
+  // Visual feedback
+  document.querySelectorAll('#app button').forEach(function(b){
+    if(b.textContent.includes(mode)){
+      b.style.background='rgba(16,185,129,0.3)';
+      setTimeout(function(){ b.style.background=''; },800);
+    }
+  });
+}
+
+function switchMode(){
+  _currentMode = _currentMode==='geo'?'sci':'geo';
+  _messages = [];
+  document.getElementById('chat-messages').innerHTML='';
+  selectMode(_currentMode);
+}
+
 </script>
 </body>
 </html>

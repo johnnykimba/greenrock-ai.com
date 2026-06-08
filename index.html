@@ -346,11 +346,20 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
 <nav>
   <a href="#" class="logo">Green<span>Rock</span> AI</a>
   <ul class="nav-links">
+    <li>
+      <select id="site-lang" onchange="setSiteLang(this.value)" style="background:rgba(255,255,255,0.05);border:1px solid rgba(0,180,216,0.2);border-radius:6px;color:var(--text-muted);font-size:11px;padding:4px 8px;outline:none;cursor:pointer;font-family:'Exo 2',sans-serif;">
+        <option value="en">🌐 EN</option>
+        <option value="fr">FR</option>
+        <option value="zh">中文</option>
+        <option value="pt">PT</option>
+        <option value="sw">SW</option>
+      </select>
+    </li>
     <li><a href="#services">Services</a></li>
-    <li><a href="#portal">Platform</a></li>
+    
     <li><a href="#contact">Contact</a></li>
     <li><button class="nav-admin">Admin</button></li>
-    <li><a href="geomind.html" style="padding:7px 16px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:8px;color:#fff;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">GeoMind AI</a></li>
+    <li><a href="geomind.html" id="dualmind-nav-btn" style="padding:7px 16px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:8px;color:#fff;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">&#9889; DualMind</a></li>
   </ul>
   <button class="hamburger" id="hamburger">
     <span></span><span></span><span></span>
@@ -360,7 +369,7 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobile-menu">
   <a href="#services">Services</a>
-  <a href="#portal">Platform</a>
+  
   <a href="#contact">Contact</a>
   <button>Admin</button>
 </div>
@@ -374,7 +383,7 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
     <div class="globe"><div class="globe-dot"></div><div class="globe-dot"></div><div class="globe-dot"></div></div>
     <div class="globe-ring"></div>
   </div>
-  <a href="#portal" class="hero-btn">▶ Launch Platform</a>
+  <a href="geomind.html" class="hero-btn">&#9889; Launch DualMind</a>
 </section>
 
 <!-- SERVICES -->
@@ -405,91 +414,12 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
       <div class="svc-icon">🧠</div>
       <h3>GeoMind DualMind AI</h3>
       <p>Dual AI verification pipeline — GPT-4o analyses, Claude verifies. Confidence scorecard with drill recommendations for every interpretation.</p>
-      <a href="geomind.html" style="display:inline-block;margin-top:12px;padding:8px 18px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:8px;color:#fff;font-size:12px;font-weight:700;text-decoration:none;">Launch GeoMind →</a>
+      <a href="geomind.html" style="display:inline-block;margin-top:12px;padding:8px 18px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:8px;color:#fff;font-size:12px;font-weight:700;text-decoration:none;">Launch DualMind →</a>
     </div></div>
   </div>
 </div>
 
 <!-- PORTAL -->
-<section id="portal">
-  <div class="section-label">Client Platform</div>
-  <h2 class="section-title" style="margin-bottom:1.5rem">Upload data. <span style="color:var(--blue-bright)">Get answers.</span></h2>
-  <div class="portal-box">
-    <div class="portal-head">
-      <div class="portal-head-left">
-        <div class="portal-head-icon">🧠</div>
-        <div><h3>GreenRock AI Platform</h3><p>Secure · Real-time · Powered by AI</p></div>
-      </div>
-      <button class="portal-close" title="Exit">✕</button>
-    </div>
-    <div class="portal-body">
-
-      <!-- CODE ENTRY -->
-      <div class="code-entry" id="code-entry">
-        <h4>Enter Access Code</h4>
-        <p>Enter your 10-digit access code provided by GreenRock AI</p>
-        <div class="code-row">
-          <input type="text" id="access-code" maxlength="10" placeholder="0000000000" wfd-id="id0">
-          <button class="btn-p">Enter →</button>
-        </div>
-        <div id="code-error" style="color:#ff8080;font-size:0.8rem;margin-top:0.4rem;display:none"></div>
-        <p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.8rem">Contact <a href="mailto:kimba@greenrock-ai.com" style="color:var(--blue-bright)">kimba@greenrock-ai.com</a> to get your code.</p>
-      </div>
-
-      <!-- ANALYSIS AREA -->
-      <div id="analysis-area">
-        <div class="uses-badge" id="uses-badge"></div>
-        <div class="expiry-badge" id="expiry-badge"></div>
-        <div class="steps-bar">
-          <div class="step-dot" id="step-0">Collar</div>
-          <div class="step-dot" id="step-1">Survey</div>
-          <div class="step-dot" id="step-2">Assay</div>
-          <div class="step-dot" id="step-3">Litho</div>
-          <div class="step-dot" id="step-4">Geology</div>
-          <div class="step-dot" id="step-5">Target</div>
-          <div class="step-dot" id="step-6">Extra</div>
-        </div>
-        <div class="file-cards">
-          <div class="file-card" id="fc-0"><div class="file-card-icon">📍</div><div class="file-card-info"><h4>1. Collar Coordinates</h4><p>Drillhole locations (Easting, Northing, Elevation)</p></div><input type="file" id="fi-0" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id1"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-0">Pending</div></div>
-          <div class="file-card" id="fc-1"><div class="file-card-icon">📐</div><div class="file-card-info"><h4>2. Downhole Survey</h4><p>Inclination and azimuth measurements</p></div><input type="file" id="fi-1" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id2"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-1">Pending</div></div>
-          <div class="file-card" id="fc-2"><div class="file-card-icon">🧪</div><div class="file-card-info"><h4>3. Assay Results</h4><p>Cu grades and geochemical data</p></div><input type="file" id="fi-2" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id3"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-2">Pending</div></div>
-          <div class="file-card" id="fc-3"><div class="file-card-icon">🪨</div><div class="file-card-info"><h4>4. Lithological Logs</h4><p>Rock types linked by Hole ID</p></div><input type="file" id="fi-3" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id4"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-3">Pending</div></div>
-          <div class="file-card" id="fc-4"><div class="file-card-icon">🗺️</div><div class="file-card-info"><h4>5. Geological Context</h4><p>Structural and geological interpretation</p></div><input type="file" id="fi-4" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id5"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-4">Pending</div></div>
-          <div class="file-card" id="fc-5"><div class="file-card-icon">🎯</div><div class="file-card-info"><h4>6. Target Area</h4><p>Polygon coordinates of exploration target</p></div><input type="file" id="fi-5" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id6"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-5">Pending</div></div>
-          <div class="file-card" id="fc-6" style="border-style:dashed;border-color:rgba(0,180,216,0.3)"><div class="file-card-icon">📎</div><div class="file-card-info"><h4>7. Additional Information <span style="font-size:0.65rem;color:var(--text-muted);font-weight:400">(Optional)</span></h4><p>Geophysics, maps, images, reports or any other relevant data</p></div><input type="file" id="fi-6" accept=".xlsx,.xls,.csv,.pdf,.png,.jpg,.jpeg,.pdf,.doc,.docx,.txt" style="display:none"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-6">Optional</div></div>
-        </div>
-
-        <!-- DOWNLOAD EXAMPLE FILES -->
-        <div style="margin:1rem 0;padding:1rem;background:rgba(0,180,216,0.05);border:1px solid rgba(0,180,216,0.2);border-radius:10px;">
-          <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.08em;">Not sure about the format?</div>
-          <button id="download-examples-btn" style="background:linear-gradient(135deg,rgba(0,180,216,0.15),rgba(0,245,255,0.08));border:1px solid var(--blue-bright);color:var(--blue-bright);border-radius:8px;padding:0.6rem 1.2rem;font-family:'Exo 2',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%;transition:0.2s;">
-            Download 6 Example CSV Files
-          </button>
-          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.4rem;text-align:center;">Based on Central African Copperbelt · Dolerite host · UTM Zone 35S</div>
-        </div>
-
-        <div class="options-row">
-          <div class="opt-group"><label>Cu Cut-off Grade</label><select id="cutoff-grade"><option value="0.4">0.4% Cu</option><option value="0.5" selected="">0.5% Cu</option><option value="0.6">0.6% Cu</option><option value="0.7">0.7% Cu</option><option value="0.8">0.8% Cu</option><option value="1.0">1.0% Cu</option><option value="1.2">1.2% Cu</option><option value="1.5">1.5% Cu</option><option value="2.0">2.0% Cu</option><option value="2.5">2.5% Cu</option><option value="3.0">3.0% Cu</option><option value="3.5">3.5% Cu</option><option value="4.0">4.0% Cu</option><option value="5.0">5.0% Cu</option><option value="6.0">6.0% Cu</option><option value="7.0">7.0% Cu</option></select></div>
-          <div class="opt-group"><label>Report Language</label><select id="report-lang"><option value="English">English</option><option value="French">Français</option><option value="Chinese">中文</option></select></div>
-          <div class="opt-group"><label>Report Format</label><select id="report-format"><option value="pdf">PDF</option><option value="word">Word (.doc)</option></select></div>
-        </div>
-        <button class="run-btn" id="run-btn" disabled="">▶ Upload all 6 files (0/6)</button>
-        <div class="progress-wrap" id="progress-wrap"><div class="progress-label" id="progress-label">Integrating datasets...</div><div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div></div>
-        <div id="err-box"></div>
-        <div id="result-area">
-          <div class="result-box" id="result-content"></div>
-          <div class="result-actions">
-            <button class="btn-o">⬇ Download Report</button>
-            <button class="btn-o">↺ New Analysis</button>
-            <button class="btn-o red">✕ Exit</button>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
 <!-- CONTACT -->
 <section id="contact">
   <div class="section-label">Get In Touch</div>
@@ -876,5 +806,43 @@ window.addEventListener('DOMContentLoaded', function(){
 
 
 });
+
+// Language selector
+var LANG_STRINGS = {
+  en: {tagline:'AI-Powered Mineral Exploration', h1a:'Find the', h1b:'ore.', h1c:'Drill with', h1d:'precision.', h1e:'Generate returns.', sub:'GreenRock AI combines geophysics, geochemistry and artificial intelligence to tell you exactly where to drill — before you spend a cent on the rig.', btn:'Launch DualMind'},
+  fr: {tagline:'Exploration Minérale par IA', h1a:'Trouvez le', h1b:'minerai.', h1c:'Forez avec', h1d:'précision.', h1e:'Générez des rendements.', sub:"GreenRock AI combine la géophysique, la géochimie et l'intelligence artificielle pour vous dire exactement où forer — avant de dépenser un centime sur le chantier.", btn:'Lancer DualMind'},
+  zh: {tagline:'AI驱动矿产勘探', h1a:'找到', h1b:'矿石。', h1c:'精准', h1d:'钻探。', h1e:'创造回报。', sub:'GreenRock AI结合地球物理学、地球化学和人工智能，在您在钻机上花费一分钱之前，精确告诉您在哪里钻探。', btn:'启动DualMind'},
+  pt: {tagline:'Exploração Mineral com IA', h1a:'Encontre o', h1b:'minério.', h1c:'Perfure com', h1d:'precisão.', h1e:'Gere retornos.', sub:'A GreenRock AI combina geofísica, geoquímica e inteligência artificial para lhe dizer exatamente onde perfurar — antes de gastar um cêntimo na sonda.', btn:'Lançar DualMind'},
+  sw: {tagline:'Uchunguzi wa Madini kwa AI', h1a:'Pata', h1b:'madini.', h1c:'Chimba kwa', h1d:'usahihi.', h1e:'Tengeneza mapato.', sub:'GreenRock AI inachanganya geofizikia, jiolojia na akili ya bandia kukuambia mahali pa kuchimba — kabla ya kutumia senti moja.', btn:'Anzisha DualMind'}
+};
+
+function setSiteLang(lang){
+  var s = LANG_STRINGS[lang] || LANG_STRINGS['en'];
+  localStorage.setItem('gr_lang', lang);
+  var sel = document.getElementById('site-lang');
+  if(sel) sel.value = lang;
+  var els = {
+    '.hero-tagline': s.tagline,
+  };
+  // Update hero text if elements exist
+  var h1 = document.querySelector('.hero-headline');
+  if(h1){
+    var spans = h1.querySelectorAll('span');
+    if(spans.length>=2){
+      spans[0].textContent = s.h1b;
+      spans[1].textContent = s.h1d;
+    }
+  }
+  var heroBtns = document.querySelectorAll('.hero-btn');
+  heroBtns.forEach(function(b){ if(b.textContent.includes('DualMind')||b.textContent.includes('Launch')||b.textContent.includes('Lancer')||b.textContent.includes('Lançar')||b.textContent.includes('Anzisha')||b.textContent.includes('启动')) b.textContent = '⚡ '+s.btn; });
+  var tagEl = document.querySelector('.hero-tag');
+  if(tagEl) tagEl.textContent = '● '+s.tagline;
+}
+
+window.addEventListener('DOMContentLoaded', function(){
+  var savedLang = localStorage.getItem('gr_lang') || 'en';
+  setSiteLang(savedLang);
+});
+
 </script>
 </body></html>

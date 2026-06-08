@@ -166,7 +166,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
       onkeydown="if(event.key==='Enter') submitCode()">
     <button class="access-submit" onclick="submitCode()">🔓 Activate GeoMind</button>
     <div class="access-error" id="code-error">Invalid or expired code</div>
-    <div class="access-demo">For demo access: <a onclick="enterDemo()">use demo code</a></div>
+    <div class="access-demo">Demo access: <a onclick="enterDemo()">use code JOHNNY11</a></div>
   </div>
 </div>
 
@@ -277,7 +277,7 @@ function submitCode(){
   var code = document.getElementById('code-input').value.trim().toUpperCase();
   if(!code){ showError('Please enter a code'); return; }
   // Demo bypass
-  if(code === 'DEMO2024' || code === 'GEO-DEMO'){
+  if(code === 'JOHNNY11'){
     activateApp({name:'Demo User', type:'demo'});
     return;
   }
@@ -295,7 +295,7 @@ function submitCode(){
 }
 
 function enterDemo(){
-  document.getElementById('code-input').value = 'DEMO2024';
+  document.getElementById('code-input').value = 'JOHNNY11';
   submitCode();
 }
 
@@ -407,11 +407,19 @@ async function sendMessage(){
   inp.value = '';
   inp.style.height = 'auto';
 
-  // Show typing
-  var typingEl = addTyping();
+  // Show typing with dual-pipeline progress
+  var typingEl = addTyping('⚡ Stage 1: LLM1 + LLM2 analysing in parallel...');
 
   try{
     var lang = document.getElementById('lang-select').value;
+
+    setTimeout(function(){
+      if(typingEl && typingEl.parentNode){
+        var lbl = typingEl.querySelector('.typing-label');
+        if(lbl) lbl.textContent = '🔀 Stage 2: Claude merging both analyses...';
+      }
+    }, 6000);
+
     var res = await fetch(WORKER_URL, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -428,8 +436,11 @@ async function sendMessage(){
 
     if(data.error){ addMessage('system','❌ Error: '+data.error); return; }
 
-    // Add AI response with dual panels
-    _messages.push({role:'assistant', content: data.llm2 || data.llm1});
+    // Guard: ensure both LLMs returned content
+    if(!data.llm1) data.llm1 = '_(LLM 1 did not return a response)_';
+    if(!data.llm2) data.llm2 = '_(LLM 2 did not return a response)_';
+
+    _messages.push({role:'assistant', content: data.llm2});
     addDualResponse(data);
 
   }catch(e){
@@ -456,12 +467,15 @@ function addMessage(role, text){
   return div;
 }
 
-function addTyping(){
+function addTyping(label){
   var msgs = document.getElementById('chat-messages');
   var div = document.createElement('div');
   div.className = 'msg';
-  div.innerHTML = '<div class="msg-avatar ai">🧠</div>'
-    +'<div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div>GeoMind is analysing...</div>';
+  div.innerHTML = '<div style="display:flex;align-items:center;gap:10px;">'
+    +'<div class="typing"><span></span><span></span><span></span></div>'
+    +'<div class="typing-label" style="font-size:11px;color:var(--muted);">'+(label||'GeoMind is analysing...')+'</div>'
+    +'</div>'
+    +'<div style="font-size:10px;color:rgba(255,255,255,0.2);margin-top:4px;">DualMind pipeline running — LLM 1 → LLM 2</div>';
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
   return div;
@@ -500,17 +514,25 @@ function addDualResponse(data){
   div.style.flexDirection = 'column';
   div.style.gap = '8px';
 
-  // LLM panels
-  var panelsHtml = '<div class="llm-panels">'
-    +'<div class="llm-panel"><div class="llm-panel-header gpt">🤖 LLM 1 — GPT-4o Analyst</div><div class="llm-panel-body">'
+  // LLM panels — Stage 1: both independent, Stage 2: merged
+  var llm1bClean = (data.llm1b||'').replace(/```json[\s\S]*?```/g,'').replace(/\{[\s\S]*?"scorecard"[\s\S]*?\}\s*\}/g,'').trim();
+
+  var panelsHtml = '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">⚡ Stage 1 — Independent Analyses (Parallel)</div>'
+    +'<div class="llm-panels">'
+    +'<div class="llm-panel"><div class="llm-panel-header gpt">🤖 LLM 1 — GPT-4o</div><div class="llm-panel-body">'
     +(typeof marked!=='undefined'?marked.parse(llm1Clean):llm1Clean)
     +'</div></div>'
-    +'<div class="llm-panel"><div class="llm-panel-header claude">🧠 LLM 2 — Claude Verifier</div><div class="llm-panel-body">'
-    +(typeof marked!=='undefined'?marked.parse(llm2Clean):llm2Clean)
+    +'<div class="llm-panel"><div class="llm-panel-header claude">🧠 LLM 2 — Claude</div><div class="llm-panel-body">'
+    +(typeof marked!=='undefined'?marked.parse(llm1bClean):llm1bClean)
     +'</div></div>'
-    +'</div>';
+    +'</div>'
+    +'<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:12px 0 6px;">🔀 Stage 2 — Merged Final Report</div>'
+    +'<div class="llm-panel" style="border-color:rgba(124,58,237,0.5);">'
+    +'<div class="llm-panel-header claude" style="background:rgba(124,58,237,0.25);">📋 Convergence · Divergence · Merged Verdict</div>'
+    +'<div class="llm-panel-body" style="max-height:600px;">'
+    +(typeof marked!=='undefined'?marked.parse(llm2Clean):llm2Clean)
+    +'</div></div>';
 
-  // Scorecard
   var scorecardHtml = '';
   if(scorecard){
     var score = scorecard.combined_score || scorecard.overall_confidence || 0;

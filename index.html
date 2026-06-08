@@ -809,12 +809,36 @@ window.addEventListener('DOMContentLoaded', function(){
 
 // Language selector
 var LANG_STRINGS = {
-  en: {tagline:'AI-Powered Mineral Exploration', h1a:'Find the', h1b:'ore.', h1c:'Drill with', h1d:'precision.', h1e:'Generate returns.', sub:'GreenRock AI combines geophysics, geochemistry and artificial intelligence to tell you exactly where to drill — before you spend a cent on the rig.', btn:'Launch DualMind'},
-  fr: {tagline:'Exploration Minérale par IA', h1a:'Trouvez le', h1b:'minerai.', h1c:'Forez avec', h1d:'précision.', h1e:'Générez des rendements.', sub:"GreenRock AI combine la géophysique, la géochimie et l'intelligence artificielle pour vous dire exactement où forer — avant de dépenser un centime sur le chantier.", btn:'Lancer DualMind'},
-  zh: {tagline:'AI驱动矿产勘探', h1a:'找到', h1b:'矿石。', h1c:'精准', h1d:'钻探。', h1e:'创造回报。', sub:'GreenRock AI结合地球物理学、地球化学和人工智能，在您在钻机上花费一分钱之前，精确告诉您在哪里钻探。', btn:'启动DualMind'},
-  pt: {tagline:'Exploração Mineral com IA', h1a:'Encontre o', h1b:'minério.', h1c:'Perfure com', h1d:'precisão.', h1e:'Gere retornos.', sub:'A GreenRock AI combina geofísica, geoquímica e inteligência artificial para lhe dizer exatamente onde perfurar — antes de gastar um cêntimo na sonda.', btn:'Lançar DualMind'},
-  ar: {tagline:'استكشاف المعادن بالذكاء الاصطناعي', h1a:'اعثر على', h1b:'الخام.', h1c:'احفر بـ', h1d:'دقة.', h1e:'حقق العوائد.', sub:'تجمع GreenRock AI بين الجيوفيزياء والجيوكيمياء والذكاء الاصطناعي لتخبرك بالضبط أين تحفر.', btn:'إطلاق DualMind'},
-  sw: {tagline:'Uchunguzi wa Madini kwa AI', h1a:'Pata', h1b:'madini.', h1c:'Chimba kwa', h1d:'usahihi.', h1e:'Tengeneza mapato.', sub:'GreenRock AI inachanganya geofizikia, jiolojia na akili ya bandia kukuambia mahali pa kuchimba — kabla ya kutumia senti moja.', btn:'Anzisha DualMind'}
+  en: {
+    tagline: 'AI-Powered Mineral Exploration',
+    h1: 'Find the <span class="accent">ore.</span><br>Drill with <span class="gold">precision.</span><br>Generate returns.',
+    sub: 'GreenRock AI combines geophysics, geochemistry and artificial intelligence to tell you exactly where to drill — before you spend a cent on the rig.',
+    btn: '⚡ Launch DualMind'
+  },
+  fr: {
+    tagline: 'Exploration Minérale par IA',
+    h1: 'Trouvez le <span class="accent">minerai.</span><br>Forez avec <span class="gold">précision.</span><br>Générez des rendements.',
+    sub: "GreenRock AI combine la géophysique, la géochimie et l'intelligence artificielle pour vous dire exactement où forer — avant de dépenser un centime.",
+    btn: '⚡ Lancer DualMind'
+  },
+  zh: {
+    tagline: 'AI驱动矿产勘探',
+    h1: '找到 <span class="accent">矿石。</span><br>精准 <span class="gold">錢探。</span><br>创造回报。',
+    sub: 'GreenRock AI结合地球物理学、地球化学和人工智能，在您花一分酷之前精确告诉您在哪里錢探。',
+    btn: '⚡ 启动DualMind'
+  },
+  pt: {
+    tagline: 'Exploração Mineral com IA',
+    h1: 'Encontre o <span class="accent">minério.</span><br>Perfure com <span class="gold">precisão.</span><br>Gere retornos.',
+    sub: 'A GreenRock AI combina geofísica, geoquímica e inteligência artificial para lhe dizer exatamente onde perfurar — antes de gastar um cêntimo.',
+    btn: '⚡ Lançar DualMind'
+  },
+  ar: {
+    tagline: 'استكشاف المعادن بالذكاء الاصطناعي',
+    h1: 'اعثر على <span class="accent">الخام.</span><br>احفر بـ <span class="gold">دقة.</span><br>حقق العوائد.',
+    sub: 'تجمع GreenRock AI بين الجيوفيزياء والجيوكيمياء والذكاء الاصطناعي لتخبرك بالضبط أين تحفر.',
+    btn: '⚡ إطلاق DualMind'
+  }
 };
 
 function setSiteLang(lang){
@@ -822,22 +846,25 @@ function setSiteLang(lang){
   localStorage.setItem('gr_lang', lang);
   var sel = document.getElementById('site-lang');
   if(sel) sel.value = lang;
-  var els = {
-    '.hero-tagline': s.tagline,
-  };
-  // Update hero text if elements exist
-  var h1 = document.querySelector('.hero-headline');
-  if(h1){
-    var spans = h1.querySelectorAll('span');
-    if(spans.length>=2){
-      spans[0].textContent = s.h1b;
-      spans[1].textContent = s.h1d;
-    }
-  }
-  var heroBtns = document.querySelectorAll('.hero-btn');
-  heroBtns.forEach(function(b){ if(b.textContent.includes('DualMind')||b.textContent.includes('Launch')||b.textContent.includes('Lancer')||b.textContent.includes('Lançar')||b.textContent.includes('Anzisha')||b.textContent.includes('启动')) b.textContent = '⚡ '+s.btn; });
-  var tagEl = document.querySelector('.hero-tag');
-  if(tagEl) tagEl.textContent = '● '+s.tagline;
+
+  // Update hero h1
+  var h1 = document.querySelector('section h1');
+  if(h1) h1.innerHTML = s.h1;
+
+  // Update hero subtitle
+  var sub = document.querySelector('.hero-sub');
+  if(sub) sub.textContent = s.sub;
+
+  // Update hero badge
+  var badge = document.querySelector('.hero-badge');
+  if(badge) badge.innerHTML = '<span class="badge-pulse"></span> ' + s.tagline;
+
+  // Update hero button
+  var btn = document.querySelector('a.hero-btn');
+  if(btn) btn.innerHTML = s.btn;
+
+  // RTL support for Arabic
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
 }
 
 window.addEventListener('DOMContentLoaded', function(){

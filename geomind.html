@@ -255,6 +255,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
         <button class="input-attach" id="attach-btn">+ Attach files</button>
         <input type="file" id="attach-input" multiple accept=".csv,.xlsx,.xls,.pdf,.png,.jpg,.jpeg,.doc,.docx,.txt,.json" style="display:none">
         <div class="input-files-preview" id="files-preview"></div>
+        <button id="save-report-btn" onclick="exportLastReport()" style="display:none;margin-left:auto;padding:5px 14px;border-radius:7px;border:1px solid rgba(16,185,129,0.4);background:rgba(16,185,129,0.1);color:var(--green);font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;">&#128190; Save Report</button>
       </div>
     </div>
   </div>
@@ -685,6 +686,10 @@ function addDualResponse(data){
   div.innerHTML = html;
   msgs.appendChild(div);
   msgs.scrollTop=msgs.scrollHeight;
+
+  // Show persistent Save Report button
+  var saveBtn = document.getElementById('save-report-btn');
+  if(saveBtn) saveBtn.style.display='block';
 }
 
 function cleanText(t){
@@ -806,9 +811,29 @@ function copyResponse(btn){
   navigator.clipboard.writeText(text).then(function(){ toast('Copied!'); });
 }
 
+function exportLastReport(){
+  // Export the most recent response
+  var msgs = document.getElementById('chat-messages');
+  var allMsgs = msgs.querySelectorAll('.msg');
+  // Find last msg with llm-panel-body
+  var lastPanel = null;
+  for(var i=allMsgs.length-1;i>=0;i--){
+    if(allMsgs[i].querySelector('.llm-panel-body')){
+      lastPanel = allMsgs[i];
+      break;
+    }
+  }
+  if(!lastPanel){ toast('No report to save yet — run an analysis first'); return; }
+  exportWordFromPanel(lastPanel);
+}
+
 function exportWord(btn){
   var panel = btn.closest('.msg');
   if(!panel) return;
+  exportWordFromPanel(panel);
+}
+
+function exportWordFromPanel(panel){
   var bodies = panel.querySelectorAll('.llm-panel-body');
   var llm1 = bodies[0]?bodies[0].innerHTML:'';
   var llm1b = bodies[1]?bodies[1].innerHTML:'';

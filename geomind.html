@@ -94,7 +94,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 .llm-panel-header{padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:6px;}
 .llm-panel-header.gpt{background:rgba(16,185,129,0.15);color:var(--green);}
 .llm-panel-header.claude{background:rgba(124,58,237,0.15);color:#a78bfa;}
-.llm-panel-body{padding:10px 12px;font-size:12px;line-height:1.7;color:var(--text);max-height:300px;overflow-y:auto;}
+.llm-panel-body{padding:10px 12px;font-size:12px;line-height:1.7;color:var(--text);max-height:500px;overflow-y:auto;}
 
 /* SCORECARD */
 .scorecard{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:10px;}
@@ -262,7 +262,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 // ════════════════════════════════════════════════════════════
 // CONFIG
 // ════════════════════════════════════════════════════════════
-var WORKER_URL = 'https://greenrock-worker.kasongokimba.workers.dev';
+var WORKER_URL = 'https://greenrock-ai.kasongokimba.workers.dev';
 var APP_SECRET = 'greenrock-2024';
 var _mode = 'exploration';
 var _messages = [];
@@ -470,16 +470,30 @@ function addTyping(){
 function addDualResponse(data){
   var msgs = document.getElementById('chat-messages');
 
-  // Extract scorecard from llm2 text
+  // Extract scorecard from llm2 text (robust nested JSON parser)
   var scorecard = null;
   try{
-    var match = data.llm2.match(/\{"scorecard":\s*\{[^}]+\}\}/);
-    if(match) scorecard = JSON.parse(match[0]).scorecard;
-  }catch(e){}
+    // Try to find scorecard JSON — handles spaces, newlines, varied formatting
+    var sc = data.llm2;
+    var idx = sc.indexOf('{"scorecard"');
+    if(idx === -1) idx = sc.indexOf('{ "scorecard"');
+    if(idx !== -1){
+      // Find matching closing braces
+      var depth = 0, end = -1;
+      for(var i=idx;i<sc.length;i++){
+        if(sc[i]==='{') depth++;
+        else if(sc[i]==='}'){depth--; if(depth===0){end=i;break;}}
+      }
+      if(end !== -1){
+        var jsonStr = sc.substring(idx, end+1);
+        scorecard = JSON.parse(jsonStr).scorecard;
+      }
+    }
+  }catch(e){ scorecard = null; }
 
-  // Clean text (remove JSON)
-  var llm1Clean = data.llm1.replace(/\{"scorecard":\s*\{[^}]+\}\}/g,'').trim();
-  var llm2Clean = data.llm2.replace(/\{"scorecard":\s*\{[^}]+\}\}/g,'').trim();
+  // Clean text (remove scorecard JSON block and code fences)
+  var llm1Clean = data.llm1.replace(/```json[\s\S]*?```/g,'').replace(/\{[\s\S]*?"scorecard"[\s\S]*?\}\s*\}/g,'').trim();
+  var llm2Clean = data.llm2.replace(/```json[\s\S]*?```/g,'').replace(/\{[\s\S]*?"scorecard"[\s\S]*?\}\s*\}/g,'').trim();
 
   var div = document.createElement('div');
   div.className = 'msg';
@@ -503,7 +517,7 @@ function addDualResponse(data){
     var grade = scorecard.grade || '';
     var verdict = scorecard.verdict || '';
     var scoreColor = score>=85?'var(--green)':score>=70?'var(--gold)':'var(--red)';
-    var verdictColor = verdict==='Drill Now'?'var(--green)':verdict==='Do Not Drill'?'var(--red)':'var(--gold)';
+    var verdictColor = verdict==='Drill Now'?'var(--green)':verdict==='Do Not Drill'?'var(--red)':verdict.includes('Reverif')?'var(--red)':'var(--gold)';
 
     var metrics = [
       {key:'data_quality',label:'Data Quality'},
@@ -514,22 +528,34 @@ function addDualResponse(data){
       {key:'recommendation_clarity',label:'Clarity'}
     ];
 
+    var isDivergence = verdict.toLowerCase().includes('reverif') || score < 40;
+    var divergenceBar = isDivergence
+      ? '<div style="background:rgba(239,68,68,0.12);border:1px solid var(--red);border-radius:8px;padding:8px 12px;margin-bottom:8px;font-size:11px;color:var(--red);font-weight:700;">⚠️ DIVERGENCE DETECTED — Manual review required before drilling decision</div>'
+      : '';
+
     scorecardHtml = '<div class="scorecard">'
       +'<div class="scorecard-title">📊 GeoMind Confidence Scorecard</div>'
+      +divergenceBar
+      +'<div style="text-align:center;padding:10px 0 12px;border-bottom:1px solid var(--border);margin-bottom:10px;">'
+      +'<div style="font-size:42px;font-weight:900;color:'+scoreColor+'">'+score+'<span style="font-size:20px;color:var(--muted)">%</span></div>'
+      +'<div style="font-size:12px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:1px;">Overall Confidence</div>'
+      +'<div style="font-size:16px;font-weight:800;color:'+verdictColor+';margin-top:8px;padding:5px 14px;background:rgba(255,255,255,0.05);border-radius:20px;display:inline-block;">'+verdict+'</div>'
+      +'<div style="font-size:11px;color:var(--muted);margin-top:4px;">Grade: <strong style="color:#fff">'+grade+'</strong></div>'
+      +'</div>'
       +'<div class="scorecard-grid">'
       +metrics.map(function(m){
         var val = scorecard[m.key]||0;
-        var cls = val>=75?'':'val '+(val>=55?'warn':'bad');
-        return '<div class="score-item"><div class="score-val '+cls+'">'+val+'</div><div class="score-label">'+m.label+'</div></div>';
+        var c = val>=75?'var(--green)':val>=55?'var(--gold)':'var(--red)';
+        return '<div class="score-item">'
+          +'<div style="background:rgba(255,255,255,0.06);border-radius:4px;height:3px;margin-bottom:5px;overflow:hidden;">'
+          +'<div style="width:'+val+'%;height:100%;background:'+c+';border-radius:4px;"></div></div>'
+          +'<div class="score-val" style="font-size:15px;color:'+c+'">'+val+'</div>'
+          +'<div class="score-label">'+m.label+'</div></div>';
       }).join('')
-      +'</div>'
-      +'<div class="score-combined">'
-      +'<div class="val" style="color:'+scoreColor+'">'+score+'<span style="font-size:16px;color:var(--muted)">/100</span></div>'
-      +'<div style="font-size:12px;color:var(--muted);margin-top:2px;">'+grade+'</div>'
-      +'<div class="score-verdict" style="color:'+verdictColor+'">'+verdict+'</div>'
       +'</div>'
       +'</div>';
   }
+
 
   // Export bar
   var exportHtml = '<div class="export-bar">'
@@ -553,19 +579,36 @@ function copyResponse(btn){
 
 function exportWord(btn){
   var panel = btn.closest('.msg');
-  var content = panel ? panel.innerHTML : '';
-  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8">'
-    +'<style>body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.6;padding:30px;max-width:800px;margin:0 auto;}'
-    +'h1,h2,h3{color:#0f2044;}table{border-collapse:collapse;width:100%;}td,th{border:1px solid #ccc;padding:6px;}@media print{body{padding:0;}}</style>'
-    +'</head><body>'
-    +'<h1>GeoMind DualMind Report</h1>'
-    +'<p style="color:#64748b;font-size:10pt;">Generated by GreenRock AI · '+new Date().toLocaleDateString()+'</p><hr>'
-    +content
+  if(!panel) return;
+  // Extract text content cleanly
+  var llm1 = panel.querySelector('.llm-panel-body') ? panel.querySelectorAll('.llm-panel-body')[0].innerHTML : '';
+  var llm2 = panel.querySelectorAll('.llm-panel-body')[1] ? panel.querySelectorAll('.llm-panel-body')[1].innerHTML : '';
+  var scorecardEl = panel.querySelector('.scorecard');
+  var scorecardHtml = scorecardEl ? scorecardEl.outerHTML : '';
+  var PRINT_CSS = 'body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.7;padding:30px;max-width:820px;margin:0 auto;color:#1a1a2e;}'
+    +'h1{color:#0a3d1f;font-size:18pt;border-bottom:2px solid #0a3d1f;padding-bottom:6px;}'
+    +'h2{color:#0a3d1f;font-size:13pt;margin-top:18px;}'
+    +'h3{color:#1e5c3a;font-size:11pt;}'
+    +'.section{border:1px solid #ddd;border-radius:6px;padding:14px;margin:12px 0;}'
+    +'.section-title{font-size:10pt;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#64748b;margin-bottom:8px;}'
+    +'.scorecard{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;margin:12px 0;}'
+    +'.scorecard-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;}'
+    +'.score-item{text-align:center;background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 4px;}'
+    +'.score-val{font-size:16pt;font-weight:900;}'
+    +'.score-label{font-size:8pt;color:#64748b;text-transform:uppercase;}'
+    +'@media print{body{padding:0;}@page{margin:1.5cm;}}';
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>GeoMind Report</title>'
+    +'<style>'+PRINT_CSS+'</style></head><body>'
+    +'<h1>⛏️ GeoMind DualMind Report</h1>'
+    +'<p style="color:#64748b;font-size:9pt;">GreenRock AI · Generated: '+new Date().toLocaleString()+' · greenrock-ai.com</p><hr>'
+    +'<div class="section"><div class="section-title">🤖 LLM 1 — GPT-4o Analyst</div>'+llm1+'</div>'
+    +'<div class="section"><div class="section-title">🧠 LLM 2 — Claude Verifier & Synthesis</div>'+llm2+'</div>'
+    +scorecardHtml
     +'</body></html>';
   var blob = new Blob([html], {type:'application/msword'});
-  var url  = URL.createObjectURL(blob);
-  var a    = document.createElement('a');
-  a.href   = url; a.download = 'GeoMind-Report-'+Date.now()+'.doc';
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'GeoMind-Report-'+new Date().toISOString().slice(0,10)+'.doc';
   document.body.appendChild(a); a.click();
   document.body.removeChild(a); URL.revokeObjectURL(url);
   toast('⬇️ Report downloaded!');
@@ -573,19 +616,26 @@ function exportWord(btn){
 
 function exportReport(){
   var msgs = document.getElementById('chat-messages');
-  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8">'
-    +'<style>body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.6;padding:30px;color:#1a1a2e;}'
-    +'h1,h2,h3{color:#0f2044;}.llm-panels{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:10px 0;}'
-    +'@media print{body{padding:0;}.llm-panels{grid-template-columns:1fr 1fr;}}</style>'
-    +'</head><body>'
-    +'<h1>GeoMind Exploration Report</h1>'
-    +'<p style="color:#64748b;font-size:10pt;">GreenRock AI · '+new Date().toLocaleString()+'</p><hr>'
+  var PRINT_CSS = 'body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.7;padding:30px;color:#1a1a2e;max-width:900px;margin:0 auto;}'
+    +'h1{color:#0a3d1f;font-size:18pt;border-bottom:2px solid #0a3d1f;padding-bottom:6px;}'
+    +'h2,h3{color:#0a3d1f;}.llm-panels{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0;}'
+    +'.llm-panel{border:1px solid #ddd;border-radius:6px;overflow:hidden;}'
+    +'.llm-panel-header{padding:6px 10px;font-size:9pt;font-weight:700;text-transform:uppercase;background:#f1f5f9;color:#334155;}'
+    +'.llm-panel-body{padding:10px;font-size:10pt;line-height:1.7;}'
+    +'.scorecard{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px;margin:12px 0;}'
+    +'.scorecard-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;}'
+    +'.score-item{text-align:center;background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 4px;}'
+    +'@media print{body{padding:0;}@page{margin:1.5cm;}.llm-panels{grid-template-columns:1fr 1fr;}}';
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>GeoMind Full Report</title>'
+    +'<style>'+PRINT_CSS+'</style></head><body>'
+    +'<h1>⛏️ GeoMind DualMind — Full Session Report</h1>'
+    +'<p style="color:#64748b;font-size:9pt;">GreenRock AI · '+new Date().toLocaleString()+' · greenrock-ai.com</p><hr>'
     +msgs.innerHTML
     +'</body></html>';
   var win = window.open('','_blank');
   win.document.write(html);
   win.document.close();
-  setTimeout(function(){ win.print(); }, 500);
+  setTimeout(function(){ win.print(); }, 600);
 }
 
 function clearChat(){

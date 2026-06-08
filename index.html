@@ -447,6 +447,7 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
           <div class="step-dot" id="step-3">Litho</div>
           <div class="step-dot" id="step-4">Geology</div>
           <div class="step-dot" id="step-5">Target</div>
+          <div class="step-dot" id="step-6">Extra</div>
         </div>
         <div class="file-cards">
           <div class="file-card" id="fc-0"><div class="file-card-icon">📍</div><div class="file-card-info"><h4>1. Collar Coordinates</h4><p>Drillhole locations (Easting, Northing, Elevation)</p></div><input type="file" id="fi-0" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id1"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-0">Pending</div></div>
@@ -455,7 +456,18 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
           <div class="file-card" id="fc-3"><div class="file-card-icon">🪨</div><div class="file-card-info"><h4>4. Lithological Logs</h4><p>Rock types linked by Hole ID</p></div><input type="file" id="fi-3" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id4"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-3">Pending</div></div>
           <div class="file-card" id="fc-4"><div class="file-card-icon">🗺️</div><div class="file-card-info"><h4>5. Geological Context</h4><p>Structural and geological interpretation</p></div><input type="file" id="fi-4" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id5"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-4">Pending</div></div>
           <div class="file-card" id="fc-5"><div class="file-card-icon">🎯</div><div class="file-card-info"><h4>6. Target Area</h4><p>Polygon coordinates of exploration target</p></div><input type="file" id="fi-5" accept=".xlsx,.xls,.csv" style="display:none" wfd-id="id6"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-5">Pending</div></div>
+          <div class="file-card" id="fc-6" style="border-style:dashed;border-color:rgba(0,180,216,0.3)"><div class="file-card-icon">📎</div><div class="file-card-info"><h4>7. Additional Information <span style="font-size:0.65rem;color:var(--text-muted);font-weight:400">(Optional)</span></h4><p>Geophysics, maps, images, reports or any other relevant data</p></div><input type="file" id="fi-6" accept=".xlsx,.xls,.csv,.pdf,.png,.jpg,.jpeg,.pdf,.doc,.docx,.txt" style="display:none"><button class="upload-btn-small">Upload</button><div class="file-card-status" id="fs-6">Optional</div></div>
         </div>
+
+        <!-- DOWNLOAD EXAMPLE FILES -->
+        <div style="margin:1rem 0;padding:1rem;background:rgba(0,180,216,0.05);border:1px solid rgba(0,180,216,0.2);border-radius:10px;">
+          <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:0.6rem;text-transform:uppercase;letter-spacing:0.08em;">Not sure about the format?</div>
+          <button id="download-examples-btn" style="background:linear-gradient(135deg,rgba(0,180,216,0.15),rgba(0,245,255,0.08));border:1px solid var(--blue-bright);color:var(--blue-bright);border-radius:8px;padding:0.6rem 1.2rem;font-family:'Exo 2',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;width:100%;transition:0.2s;">
+            Download 6 Example CSV Files
+          </button>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:0.4rem;text-align:center;">Based on Central African Copperbelt · Dolerite host · UTM Zone 35S</div>
+        </div>
+
         <div class="options-row">
           <div class="opt-group"><label>Cu Cut-off Grade</label><select id="cutoff-grade"><option value="0.4">0.4% Cu</option><option value="0.5" selected="">0.5% Cu</option><option value="0.6">0.6% Cu</option><option value="0.7">0.7% Cu</option><option value="0.8">0.8% Cu</option><option value="1.0">1.0% Cu</option><option value="1.2">1.2% Cu</option><option value="1.5">1.5% Cu</option><option value="2.0">2.0% Cu</option><option value="2.5">2.5% Cu</option><option value="3.0">3.0% Cu</option><option value="3.5">3.5% Cu</option><option value="4.0">4.0% Cu</option><option value="5.0">5.0% Cu</option><option value="6.0">6.0% Cu</option><option value="7.0">7.0% Cu</option></select></div>
           <div class="opt-group"><label>Report Language</label><select id="report-lang"><option value="English">English</option><option value="French">Français</option><option value="Chinese">中文</option></select></div>
@@ -766,7 +778,7 @@ window.addEventListener('DOMContentLoaded', function(){
   });
 
   // ── PORTAL FILE UPLOADS ──────────────────────────────────
-  for(let i=0;i<6;i++){
+  for(let i=0;i<7;i++){
     (function(idx){
       const btn=document.querySelector('#fc-'+idx+' .upload-btn-small');
       const inp=document.getElementById('fi-'+idx);
@@ -788,8 +800,13 @@ window.addEventListener('DOMContentLoaded', function(){
   function updateRunBtn(){
     let n=0;
     for(let i=0;i<6;i++){const f=document.getElementById('fi-'+i);if(f&&f.files&&f.files[0])n++;}
+    const extra=document.getElementById('fi-6');
+    const hasExtra=extra&&extra.files&&extra.files[0];
     const btn=document.getElementById('run-btn');
-    if(btn){btn.textContent=n===6?'Run Analysis':'Upload all 6 files ('+n+'/6)';btn.disabled=n<6;}
+    if(btn){
+      btn.textContent=n===6?(hasExtra?'Run Analysis (7 files)':'Run Analysis'):'Upload required files ('+n+'/6)';
+      btn.disabled=n<6;
+    }
   }
 
   // ── PORTAL ACCESS CODE ────────────────────────────────────
@@ -810,6 +827,53 @@ window.addEventListener('DOMContentLoaded', function(){
       }
     }catch(e){if(errBox){errBox.textContent='Connection error';errBox.style.display='block';}}
   });
+
+
+  // ── DOWNLOAD EXAMPLE FILES ────────────────────────────────
+  const dlBtn = document.getElementById('download-examples-btn');
+  if(dlBtn) dlBtn.addEventListener('click', function(){
+    const files = [
+      {
+        name: '1_Collar_Coordinates.csv',
+        data: 'HoleID,Easting,Northing,Elevation_m,TotalDepth_m,CRS\nDH001,471280,8764050,1124,200,WGS84 UTM Zone 35S\nDH002,471350,8763980,1118,180,WGS84 UTM Zone 35S\nDH003,471520,8764020,1121,220,WGS84 UTM Zone 35S\nDH004,471650,8763890,1115,160,WGS84 UTM Zone 35S\nDH005,471400,8763850,1110,240,WGS84 UTM Zone 35S'
+      },
+      {
+        name: '2_Downhole_Survey.csv',
+        data: 'HoleID,Depth_m,Dip_deg,Azimuth_deg\nDH001,0,-60,270\nDH001,50,-61,271\nDH001,100,-62,270\nDH002,0,-55,090\nDH002,50,-56,090\nDH003,0,-65,180\nDH003,50,-65,180\nDH003,100,-66,181\nDH004,0,-60,045\nDH004,50,-61,046\nDH005,0,-70,270\nDH005,100,-70,270\nDH005,200,-71,271'
+      },
+      {
+        name: '3_Assay_Results.csv',
+        data: 'HoleID,From_m,To_m,Cu_pct,Co_ppm,Fe_pct,S_pct\nDH001,42,44,0.38,120,14.2,0.8\nDH001,44,46,1.24,450,18.5,2.1\nDH001,46,48,2.87,890,22.1,3.4\nDH001,48,50,1.65,560,19.8,2.8\nDH002,32,34,0.72,280,16.4,1.5\nDH002,34,36,1.45,520,20.2,2.6\nDH002,36,38,0.88,310,17.5,1.9\nDH003,60,62,3.12,1200,24.5,4.2\nDH003,62,64,2.95,1100,23.8,4.0\nDH003,64,66,1.88,720,21.0,3.1\nDH003,66,68,0.55,180,15.2,1.1\nDH005,100,120,1.92,680,21.5,3.0\nDH005,120,140,3.45,1350,25.8,4.8\nDH005,140,160,2.10,800,22.4,3.5'
+      },
+      {
+        name: '4_Lithological_Logs.csv',
+        data: 'HoleID,From_m,To_m,LithCode,FullName,Description\nDH001,0,20,sap,Saprolite,Oxidised weathered material - brown clay\nDH001,20,40,rat,Polymictic Breccia,Angular clasts in clay matrix\nDH001,40,100,dol,Dolerite,Fresh dark green dolerite - primary Cu host\nDH001,100,200,dol,Dolerite,Weakly altered dolerite with disseminated sulphides\nDH002,0,15,sap,Saprolite,Deeply weathered - red-brown clay\nDH002,15,40,Br,Fault Breccia,Fault zone - crushed rock haematite-stained\nDH002,40,100,dol,Dolerite,Fresh mineralised dolerite\nDH003,0,25,rat,Polymictic Breccia,Coarse breccia angular dolerite clasts\nDH003,25,220,dol,Dolerite,Strongly mineralised fresh dolerite - main ore zone\nDH004,0,10,sap,Saprolite,Thin saprolite cover\nDH004,10,160,dol,Dolerite,Barren dolerite - outside mineralised zone\nDH005,0,30,rat,Polymictic Breccia,Breccia zone\nDH005,30,240,dol,Dolerite,Mineralised dolerite - high-grade intercepts at depth'
+      },
+      {
+        name: '5_Geological_Context.csv',
+        data: 'HoleID,From_m,To_m,Structure,LithCode,Alteration,MineralAssemblage,Notes\nDH001,40,100,Disseminated,dol,Chlorite-carbonate,Chalcopyrite-pyrite,Cu in dolerite - moderate grade\nDH001,20,40,Breccia contact,rat,Silicification,Haematite,Pre-mineralisation breccia\nDH002,15,40,Fault zone,Br,Haematite-chlorite,Pyrite-chalcopyrite,Post-mineral fault cuts mineralisation\nDH002,40,100,Flat lying,dol,Carbonate-chlorite,Chalcopyrite-bornite,Dolerite contact zone\nDH003,25,220,Fold hinge,dol,Strong chlorite,Chalcopyrite-bornite-malachite,High-grade fold axis control\nDH005,30,240,Fold limb,dol,Chlorite-carbonate,Chalcopyrite-pyrite,Deep fold-hosted mineralisation'
+      },
+      {
+        name: '6_Target_Area_Polygon.csv',
+        data: 'PointID,Easting,Northing,CRS,Notes\nT001,471222,8764165,WGS84 UTM Zone 35S,NW corner - polygon start\nT002,471415,8764163,WGS84 UTM Zone 35S,N boundary\nT003,471450,8763965,WGS84 UTM Zone 35S,NE inner point\nT004,471827,8763926,WGS84 UTM Zone 35S,E boundary\nT005,471822,8763757,WGS84 UTM Zone 35S,SE corner\nT006,471230,8763768,WGS84 UTM Zone 35S,SW corner - close polygon'
+      }
+    ];
+
+    files.forEach(function(file, i){
+      setTimeout(function(){
+        var blob = new Blob([file.data], {type:'text/csv'});
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url; a.download = file.name;
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a); URL.revokeObjectURL(url);
+      }, i * 400);
+    });
+
+    dlBtn.textContent = 'Downloading 6 files...';
+    setTimeout(function(){ dlBtn.textContent = 'Download 6 Example CSV Files'; }, 3500);
+  });
+
 
 });
 </script>

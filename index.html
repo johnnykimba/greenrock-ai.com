@@ -464,61 +464,76 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
         <h2>Admin Panel</h2>
         <button class="modal-close-btn">&#x2715;</button>
       </div>
-      <p class="modal-sub">Manage Worker URL, access codes and AI usage</p>
+      <p class="modal-sub" style="margin-bottom:1rem;">GreenRock AI — Access Codes &amp; AI Cost Dashboard</p>
 
-      <!-- WORKER URL -->
-      <div class="a-section">
-        <h3>WORKER URL</h3>
-        <div class="worker-info">Paste your Cloudflare Worker URL below. Saved in browser.</div>
-        <div class="fg"><label>Worker URL</label><input type="text" id="worker-url" placeholder="https://greenrock-worker.kasongokimba.workers.dev"></div>
-        <button class="save-btn" id="save-worker-btn">Save Worker URL</button>
-        <div class="save-confirm" id="save-confirm">Saved!</div>
+      <!-- TWO COLUMN LAYOUT -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+
+        <!-- LEFT: Controls -->
+        <div>
+          <!-- WORKER URL -->
+          <div class="a-section" style="margin-bottom:1rem;">
+            <h3>WORKER URL</h3>
+            <div class="fg"><input type="text" id="worker-url" placeholder="https://greenrock-worker.kasongokimba.workers.dev" style="font-size:0.75rem;"></div>
+            <button class="save-btn" id="save-worker-btn" style="margin-top:0.5rem;width:100%;">Save URL</button>
+            <div class="save-confirm" id="save-confirm">Saved!</div>
+          </div>
+
+          <!-- GENERATE CODE -->
+          <div class="a-section" style="margin-bottom:1rem;">
+            <h3>GENERATE CODE</h3>
+            <div class="fg" style="margin-bottom:0.5rem;">
+              <label>Client Name</label>
+              <input type="text" id="new-code-name" placeholder="e.g. Andries, DMR-Client">
+            </div>
+            <div class="fg" style="margin-bottom:0.5rem;">
+              <label>Duration</label>
+              <select id="new-code-duration" style="width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.6rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.82rem;outline:none;">
+                <option value="7">1 Week — $15</option>
+                <option value="30" selected>1 Month — $45</option>
+                <option value="365">1 Year — $400</option>
+              </select>
+            </div>
+            <div class="fg" style="margin-bottom:0.5rem;">
+              <label>Custom Code (optional)</label>
+              <input type="text" id="new-code-value" placeholder="Leave blank to auto-generate" style="text-transform:uppercase;">
+            </div>
+            <button class="btn-p" id="gen-code-btn" style="width:100%;">+ Generate Code</button>
+            <div id="gen-result" style="margin-top:0.5rem;font-size:0.78rem;display:none;"></div>
+          </div>
+
+          <!-- COST CONTROLS -->
+          <div class="a-section">
+            <h3>AI COST CONTROLS</h3>
+            <div style="display:flex;gap:6px;">
+              <button class="btn-p" id="load-usage-btn" style="flex:1;font-size:0.75rem;">Refresh</button>
+              <button class="btn-o" id="set-limit-btn" style="flex:1;font-size:0.75rem;">Set Limit %</button>
+            </div>
+            <div id="usage-display" style="margin-top:0.6rem;font-size:0.78rem;color:var(--text-muted);">Click Refresh to load.</div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Codes table -->
+        <div>
+          <div class="a-section" style="height:100%;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;">
+              <h3 style="margin:0;">ACCESS CODES</h3>
+              <button class="btn-o" id="load-codes-btn" style="font-size:0.7rem;padding:4px 10px;">Load</button>
+            </div>
+            <div id="codes-stats" style="display:flex;gap:6px;margin-bottom:0.6rem;flex-wrap:wrap;"></div>
+            <!-- Table header -->
+            <div style="display:grid;grid-template-columns:1fr 70px 80px 24px;gap:4px;padding:4px 6px;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);border-bottom:1px solid var(--border);margin-bottom:4px;">
+              <span>Code</span><span>Status</span><span>AI Cost</span><span></span>
+            </div>
+            <div id="codes-list" style="max-height:380px;overflow-y:auto;font-size:0.75rem;">
+              <p style="color:var(--text-muted);font-size:0.75rem;">Click Load to view codes.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- GENERATE CODE -->
-      <div class="a-section" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)">
-        <h3>GENERATE ACCESS CODE</h3>
-        <div class="fg" style="margin-bottom:0.6rem">
-          <label>Code Name / Client</label>
-          <input type="text" id="new-code-name" placeholder="e.g. Andries, DMR-Client-1">
-        </div>
-        <div class="fg" style="margin-bottom:0.6rem">
-          <label>Duration</label>
-          <select id="new-code-duration" style="width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.7rem 1rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.88rem;outline:none;">
-            <option value="7">1 Week</option>
-            <option value="30" selected>1 Month</option>
-            <option value="365">1 Year</option>
-          </select>
-        </div>
-        <div class="fg">
-          <label>Custom Code (optional)</label>
-          <input type="text" id="new-code-value" placeholder="Leave blank to auto-generate" style="text-transform:uppercase">
-        </div>
-        <button class="btn-p" id="gen-code-btn" style="width:100%">+ Generate Code</button>
-        <div id="gen-result" style="margin-top:0.6rem;font-size:0.82rem;display:none"></div>
-      </div>
-
-      <!-- AI COST MONITOR -->
-      <div class="a-section" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)">
-        <h3>AI USAGE &amp; COST</h3>
-        <div style="display:flex;gap:8px;margin-bottom:0.8rem;">
-          <button class="btn-p" id="load-usage-btn" style="flex:1;">Refresh</button>
-          <button class="btn-o" id="set-limit-btn" style="flex:1;font-size:0.75rem;">Set Limit %</button>
-        </div>
-        <div id="usage-display" style="font-size:0.78rem;color:var(--text-muted)">Click refresh to load usage.</div>
-        <div id="per-code-costs" style="margin-top:0.8rem;"></div>
-      </div>
-
-      <!-- CODES LIST -->
-      <div class="a-section" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)">
-        <h3>ACTIVE CODES</h3>
-        <button class="btn-p" id="load-codes-btn" style="width:100%;margin-bottom:0.8rem">Load All Codes</button>
-        <div id="codes-list" style="margin-top:0.4rem"></div>
-      </div>
-
-      <button class="btn-o red" id="admin-logout-btn" style="width:100%;margin-top:1rem">Logout</button>
-    </div>
-  </div>
+      <button class="btn-o red" id="admin-logout-btn" style="width:100%;margin-top:1rem;">Logout</button>
+    </div>  </div>
 </div>
 
 
@@ -638,37 +653,100 @@ window.addEventListener('DOMContentLoaded', function(){
 
   // ── LOAD CODES LIST ───────────────────────────────────────
   const loadCodesBtn = document.getElementById('load-codes-btn');
-  if(loadCodesBtn) loadCodesBtn.addEventListener('click', loadCodesList);
+  if(loadCodesBtn) loadCodesBtn.addEventListener('click', loadCodesTable);
 
-  async function loadCodesList(){
+  async function loadCodesTable(){
     const wurl = getWorkerURL();
     const codesList = document.getElementById('codes-list');
+    const stats = document.getElementById('codes-stats');
     if(!codesList) return;
-    codesList.innerHTML='<p style="color:var(--text-muted);font-size:0.78rem">Loading...</p>';
+    codesList.innerHTML='<p style="color:var(--text-muted);font-size:0.75rem">Loading...</p>';
+
     try{
-      const res = await fetch(wurl,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({_appSecret:'greenrock-2024',action:'list-codes',adminKey:'Johnny11'})
-      });
-      const data = await res.json();
-      if(data.codes && data.codes.length){
-        const now = Date.now();
-        codesList.innerHTML = data.codes.map(c=>{
-          const exp = c.expires ? new Date(c.expires).toLocaleDateString() : 'Never';
-          const expired = c.expires && c.expires < now;
-          const typeLabel = c.type==='Y'?'1 Year':c.type==='M'?'1 Month':'1 Week';
-          return '<div class="code-chip">'
-            +'<span style="font-weight:700">'+c.code+'</span>'
-            +'<span class="cu '+(expired?'dead':'')+'">'+typeLabel+' | Exp: '+exp+(c.name?' | '+c.name:'')+'</span>'
-            +'</div>';
-        }).join('');
-      } else {
-        codesList.innerHTML='<p style="color:var(--text-muted);font-size:0.78rem">No codes found.</p>';
+      // Load codes + costs in parallel
+      const [codesRes, costsRes] = await Promise.all([
+        fetch(wurl,{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({_appSecret:'greenrock-2024',action:'list-codes',adminKey:'Johnny11'})}),
+        fetch(wurl,{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({_appSecret:'greenrock-2024',action:'get-all-costs',adminKey:'Johnny11'})})
+      ]);
+      const codesData = await codesRes.json();
+      const costsData = await costsRes.json();
+
+      // Build cost lookup map
+      const costMap = {};
+      if(costsData.ok && costsData.costs){
+        costsData.costs.forEach(function(c){ costMap[c.code] = c; });
       }
+
+      const now = Date.now();
+      const codes = codesData.codes || [];
+
+      // Stats bar
+      const total = codes.length;
+      const active = codes.filter(c=>c.expires && c.expires > now).length;
+      const expired = codes.filter(c=>c.expires && c.expires < now).length;
+      const unused = codes.filter(c=>!costMap[c.code] || !costMap[c.code].calls).length;
+      const totalCost = costsData.globalCost || 0;
+
+      var sc1='background:rgba(0,180,216,0.15);border:1px solid rgba(0,180,216,0.3);border-radius:10px;padding:2px 8px;font-size:0.65rem;color:var(--cyan)';
+      var sc2='background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:10px;padding:2px 8px;font-size:0.65rem;color:#10b981';
+      var sc3='background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:2px 8px;font-size:0.65rem;color:#ef4444';
+      var sc4='background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);border-radius:10px;padding:2px 8px;font-size:0.65rem;color:var(--gold)';
+      if(stats) stats.innerHTML =
+        '<span style="'+sc1+'">Total: '+total+'</span>'+
+        '<span style="'+sc2+'">Active: '+active+'</span>'+
+        '<span style="'+sc3+'">Expired: '+expired+'</span>'+
+        '<span style="'+sc4+'">AI Cost: $'+totalCost.toFixed(4)+'</span>';
+
+      if(!codes.length){
+        codesList.innerHTML='<p style="color:var(--text-muted);font-size:0.75rem;">No codes yet.</p>';
+        return;
+      }
+
+      // Render table rows
+      const COST_IN=2.75/1000000, COST_OUT=12.50/1000000;
+      const planMap = {W:15,M:45,Y:400,D:0};
+
+      codesList.innerHTML = codes.map(function(c){
+        var cd = costMap[c.code]||{inputTokens:0,outputTokens:0,calls:0};
+        var cost = (cd.inputTokens||0)*COST_IN + (cd.outputTokens||0)*COST_OUT;
+        var prefix = c.code.charAt(0);
+        var planPrice = planMap[prefix]||45;
+        var pct = planPrice>0 ? Math.min(100,Math.round(cost/planPrice*100)) : 0;
+        var isExpired = c.expires && c.expires < now;
+        var daysLeft = c.expires ? Math.max(0,Math.round((c.expires-now)/(1000*60*60*24))) : 9999;
+        var typeLabel = c.type==='Y'?'1Y':c.type==='M'?'1M':'1W';
+        var statusColor = isExpired?'#ef4444':daysLeft<7?'#f59e0b':'#10b981';
+        var costColor = pct>=80?'#ef4444':pct>=50?'#f59e0b':'#10b981';
+        var statusText = isExpired?'Expired':(daysLeft===9999?'No expiry':daysLeft+'d left');
+        var row = document.createElement('div');
+        row.style.cssText = 'display:grid;grid-template-columns:1fr 70px 80px 24px;gap:4px;align-items:center;padding:5px 6px;border-bottom:1px solid rgba(255,255,255,0.04);';
+        row.innerHTML = '<div>'
+          +'<div style="font-weight:700;font-size:0.75rem;color:#fff;">'+c.code+'</div>'
+          +'<div style="font-size:0.62rem;color:var(--text-muted);">'+(c.name||'&mdash;')+' &middot; '+typeLabel+'</div>'
+          +'</div>'
+          +'<div style="font-size:0.68rem;color:'+statusColor+';">'+statusText+'</div>'
+          +'<div>'
+            +'<div style="font-size:0.7rem;color:'+costColor+';font-weight:700;">$'+cost.toFixed(4)+'</div>'
+            +'<div style="background:rgba(255,255,255,0.06);border-radius:2px;height:3px;margin-top:2px;overflow:hidden;">'
+              +'<div style="width:'+pct+'%;height:100%;background:'+costColor+';border-radius:2px;"></div>'
+            +'</div>'
+            +'<div style="font-size:0.6rem;color:var(--text-muted);">'+(cd.calls||0)+' calls &middot; '+pct+'%</div>'
+          +'</div>'
+          +'<button onclick="deleteCode(\'' +c.code+ '\')" style="background:none;border:none;color:rgba(255,255,255,0.2);cursor:pointer;font-size:12px;padding:2px;" title="Delete">&#128465;</button>';
+        return row.outerHTML;
+      }).join('');
+
     }catch(e){
-      codesList.innerHTML='<p style="color:#ff8080;font-size:0.78rem">Error: '+e.message+'</p>';
+      codesList.innerHTML='<p style="color:#ff8080;font-size:0.75rem;">Error: '+e.message+'</p>';
     }
+  }
+
+  async function deleteCode(code){
+    if(!confirm('Delete code '+code+'?')) return;
+    // We don't have a delete endpoint yet — show message
+    toast('To delete: go to Cloudflare KV → GREENROCK_CODES → delete key "'+code+'"');
   }
 
   // ── AI USAGE / COST MONITOR ───────────────────────────────

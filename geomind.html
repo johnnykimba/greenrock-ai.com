@@ -717,7 +717,14 @@ function addDualResponse(data){
 }
 
 function cleanText(t){
-  return (t||'').replace(/```json[\s\S]*?```/g,'').replace(/\{[\s\S]*?"scorecard"[\s\S]*?\}\s*\}/g,'').replace(/\{[\s\S]*?"confidence"[\s\S]*?\}\s*\}/g,'').trim();
+  var s = t||'';
+  // Remove code blocks
+  s = s.replace(/```json[\s\S]*?```/g,'');
+  // Remove scorecard JSON
+  s = s.replace(/\{[\s\S]{0,500}"scorecard"[\s\S]{0,1000}\}/g,'');
+  // Remove confidence JSON (keep text, remove only the JSON block at end)
+  s = s.replace(/\{[\s\S]{0,200}"confidence"[\s\S]{0,500}\}/g,'');
+  return s.trim();
 }
 
 // ── GEO SCORECARD ─────────────────────────────────────────
@@ -775,20 +782,47 @@ function buildGeoScorecard(text){
 
 // ── SCIENCE CONFIDENCE ────────────────────────────────────
 function buildSciConfidence(text){
-  // Parse confidence JSON from response
   var conf=null;
+  // Try multiple extraction strategies
   try{
-    var idx=text.indexOf('{"confidence"');
-    if(idx===-1) idx=text.indexOf('{ "confidence"');
+    // Strategy 1: find {"confidence": or { "confidence":
+    var searches = ['{"confidence"', '{ "confidence"', '{\n  "confidence"', '{\n"confidence"'];
+    var idx = -1;
+    for(var s=0;s<searches.length;s++){
+      idx = text.indexOf(searches[s]);
+      if(idx!==-1) break;
+    }
     if(idx!==-1){
       var depth=0,end=-1;
       for(var i=idx;i<text.length;i++){
         if(text[i]==='{') depth++;
         else if(text[i]==='}'){depth--;if(depth===0){end=i;break;}}
       }
-      if(end!==-1) conf=JSON.parse(text.substring(idx,end+1)).confidence;
+      if(end!==-1){
+        var jsonStr = text.substring(idx,end+1);
+        var parsed = JSON.parse(jsonStr);
+        conf = parsed.confidence || parsed;
+        // Validate it has expected fields
+        if(!conf.overall && !conf.factual_accuracy) conf=null;
+      }
     }
-  }catch(e){}
+    // Strategy 2: regex fallback
+    if(!conf){
+      var match = text.match(/"overall"\s*:\s*(\d+)/);
+      if(match){
+        conf = {
+          overall: parseInt(match[1]),
+          factual_accuracy: parseInt((text.match(/"factual_accuracy"\s*:\s*(\d+)/)||[0,70])[1]),
+          source_reliability: parseInt((text.match(/"source_reliability"\s*:\s*(\d+)/)||[0,70])[1]),
+          reasoning_quality: parseInt((text.match(/"reasoning_quality"\s*:\s*(\d+)/)||[0,70])[1]),
+          consensus_level: parseInt((text.match(/"consensus_level"\s*:\s*(\d+)/)||[0,65])[1]),
+          completeness: parseInt((text.match(/"completeness"\s*:\s*(\d+)/)||[0,70])[1]),
+          uncertainty_acknowledged: parseInt((text.match(/"uncertainty_acknowledged"\s*:\s*(\d+)/)||[0,70])[1]),
+          verdict: (text.match(/"verdict"\s*:\s*"([^"]+)"/)||['','Moderate Confidence'])[1]
+        };
+      }
+    }
+  }catch(e){ conf=null; }
   if(!conf) return '';
 
   var overall=conf.overall||0;

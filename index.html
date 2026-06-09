@@ -488,11 +488,15 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
             </div>
             <div class="fg" style="margin-bottom:0.5rem;">
               <label>Duration</label>
-              <select id="new-code-duration" style="width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.6rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.82rem;outline:none;">
-                <option value="7">1 Week — $15</option>
-                <option value="30" selected>1 Month — $45</option>
-                <option value="365">1 Year — $400</option>
+              <select id="new-code-duration" onchange="updateDefaultPrice(this.value)" style="width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.6rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.82rem;outline:none;">
+                <option value="7">1 Week</option>
+                <option value="30" selected>1 Month</option>
+                <option value="365">1 Year</option>
               </select>
+            </div>
+            <div class="fg" style="margin-bottom:0.5rem;">
+              <label>Price (USD) — charged to client</label>
+              <input type="number" id="new-code-price" value="45" min="0" step="1" placeholder="e.g. 45" style="width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.6rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.82rem;outline:none;">
             </div>
             <div class="fg" style="margin-bottom:0.5rem;">
               <label>Custom Code (optional)</label>
@@ -607,13 +611,24 @@ window.addEventListener('DOMContentLoaded', function(){
   const logoutBtn = document.getElementById('admin-logout-btn');
   if(logoutBtn) logoutBtn.addEventListener('click', closeAdmin);
 
+  // Auto-set suggested price when duration changes
+  window.updateDefaultPrice = function(days){
+    var el = document.getElementById('new-code-price');
+    if(!el) return;
+    var d = parseInt(days);
+    if(d<=7) el.value=15;
+    else if(d<=31) el.value=45;
+    else el.value=400;
+  };
+
   // ── GENERATE CODE ─────────────────────────────────────────
   const genBtn = document.getElementById('gen-code-btn');
   if(genBtn) genBtn.addEventListener('click', async function(){
     const wurl = getWorkerURL();
-    const name = (document.getElementById('new-code-name')||{}).value || '';
+    const name = (document.getElementById('new-code-name')||{value:''}).value || '';
     const days = parseInt(document.getElementById('new-code-duration').value) || 30;
-    const customCode = ((document.getElementById('new-code-value')||{}).value || '').trim().toUpperCase();
+    const price = parseFloat(document.getElementById('new-code-price').value) || 0;
+    const customCode = ((document.getElementById('new-code-value')||{value:''}).value || '').trim().toUpperCase();
     const code = customCode || 'GR-' + Math.random().toString(36).substring(2,7).toUpperCase();
     const type = days<=7?'W':days<=31?'M':'Y';
     const resultDiv = document.getElementById('gen-result');
@@ -627,7 +642,7 @@ window.addEventListener('DOMContentLoaded', function(){
           _appSecret:'greenrock-2024',
           action:'generate-code',
           adminKey:'Johnny11',
-          code:code, type:type, name:name, days:days
+          code:code, type:type, name:name, days:days, price:price
         })
       });
       const data = await res.json();
@@ -635,9 +650,10 @@ window.addEventListener('DOMContentLoaded', function(){
         const exp = new Date(data.expires).toLocaleDateString();
         resultDiv.style.display='block';
         resultDiv.style.color='#10b981';
-        resultDiv.innerHTML='<strong>Code created:</strong> '+code+'<br>Type: '+type+' | Expires: '+exp+(name?' | Client: '+name:'');
+        resultDiv.innerHTML='&#10003; Code: <strong>'+code+'</strong> | '+type+' | $'+price+' | Exp: '+exp+(name?' | '+name:'');
         document.getElementById('new-code-value').value='';
-        loadCodesList();
+        document.getElementById('new-code-name').value='';
+        loadCodesTable();
       } else {
         resultDiv.style.display='block';
         resultDiv.style.color='#ff8080';
@@ -680,7 +696,10 @@ window.addEventListener('DOMContentLoaded', function(){
       }
 
       const now = Date.now();
-      const codes = codesData.codes || [];
+      // Filter out system keys
+      const codes = (codesData.codes || []).filter(function(c){
+        return c.code !== 'COST_LIMIT_PCT' && !c.code.startsWith('usage:') && !c.code.startsWith('cost_');
+      });
 
       // Stats bar
       const total = codes.length;
@@ -712,11 +731,12 @@ window.addEventListener('DOMContentLoaded', function(){
         var cd = costMap[c.code]||{inputTokens:0,outputTokens:0,calls:0};
         var cost = (cd.inputTokens||0)*COST_IN + (cd.outputTokens||0)*COST_OUT;
         var prefix = c.code.charAt(0);
-        var planPrice = planMap[prefix]||45;
+        var planPrice = (c.price != null) ? c.price : (planMap[prefix]||45);
         var pct = planPrice>0 ? Math.min(100,Math.round(cost/planPrice*100)) : 0;
         var isExpired = c.expires && c.expires < now;
         var daysLeft = c.expires ? Math.max(0,Math.round((c.expires-now)/(1000*60*60*24))) : 9999;
-        var typeLabel = c.type==='Y'?'1Y':c.type==='M'?'1M':'1W';
+        var typeLabel = c.type==='Y'?'1 Year':c.type==='M'?'1 Month':'1 Week';
+        var priceLabel = planPrice>0?'$'+planPrice:'Demo';
         var statusColor = isExpired?'#ef4444':daysLeft<7?'#f59e0b':'#10b981';
         var costColor = pct>=80?'#ef4444':pct>=50?'#f59e0b':'#10b981';
         var statusText = isExpired?'Expired':(daysLeft===9999?'No expiry':daysLeft+'d left');

@@ -415,10 +415,12 @@ function validateCode(){
   .catch(function(){ err.textContent='Connection error'; err.style.display='block'; });
 }
 
+var _activeCode = '';
+
 function showModeSelector(){
+  _activeCode = document.getElementById('code-input').value.trim().toUpperCase();
   document.getElementById('access-gate').style.display='none';
   document.getElementById('app').style.display='flex';
-  // Default to geo mode
   selectMode('geo');
 }
 
@@ -615,7 +617,8 @@ async function sendMessage(){
         mode:_currentMode,
         pipelineMode:geoMode,
         lang:lang,
-        messages:_messages
+        messages:_messages,
+        code:_activeCode
       })
     });
     var data = await res.json();
@@ -629,6 +632,11 @@ async function sendMessage(){
 
     _messages.push({role:'assistant',content:data.llm2});
     addDualResponse(data);
+
+    // Track cost and check limit
+    if(data.usage && _activeCode && _activeCode !== 'JOHNNY11'){
+      trackAICost(_activeCode, data.usage, _currentMode);
+    }
 
   }catch(e){
     typingEl.remove();
@@ -928,6 +936,57 @@ function switchMode(){
   _messages = [];
   document.getElementById('chat-messages').innerHTML='';
   selectMode(_currentMode);
+}
+
+
+// ── AI COST TRACKING ─────────────────────────────────────
+async function trackAICost(code, usage, mode){
+  // Also store locally as fallback
+  try{
+    var key = 'gr_cost_'+code;
+    var local = JSON.parse(localStorage.getItem(key)||'{}');
+    local.inputTokens  = (local.inputTokens||0)  + (usage.prompt_tokens||0);
+    local.outputTokens = (local.outputTokens||0) + (usage.completion_tokens||0);
+    local.calls        = (local.calls||0) + 1;
+    localStorage.setItem(key, JSON.stringify(local));
+  }catch(e){}
+
+  try{
+    var res = await fetch(WORKER_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        _appSecret:APP_SECRET,
+        action:'track-cost',
+        code:code,
+        usage:usage,
+        mode:mode
+      })
+    });
+    var data = await res.json();
+    if(data.limitReached){
+      showLimitOverlay(data.cost, data.limit);
+    }
+  }catch(e){
+    console.warn('Cost tracking failed:', e);
+  }
+}
+
+function showLimitOverlay(cost, limit){
+  if(window._limitShown) return;
+  window._limitShown = true;
+  var overlay = document.createElement('div');
+  overlay.id='limit-overlay';
+  overlay.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.93);display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML='<div style="background:#111827;border:1px solid rgba(239,68,68,0.4);border-radius:16px;padding:32px;max-width:380px;text-align:center;color:#fff;">'
+    +'<div style="font-size:44px;margin-bottom:12px;">⚠️</div>'
+    +'<h2 style="color:#ef4444;margin-bottom:10px;font-size:18px;">Usage Limit Reached</h2>'
+    +'<p style="color:#9ca3af;margin-bottom:6px;font-size:13px;">You have used $'+(cost||0).toFixed(4)+' of your $'+(limit||0).toFixed(2)+' AI budget.</p>'
+    +'<p style="color:#9ca3af;margin-bottom:20px;font-size:13px;">Please contact GreenRock AI to renew your subscription.</p>'
+    +'<a href="mailto:kimba@greenrock-ai.com" style="display:block;padding:10px 20px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:8px;color:#fff;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:10px;">Contact GreenRock AI</a>'
+    +'<button onclick="document.getElementById(\'limit-overlay\').remove();window._limitShown=false;" style="padding:8px 20px;background:transparent;border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:#9ca3af;font-size:12px;cursor:pointer;">Dismiss</button>'
+    +'</div>';
+  document.body.appendChild(overlay);
 }
 
 </script>

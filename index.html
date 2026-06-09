@@ -501,8 +501,12 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
       <!-- AI COST MONITOR -->
       <div class="a-section" style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)">
         <h3>AI USAGE &amp; COST</h3>
-        <button class="btn-p" id="load-usage-btn" style="width:100%;margin-bottom:0.8rem">Refresh Usage Data</button>
+        <div style="display:flex;gap:8px;margin-bottom:0.8rem;">
+          <button class="btn-p" id="load-usage-btn" style="flex:1;">Refresh</button>
+          <button class="btn-o" id="set-limit-btn" style="flex:1;font-size:0.75rem;">Set Limit %</button>
+        </div>
         <div id="usage-display" style="font-size:0.78rem;color:var(--text-muted)">Click refresh to load usage.</div>
+        <div id="per-code-costs" style="margin-top:0.8rem;"></div>
       </div>
 
       <!-- CODES LIST -->
@@ -669,43 +673,88 @@ window.addEventListener('DOMContentLoaded', function(){
 
   // ── AI USAGE / COST MONITOR ───────────────────────────────
   const loadUsageBtn = document.getElementById('load-usage-btn');
-  if(loadUsageBtn) loadUsageBtn.addEventListener('click', async function(){
+  if(loadUsageBtn) loadUsageBtn.addEventListener('click', loadFullCostReport);
+
+  async function loadFullCostReport(){
     const wurl = getWorkerURL();
     const display = document.getElementById('usage-display');
+    const perCode = document.getElementById('per-code-costs');
     display.innerHTML='Loading...';
     try{
       const res = await fetch(wurl,{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({_appSecret:'greenrock-2024',action:'get-usage',adminKey:'Johnny11'})
+        body:JSON.stringify({_appSecret:'greenrock-2024',action:'get-all-costs',adminKey:'Johnny11'})
       });
       const data = await res.json();
-      if(data.usage){
-        const u = data.usage;
-        const inputCost  = ((u.total_prompt_tokens||0)     / 1000000 * 5).toFixed(4);
-        const outputCost = ((u.total_completion_tokens||0)  / 1000000 * 15).toFixed(4);
-        const totalCost  = (parseFloat(inputCost)+parseFloat(outputCost)).toFixed(4);
-        display.innerHTML =
+      if(data.ok){
+        const g = data.globalStats||{};
+        const COST_IN=2.75/1000000, COST_OUT=12.50/1000000;
+        const totalCost=((g.total_prompt_tokens||0)*COST_IN+(g.total_completion_tokens||0)*COST_OUT).toFixed(4);
+        display.innerHTML=
           '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">'
           +'<div style="background:rgba(0,180,216,0.08);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">'
-          +'<div style="font-size:1.2rem;font-weight:900;color:var(--cyan)">'+(u.total_requests||0)+'</div>'
+          +'<div style="font-size:1.2rem;font-weight:900;color:var(--cyan)">'+(g.total_requests||0)+'</div>'
           +'<div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase">Total Queries</div></div>'
           +'<div style="background:rgba(0,180,216,0.08);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">'
           +'<div style="font-size:1.2rem;font-weight:900;color:var(--gold)">$'+totalCost+'</div>'
-          +'<div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase">Est. AI Cost</div></div>'
+          +'<div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase">Total AI Cost</div></div>'
           +'</div>'
-          +'<div style="font-size:0.72rem;color:var(--text-muted);line-height:1.8">'
-          +'Input tokens: '+(u.total_prompt_tokens||0).toLocaleString()+' ($'+inputCost+')<br>'
-          +'Output tokens: '+(u.total_completion_tokens||0).toLocaleString()+' ($'+outputCost+')<br>'
-          +'Last query: '+(u.last_query ? new Date(u.last_query).toLocaleString() : 'N/A')
-          +'</div>';
+          +'<div style="font-size:0.7rem;color:var(--text-muted);line-height:1.8;">'
+          +'Input: '+(g.total_prompt_tokens||0).toLocaleString()+' tokens<br>'
+          +'Output: '+(g.total_completion_tokens||0).toLocaleString()+' tokens<br>'
+          +'Last query: '+(g.last_query?new Date(g.last_query).toLocaleString():'N/A')+'</div>';
+
+        // Per-code breakdown
+        if(data.costs && data.costs.length){
+          perCode.innerHTML='<div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;">Per-Code Breakdown</div>'
+            +data.costs.sort((a,b)=>(b.cost||0)-(a.cost||0)).map(function(c){
+              const pct = c.cost&&c.limit ? Math.min(100,Math.round(c.cost/c.limit*100)) : 0;
+              const col = pct>=80?'#ef4444':pct>=60?'#f59e0b':'#10b981';
+              return '<div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:6px;">'
+                +'<div style="display:flex;justify-content:space-between;margin-bottom:4px;">'
+                +'<span style="font-size:0.75rem;font-weight:700;">'+c.code+'</span>'
+                +'<span style="font-size:0.75rem;color:'+col+';">$'+(c.cost||0).toFixed(4)+'</span></div>'
+                +'<div style="background:rgba(255,255,255,0.06);border-radius:3px;height:4px;overflow:hidden;">'
+                +'<div style="width:'+pct+'%;height:100%;background:'+col+';border-radius:3px;"></div></div>'
+                +'<div style="font-size:0.65rem;color:var(--text-muted);margin-top:3px;">'
+                +c.calls+' queries · last: '+(c.lastCall?new Date(c.lastCall).toLocaleDateString():'never')+'</div>'
+                +'</div>';
+            }).join('');
+        } else {
+          perCode.innerHTML='<p style="font-size:0.75rem;color:var(--text-muted)">No per-code data yet.</p>';
+        }
       } else {
-        display.innerHTML='<p style="color:#ff8080">'+( data.error||'No usage data available')+'</p>';
+        display.innerHTML='<p style="color:#ff8080">'+(data.error||'Error loading costs')+'</p>';
       }
     }catch(e){
       display.innerHTML='<p style="color:#ff8080">Error: '+e.message+'</p>';
     }
+  }
+
+  // Set cost limit button
+  const setLimitBtn = document.getElementById('set-limit-btn');
+  if(setLimitBtn) setLimitBtn.addEventListener('click', async function(){
+    const pct = prompt('Set cost limit as % of plan price (default 70):', '70');
+    if(!pct) return;
+    const wurl = getWorkerURL();
+    try{
+      const res = await fetch(wurl,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({_appSecret:'greenrock-2024',action:'set-cost-limit',adminKey:'Johnny11',pct:parseFloat(pct)})});
+      const d = await res.json();
+      if(d.ok) toast('Cost limit set to '+pct+'%');
+      else toast('Error: '+(d.error||'failed'));
+    }catch(e){ toast('Error: '+e.message); }
   });
+
+  function toast(msg){
+    var el=document.getElementById('toast')||document.createElement('div');
+    el.id='toast';
+    el.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1e293b;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 20px;font-size:12px;color:#fff;z-index:999;';
+    el.textContent=msg;
+    document.body.appendChild(el);
+    setTimeout(function(){el.remove();},2500);
+  }
 
   // ── PORTAL FILE UPLOADS ──────────────────────────────────
   for(let i=0;i<7;i++){

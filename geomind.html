@@ -205,7 +205,14 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
     <input class="access-input" id="code-input" type="text" placeholder="ACCESS CODE" maxlength="20" autocomplete="off">
     <button class="access-submit" id="code-submit">Activate DualMind</button>
     <div class="access-error" id="code-error">Invalid or expired code</div>
-    <div class="access-demo" style="color:rgba(255,255,255,0.2);font-size:11px;margin-top:14px;">Access codes are issued by GreenRock AI</div>
+    <div style="margin-top:14px;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;display:none;" id="code-display-card">
+      <div style="font-size:18px;font-weight:900;letter-spacing:3px;color:#fff;margin-bottom:4px;" id="code-display-text"></div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:8px;" id="code-display-meta"></div>
+      <button id="code-copy-btn" style="width:100%;padding:8px;background:linear-gradient(135deg,var(--green),var(--cyan));border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+        &#128203; Copy Code
+      </button>
+    </div>
+    <div style="color:rgba(255,255,255,0.2);font-size:11px;margin-top:14px;">Access codes are issued by GreenRock AI</div>
   </div>
 </div>
 
@@ -409,13 +416,35 @@ function validateCode(){
     body:JSON.stringify({_appSecret:APP_SECRET,action:'validate-code',code:code,deviceId:deviceId})})
   .then(function(r){return r.json();})
   .then(function(d){
-    if(d.valid){ showModeSelector(); }
+    if(d.valid){
+      showCodeCard(code, d);
+      setTimeout(function(){ showModeSelector(); }, 1500);
+    }
     else { err.textContent=d.error||'Invalid code'; err.style.display='block'; }
   })
   .catch(function(){ err.textContent='Connection error'; err.style.display='block'; });
 }
 
 var _activeCode = '';
+var _activeMeta = {};
+
+function showCodeCard(code, meta){
+  var card = document.getElementById('code-display-card');
+  var textEl = document.getElementById('code-display-text');
+  var metaEl = document.getElementById('code-display-meta');
+  var copyBtn = document.getElementById('code-copy-btn');
+  if(!card) return;
+  textEl.textContent = code;
+  var typeLabel = meta.type==='Y'?'Yearly':meta.type==='W'?'Weekly':'Monthly';
+  metaEl.textContent = typeLabel + (meta.name?' · '+meta.name:'') + ' · Device-locked on first use';
+  card.style.display = 'block';
+  copyBtn.onclick = function(){
+    navigator.clipboard.writeText(code).then(function(){
+      copyBtn.innerHTML = '&#10003; Copied!';
+      setTimeout(function(){ copyBtn.innerHTML = '&#128203; Copy Code'; }, 2500);
+    });
+  };
+}
 
 function showModeSelector(){
   _activeCode = document.getElementById('code-input').value.trim().toUpperCase();
@@ -528,6 +557,13 @@ async function sendMessage(){
   var input = document.getElementById('chat-input');
   var text = input.value.trim();
   if(!text && !_attachedFiles.length && !Object.keys(_geoFiles).length) return;
+
+  // Protect system prompts from disclosure
+  var blocked = /system.?prompt|show.?prompt|reveal.?prompt|what.?prompt|your.?instruction|ignore.?previous|ignore.?above|disregard.?instruction|jailbreak|act.?as.?dan|prompt.?inject/i;
+  if(blocked.test(text)){
+    addSystemMsg('This type of request is not permitted on this platform.');
+    return;
+  }
 
   var msgs = document.getElementById('chat-messages');
 

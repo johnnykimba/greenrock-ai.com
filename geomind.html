@@ -371,6 +371,31 @@ document.getElementById('code-input').addEventListener('keydown',function(e){ if
 
 function enterDemo(){} // disabled
 
+// Generate stable device fingerprint
+function getDeviceId(){
+  var stored = localStorage.getItem('dm_device_id');
+  if(stored) return stored;
+  // Build fingerprint from available browser properties
+  var fp = [
+    navigator.userAgent,
+    navigator.language,
+    screen.width + 'x' + screen.height,
+    screen.colorDepth,
+    new Date().getTimezoneOffset(),
+    navigator.hardwareConcurrency||'',
+    navigator.platform||''
+  ].join('|');
+  // Simple hash
+  var hash = 0;
+  for(var i=0;i<fp.length;i++){
+    hash = ((hash<<5)-hash)+fp.charCodeAt(i);
+    hash |= 0;
+  }
+  var id = 'dev-' + Math.abs(hash).toString(36) + '-' + Date.now().toString(36);
+  localStorage.setItem('dm_device_id', id);
+  return id;
+}
+
 function validateCode(){
   var code = document.getElementById('code-input').value.trim().toUpperCase();
   var err = document.getElementById('code-error');
@@ -379,8 +404,9 @@ function validateCode(){
     showModeSelector();
     return;
   }
+  var deviceId = getDeviceId();
   fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({_appSecret:APP_SECRET,action:'validate-code',code:code})})
+    body:JSON.stringify({_appSecret:APP_SECRET,action:'validate-code',code:code,deviceId:deviceId})})
   .then(function(r){return r.json();})
   .then(function(d){
     if(d.valid){ showModeSelector(); }
@@ -435,7 +461,7 @@ function addWelcome(mode){
     div.innerHTML='<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;">'+
       '<div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:8px;">⛏️ GeoMind DualMind</div>'+
       '<div style="font-size:12px;color:var(--muted);line-height:1.7;">Upload your geological data files above, then ask me to analyse them.<br>'+
-      'I use two AI models simultaneously — <span style="color:var(--green)">GPT-4o</span> and <span style="color:#a78bfa">Claude</span> — then merge their analyses into one verified interpretation with a confidence scorecard.</div>'+
+      'I use two AI models simultaneously — <span style="color:var(--green)">LLM 1</span> and <span style="color:#a78bfa">LLM 2</span> — delivering a verified interpretation with a confidence scorecard.</div>'+
       '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">'+
       '</div>'+
       '<div style="margin-top:10px;font-size:10px;color:var(--muted);margin-bottom:6px;">Select analysis mode:</div>'+
@@ -453,7 +479,7 @@ function addWelcome(mode){
     div.innerHTML='<div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;">'+
       '<div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:8px;">🔬 General Science DualMind</div>'+
       '<div style="font-size:12px;color:var(--muted);line-height:1.7;">Ask any technical or scientific question. Upload files optionally.<br>'+
-      'Two AI models analyse independently, then merge into a verified answer with <span style="color:var(--cyan)">confidence ratings</span> for each conclusion.</div>'+
+      'Two AI models working simultaneously deliver a verified answer with <span style="color:var(--cyan)">confidence ratings</span> for each conclusion.</div>'+
       '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">'+
       '</div>'+
       '<div style="margin-top:10px;font-size:10px;color:var(--muted);margin-bottom:6px;">Click a topic to start — or type your own question:</div>'+
@@ -643,13 +669,13 @@ function addTyping(){
   div.className='msg';
   div.innerHTML='<div style="display:flex;align-items:center;gap:10px;">'+
     '<div class="typing"><span></span><span></span><span></span></div>'+
-    '<span class="typing-label" id="typing-label">Stage 1: Both AIs analysing in parallel...</span></div>'+
-    '<div style="font-size:10px;color:rgba(255,255,255,0.2);margin-top:2px;">DualMind Pipeline — LLM1 + LLM2 simultaneously</div>';
+    '<span class="typing-label" id="typing-label">DualMind is analysing...</span></div>'+
+    '';
   msgs.appendChild(div);
   msgs.scrollTop=msgs.scrollHeight;
   setTimeout(function(){
     var lbl=document.getElementById('typing-label');
-    if(lbl) lbl.textContent='Stage 2: Merging and cross-validating...';
+    if(lbl) lbl.textContent='DualMind is processing...';
   },5000);
   return div;
 }
@@ -667,11 +693,11 @@ function addDualResponse(data){
 
   var html = '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;">⚡ Stage 1 — Independent Analyses</div>'+
     '<div class="llm-panels">'+
-    '<div class="llm-panel"><div class="llm-panel-header gpt">&#129302; LLM 1 — GPT-4o</div><div class="llm-panel-body">'+parse(llm1Clean)+'</div></div>'+
-    '<div class="llm-panel"><div class="llm-panel-header claude">&#129504; LLM 2 — Claude</div><div class="llm-panel-body">'+parse(llm1bClean)+'</div></div>'+
+    '<div class="llm-panel"><div class="llm-panel-header gpt">&#9679; LLM 1 — Analysis</div><div class="llm-panel-body">'+parse(llm1Clean)+'</div></div>'+
+    '<div class="llm-panel"><div class="llm-panel-header claude">&#9679; LLM 2 — Analysis</div><div class="llm-panel-body">'+parse(llm1bClean)+'</div></div>'+
     '</div>'+
-    '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin:10px 0 6px;">&#128256; Stage 2 — Merged Final Report</div>'+
-    '<div class="llm-panels"><div class="llm-panel merged-panel"><div class="llm-panel-header merged">&#128203; Convergence · Divergence · Merged Verdict</div><div class="llm-panel-body" style="max-height:600px;">'+parse(llm2Clean)+'</div></div></div>';
+    '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin:10px 0 6px;">&#9679; DualMind — Verified Result</div>'+
+    '<div class="llm-panels"><div class="llm-panel merged-panel"><div class="llm-panel-header merged">&#128203; DualMind — Verified Result</div><div class="llm-panel-body" style="max-height:600px;">'+parse(llm2Clean)+'</div></div></div>';
 
   // Scorecard
   if(_currentMode==='geo'){
@@ -851,9 +877,9 @@ function exportWordFromPanel(panel){
   var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>'+CSS+'</style></head><body>'+
     '<h1>'+modeLabel+' Report</h1>'+
     '<p style="color:#64748b;font-size:9pt;">GreenRock AI · '+new Date().toLocaleString()+' · greenrock-ai.com</p><hr>'+
-    '<div class="section"><div class="section-title">LLM 1 — GPT-4o Independent Analysis</div>'+llm1+'</div>'+
-    '<div class="section"><div class="section-title">LLM 2 — Claude Independent Analysis</div>'+llm1b+'</div>'+
-    '<div class="section"><div class="section-title">Merged Final Report</div>'+merged+'</div>'+
+    '<div class="section"><div class="section-title">LLM 1 — Analysis</div>'+llm1+'</div>'+
+    '<div class="section"><div class="section-title">LLM 2 — Analysis</div>'+llm1b+'</div>'+
+    '<div class="section"><div class="section-title">DualMind Verified Report</div>'+merged+'</div>'+
     scoreHtml+'</body></html>';
 
   var blob=new Blob([html],{type:'application/msword'});

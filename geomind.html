@@ -308,6 +308,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 </div>
 
 <script>
+
 var WORKER_URL = 'https://greenrock-worker.kasongokimba.workers.dev';
 var APP_SECRET = 'greenrock-2024';
 var _currentMode = 'geo';
@@ -1038,40 +1039,136 @@ function selectGeoMode(){
   }
   selectMode('geo');
 }
+
+var _mapInstance = null;
+
+function openMap(coords, title){
+  var modal = document.getElementById('map-modal');
+  var mapTitle = document.getElementById('map-title');
+  if(mapTitle) mapTitle.textContent = '\u{1F6F0}\uFE0F Satellite Map — '+(title||'Target Coordinates');
+  modal.classList.add('open');
+
+  // Load Leaflet if not loaded
+  if(!window.L){
+    var css = document.createElement('link');
+    css.rel='stylesheet';
+    css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(css);
+    var script = document.createElement('script');
+    script.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    script.onload = function(){ renderMap(coords); };
+    document.head.appendChild(script);
+  } else {
+    renderMap(coords);
+  }
+}
+
+function renderMap(coords){
+  var container = document.getElementById('map-container');
+  container.style.height = (window.innerHeight - 56) + 'px';
+
+  if(_mapInstance){ _mapInstance.remove(); _mapInstance=null; }
+
+  // Default center — use first coordinate
+  var center = coords.length>0 ? [coords[0].lat, coords[0].lng] : [-8.5, 23.5];
+
+  _mapInstance = L.map('map-container', {zoomControl:true}).setView(center, 14);
+
+  // Satellite layer
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri',
+    maxZoom: 19
+  }).addTo(_mapInstance);
+
+  // Add labels overlay
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+    opacity:0.7, maxZoom:19
+  }).addTo(_mapInstance);
+
+  // Plot coordinates
+  var bounds = [];
+  coords.forEach(function(c, i){
+    var marker = L.circleMarker([c.lat, c.lng], {
+      radius:10, color:'#10b981', fillColor:'#00f5ff',
+      fillOpacity:0.9, weight:2
+    }).addTo(_mapInstance);
+    marker.bindPopup('<strong>'+(c.label||'Target '+(i+1))+'</strong><br>'+
+      'Lat: '+c.lat.toFixed(6)+'<br>Lng: '+c.lng.toFixed(6)+
+      (c.note?'<br>'+c.note:''));
+    bounds.push([c.lat, c.lng]);
+  });
+
+  if(bounds.length>1) _mapInstance.fitBounds(bounds, {padding:[20,20]});
+  setTimeout(function(){ _mapInstance.invalidateSize(); }, 300);
+}
+
+function closeMap(){
+  document.getElementById('map-modal').classList.remove('open');
+}
+
+// ── COORDINATE DETECTION IN RESPONSES ────────────────────
+function extractCoordinates(text){
+  var coords = [];
+
+  // Pattern 1: UTM Easting/Northing (Copperbelt range)
+  var utmPattern = /(?:easting|east)[:\s]+([3-7]\d{5,6})[^\d]*(?:northing|north)[:\s]+([78]\d{6})/gi;
+  var m;
+  while((m=utmPattern.exec(text))!==null){
+    // Convert UTM to approximate lat/lng for Copperbelt (Zone 35S)
+    var e = parseFloat(m[1]), n = parseFloat(m[2]);
+    // Approximate conversion for Zone 35S
+    var lat = (n - 10000000) / 111111;
+    var lng = (e - 500000) / (111111 * Math.cos(lat * Math.PI / 180)) + 27;
+    coords.push({lat:lat, lng:lng, label:'UTM ('+e+', '+n+')'});
+  }
+
+  // Pattern 2: Decimal lat/lng
+  var latLngPattern = /(?:lat(?:itude)?)[:\s]+(-?\d+\.\d+)[^\d-]*(?:lon(?:gitude)?|lng)[:\s]+(-?\d+\.\d+)/gi;
+  while((m=latLngPattern.exec(text))!==null){
+    coords.push({lat:parseFloat(m[1]), lng:parseFloat(m[2]), label:'Coordinates'});
+  }
+
+  // Pattern 3: Collar coordinates table
+  var collarPattern = /DH\w+[\s,]+(\d{6})[\s,]+(\d{7})/g;
+  while((m=collarPattern.exec(text))!==null){
+    var e2=parseFloat(m[1]), n2=parseFloat(m[2]);
+    var lat2=(n2-10000000)/111111;
+    var lng2=(e2-500000)/(111111*Math.cos(lat2*Math.PI/180))+27;
+    coords.push({lat:lat2, lng:lng2, label:'Drillhole collar'});
+  }
+
+  return coords;
+}
+
+function addMapButton(div, text){
+  var coords = extractCoordinates(text);
+  if(!coords || coords.length===0) return;
+
+  var btn = document.createElement('button');
+  btn.className = 'export-btn';
+  btn.innerHTML = '\u{1F6F0}\uFE0F View on Satellite Map ('+coords.length+' point'+(coords.length>1?'s':'')+')';
+  btn.style.cssText = 'border-color:rgba(16,185,129,0.4);color:#10b981;';
+  btn.addEventListener('click', function(){
+    openMap(coords, 'Analysis Results');
+  });
+
+  var exportBar = div.querySelector('.export-bar');
+  if(exportBar) exportBar.appendChild(btn);
+}
+
+
+
+// ── SERVICE WORKER REGISTRATION ──────────────────────────
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/sw.js')
+      .then(function(r){ console.log('SW registered'); })
+      .catch(function(e){ console.log('SW failed:', e); });
+  });
+}
 </script>
 
-<script>
-// Service Worker & PWA
-var _deferredInstall = null;
-window.addEventListener('beforeinstallprompt', function(e){
-  e.preventDefault();
-  _deferredInstall = e;
-  // Show install banner after 3 seconds
-  setTimeout(function(){
-    var banner = document.getElementById('pwa-banner');
-    if(banner) banner.style.display='flex';
-  }, 3000);
-});
 
-document.addEventListener('DOMContentLoaded', function(){
-  var installBtn = document.getElementById('pwa-install-btn');
-  var dismissBtn = document.getElementById('pwa-dismiss-btn');
-  if(installBtn) installBtn.addEventListener('click', function(){
-    if(_deferredInstall){
-      _deferredInstall.prompt();
-      _deferredInstall.userChoice.then(function(){
-        _deferredInstall=null;
-        var banner=document.getElementById('pwa-banner');
-        if(banner) banner.style.display='none';
-      });
-    }
-  });
-  if(dismissBtn) dismissBtn.addEventListener('click', function(){
-    var banner=document.getElementById('pwa-banner');
-    if(banner) banner.style.display='none';
-  });
-});
-</script>
 
 <!-- SATELLITE MAP MODAL -->
 <div id="map-modal" style="display:none;position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,0.92);">
@@ -1088,7 +1185,9 @@ document.addEventListener('DOMContentLoaded', function(){
   </div>
 </div>
 
-</body></html>';
+</body>
+</html>
+';
 
   var blob=new Blob([html],{type:'application/msword'});
   var url=URL.createObjectURL(blob);
@@ -1219,134 +1318,7 @@ window.addEventListener('appinstalled', function(){
 });
 
 // ── SATELLITE MAP ─────────────────────────────────────────
-var _mapInstance = null;
 
-function openMap(coords, title){
-  var modal = document.getElementById('map-modal');
-  var mapTitle = document.getElementById('map-title');
-  if(mapTitle) mapTitle.textContent = '\u{1F6F0}\uFE0F Satellite Map — '+(title||'Target Coordinates');
-  modal.classList.add('open');
-
-  // Load Leaflet if not loaded
-  if(!window.L){
-    var css = document.createElement('link');
-    css.rel='stylesheet';
-    css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-    document.head.appendChild(css);
-    var script = document.createElement('script');
-    script.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-    script.onload = function(){ renderMap(coords); };
-    document.head.appendChild(script);
-  } else {
-    renderMap(coords);
-  }
-}
-
-function renderMap(coords){
-  var container = document.getElementById('map-container');
-  container.style.height = (window.innerHeight - 56) + 'px';
-
-  if(_mapInstance){ _mapInstance.remove(); _mapInstance=null; }
-
-  // Default center — use first coordinate
-  var center = coords.length>0 ? [coords[0].lat, coords[0].lng] : [-8.5, 23.5];
-
-  _mapInstance = L.map('map-container', {zoomControl:true}).setView(center, 14);
-
-  // Satellite layer
-  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri',
-    maxZoom: 19
-  }).addTo(_mapInstance);
-
-  // Add labels overlay
-  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
-    opacity:0.7, maxZoom:19
-  }).addTo(_mapInstance);
-
-  // Plot coordinates
-  var bounds = [];
-  coords.forEach(function(c, i){
-    var marker = L.circleMarker([c.lat, c.lng], {
-      radius:10, color:'#10b981', fillColor:'#00f5ff',
-      fillOpacity:0.9, weight:2
-    }).addTo(_mapInstance);
-    marker.bindPopup('<strong>'+(c.label||'Target '+(i+1))+'</strong><br>'+
-      'Lat: '+c.lat.toFixed(6)+'<br>Lng: '+c.lng.toFixed(6)+
-      (c.note?'<br>'+c.note:''));
-    bounds.push([c.lat, c.lng]);
-  });
-
-  if(bounds.length>1) _mapInstance.fitBounds(bounds, {padding:[20,20]});
-  setTimeout(function(){ _mapInstance.invalidateSize(); }, 300);
-}
-
-function closeMap(){
-  document.getElementById('map-modal').classList.remove('open');
-}
-
-// ── COORDINATE DETECTION IN RESPONSES ────────────────────
-function extractCoordinates(text){
-  var coords = [];
-
-  // Pattern 1: UTM Easting/Northing (Copperbelt range)
-  var utmPattern = /(?:easting|east)[:\s]+([3-7]\d{5,6})[^\d]*(?:northing|north)[:\s]+([78]\d{6})/gi;
-  var m;
-  while((m=utmPattern.exec(text))!==null){
-    // Convert UTM to approximate lat/lng for Copperbelt (Zone 35S)
-    var e = parseFloat(m[1]), n = parseFloat(m[2]);
-    // Approximate conversion for Zone 35S
-    var lat = (n - 10000000) / 111111;
-    var lng = (e - 500000) / (111111 * Math.cos(lat * Math.PI / 180)) + 27;
-    coords.push({lat:lat, lng:lng, label:'UTM ('+e+', '+n+')'});
-  }
-
-  // Pattern 2: Decimal lat/lng
-  var latLngPattern = /(?:lat(?:itude)?)[:\s]+(-?\d+\.\d+)[^\d-]*(?:lon(?:gitude)?|lng)[:\s]+(-?\d+\.\d+)/gi;
-  while((m=latLngPattern.exec(text))!==null){
-    coords.push({lat:parseFloat(m[1]), lng:parseFloat(m[2]), label:'Coordinates'});
-  }
-
-  // Pattern 3: Collar coordinates table
-  var collarPattern = /DH\w+[\s,]+(\d{6})[\s,]+(\d{7})/g;
-  while((m=collarPattern.exec(text))!==null){
-    var e2=parseFloat(m[1]), n2=parseFloat(m[2]);
-    var lat2=(n2-10000000)/111111;
-    var lng2=(e2-500000)/(111111*Math.cos(lat2*Math.PI/180))+27;
-    coords.push({lat:lat2, lng:lng2, label:'Drillhole collar'});
-  }
-
-  return coords;
-}
-
-function addMapButton(div, text){
-  var coords = extractCoordinates(text);
-  if(!coords || coords.length===0) return;
-
-  var btn = document.createElement('button');
-  btn.className = 'export-btn';
-  btn.innerHTML = '\u{1F6F0}\uFE0F View on Satellite Map ('+coords.length+' point'+(coords.length>1?'s':'')+')';
-  btn.style.cssText = 'border-color:rgba(16,185,129,0.4);color:#10b981;';
-  btn.addEventListener('click', function(){
-    openMap(coords, 'Analysis Results');
-  });
-
-  var exportBar = div.querySelector('.export-bar');
-  if(exportBar) exportBar.appendChild(btn);
-}
-
-
-
-// ── SERVICE WORKER REGISTRATION ──────────────────────────
-if('serviceWorker' in navigator){
-  window.addEventListener('load', function(){
-    navigator.serviceWorker.register('/sw.js')
-      .then(function(r){ console.log('SW registered'); })
-      .catch(function(e){ console.log('SW failed:', e); });
-  });
-}
-
-</script>
 
 <!-- SATELLITE MAP MODAL -->
 <div id="map-modal" style="display:none;position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,0.92);">
@@ -1363,5 +1335,39 @@ if('serviceWorker' in navigator){
   </div>
 </div>
 
+</body>
+</html>
+<script>
+// Service Worker & PWA
+var _deferredInstall = null;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  _deferredInstall = e;
+  // Show install banner after 3 seconds
+  setTimeout(function(){
+    var banner = document.getElementById('pwa-banner');
+    if(banner) banner.style.display='flex';
+  }, 3000);
+});
+
+document.addEventListener('DOMContentLoaded', function(){
+  var installBtn = document.getElementById('pwa-install-btn');
+  var dismissBtn = document.getElementById('pwa-dismiss-btn');
+  if(installBtn) installBtn.addEventListener('click', function(){
+    if(_deferredInstall){
+      _deferredInstall.prompt();
+      _deferredInstall.userChoice.then(function(){
+        _deferredInstall=null;
+        var banner=document.getElementById('pwa-banner');
+        if(banner) banner.style.display='none';
+      });
+    }
+  });
+  if(dismissBtn) dismissBtn.addEventListener('click', function(){
+    var banner=document.getElementById('pwa-banner');
+    if(banner) banner.style.display='none';
+  });
+});
+</script>
 </body>
 </html>

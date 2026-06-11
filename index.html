@@ -330,6 +330,12 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="6qaDK9WfePT3KPsbkW4ocp8ywbCRqfJLv0Q_syjZCr8">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#10b981">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DualMind">
+<meta name="mobile-web-app-capable" content="yes">
 <title>GreenRock AI | AI-Powered Mineral Exploration</title>
 <meta name="description" content="GreenRock AI uses artificial intelligence and geophysics to optimise drill plans and discover new mineralisation across Africa and globally.">
 <meta name="keywords" content="AI mineral exploration, drill plan optimisation, geophysics AI, copper exploration Africa, drillhole prediction, Copperbelt mining AI">
@@ -483,6 +489,13 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
           <div class="a-section" style="margin-bottom:1rem;">
             <h3>GENERATE CODE</h3>
             <div class="fg" style="margin-bottom:0.5rem;">
+              <label>Access Type</label>
+              <select id="new-code-type" onchange="updateCodePrefix(this.value)" style="width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.6rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.82rem;outline:none;">
+                <option value="GR">GR- Full Access (GeoMind + General Science)</option>
+                <option value="SC">SC- General Science Only</option>
+              </select>
+            </div>
+            <div class="fg" style="margin-bottom:0.5rem;">
               <label>Client Name</label>
               <input type="text" id="new-code-name" placeholder="e.g. Andries, DMR-Client">
             </div>
@@ -497,6 +510,14 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
             <div class="fg" style="margin-bottom:0.5rem;">
               <label>Price (USD) — charged to client</label>
               <input type="number" id="new-code-price" value="45" min="0" step="1" placeholder="e.g. 45" style="width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.6rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.82rem;outline:none;">
+            </div>
+            <div class="fg" style="margin-bottom:0.5rem;">
+              <label>Access Type</label>
+              <select id="new-code-mode" onchange="updateCodePrefix(this.value)" style="width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.6rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.82rem;outline:none;">
+                <option value="GR">GeoMind Only (GR-)</option>
+                <option value="DS">General Science Only (DS-)</option>
+                <option value="DM">Full Access — Both Modes (DM-)</option>
+              </select>
             </div>
             <div class="fg" style="margin-bottom:0.5rem;">
               <label>Custom Code (optional)</label>
@@ -611,6 +632,13 @@ window.addEventListener('DOMContentLoaded', function(){
   const logoutBtn = document.getElementById('admin-logout-btn');
   if(logoutBtn) logoutBtn.addEventListener('click', closeAdmin);
 
+  // Update code prefix when type changes
+  window.updateCodePrefix = function(type){
+    // just visual feedback - the prefix is applied on generation
+    var btn = document.getElementById('gen-code-btn');
+    if(btn) btn.textContent = '+ Generate ' + (type==='SC'?'Science':'Full') + ' Code';
+  };
+
   // Auto-set suggested price when duration changes
   window.updateDefaultPrice = function(days){
     var el = document.getElementById('new-code-price');
@@ -621,6 +649,11 @@ window.addEventListener('DOMContentLoaded', function(){
     else el.value=400;
   };
 
+  window.updateCodePrefix = function(mode){
+    var el = document.getElementById('new-code-value');
+    if(el && !el.value) el.placeholder = 'Leave blank — auto prefix: '+mode+'-XXXXX';
+  };
+
   // ── GENERATE CODE ─────────────────────────────────────────
   const genBtn = document.getElementById('gen-code-btn');
   if(genBtn) genBtn.addEventListener('click', async function(){
@@ -629,7 +662,9 @@ window.addEventListener('DOMContentLoaded', function(){
     const days = parseInt(document.getElementById('new-code-duration').value) || 30;
     const price = parseFloat(document.getElementById('new-code-price').value) || 0;
     const customCode = ((document.getElementById('new-code-value')||{value:''}).value || '').trim().toUpperCase();
-    const code = customCode || 'GR-' + Math.random().toString(36).substring(2,7).toUpperCase();
+    const codeType = (document.getElementById('new-code-type')||{value:'GR'}).value || 'GR';
+    const tier = codeType === 'SC' ? 'science' : 'full';
+    const code = customCode || codeType+'-' + Math.random().toString(36).substring(2,7).toUpperCase();
     const type = days<=7?'W':days<=31?'M':'Y';
     const resultDiv = document.getElementById('gen-result');
 
@@ -642,7 +677,8 @@ window.addEventListener('DOMContentLoaded', function(){
           _appSecret:'greenrock-2024',
           action:'generate-code',
           adminKey:'Johnny11',
-          code:code, type:type, name:name, days:days, price:price
+          code:code, type:type, name:name, days:days, price:price,
+          modeAccess:(document.getElementById('new-code-mode')||{value:'GR'}).value
         })
       });
       const data = await res.json();
@@ -650,7 +686,19 @@ window.addEventListener('DOMContentLoaded', function(){
         const exp = new Date(data.expires).toLocaleDateString();
         resultDiv.style.display='block';
         resultDiv.style.color='#10b981';
-        resultDiv.innerHTML='&#10003; Code: <strong>'+code+'</strong> | '+type+' | $'+price+' | Exp: '+exp+(name?' | '+name:'');
+        resultDiv.innerHTML='&#10003; Code: <strong style="font-size:1rem;letter-spacing:1px;">'+code+'</strong> | '+type+' | $'+price+' | '+exp+(name?' | '+name:'');
+        var copyBtn = document.createElement('button');
+        copyBtn.textContent = '📋 Copy Code: ' + code;
+        copyBtn.setAttribute('data-code', code);
+        copyBtn.style.cssText = 'margin-top:6px;padding:7px 16px;background:linear-gradient(135deg,#10b981,#06b6d4);border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;width:100%;display:block;';
+        copyBtn.addEventListener('click', function(){
+          var c = this.getAttribute('data-code');
+          navigator.clipboard.writeText(c).then(function(){
+            copyBtn.textContent = '✅ Copied: ' + c;
+            setTimeout(function(){ copyBtn.textContent = '📋 Copy Code: ' + c; }, 2500);
+          });
+        });
+        resultDiv.appendChild(copyBtn);
         document.getElementById('new-code-value').value='';
         document.getElementById('new-code-name').value='';
         loadCodesTable();
@@ -1020,4 +1068,5 @@ window.addEventListener('DOMContentLoaded', function(){
 });
 
 </script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("/sw.js").catch(function(){});}</script>
 </body></html>

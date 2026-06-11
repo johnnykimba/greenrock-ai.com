@@ -3,22 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#10b981">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="DualMind">
-<meta name="mobile-web-app-capable" content="yes">
 <title>DualMind — GreenRock AI</title>
 
 
-<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#060e1a">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="DualMind">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23060e1a'/><text y='65' x='50' text-anchor='middle' font-size='55'>⚡</text></svg>">
 <script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
 <style>
@@ -240,7 +228,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 
   <!-- MODE TABS -->
   <div class="mode-bar">
-    <div class="mode-pill active geo" id="pill-geo" onclick="selectGeoMode()" style="cursor:pointer;">&#9874; GeoMind DualMind</div>
+    <div class="mode-pill active geo" id="pill-geo" onclick="selectMode('geo')" style="cursor:pointer;">&#9874; GeoMind DualMind</div>
     <div class="mode-pill sci" id="pill-sci" onclick="selectMode('sci')" style="cursor:pointer;">&#128300; General Science</div>
   </div>
 
@@ -299,14 +287,6 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 </div>
 
 <!-- Satellite Map Modal -->
-<div class="map-modal" id="map-modal">
-  <div class="map-header">
-    <h3 id="map-title">&#127759; Satellite Map — Target Coordinates</h3>
-    <button class="map-close" onclick="closeMap()">&#x2715; Close</button>
-  </div>
-  <div id="map-container"></div>
-</div>
-
 <script>
 
 var WORKER_URL = 'https://greenrock-worker.kasongokimba.workers.dev';
@@ -465,21 +445,7 @@ function validateCode(){
 
 var _activeCode = '';
 var _activeMeta = {};
-var _accessTier = 'full'; // 'full' or 'science'
 
-function applyAccessTier(tier){
-  _accessTier = tier || 'full';
-  if(_accessTier === 'science'){
-    // Hide GeoMind tab, go straight to science
-    var geoTab = document.getElementById('pill-geo');
-    if(geoTab){
-      geoTab.style.display='none';
-      geoTab.title='GeoMind requires a full access code';
-    }
-    // Force science mode
-    _currentMode = 'sci';
-  }
-}
 
 function showCodeCard(code, meta){
   var card = document.getElementById('code-display-card');
@@ -804,10 +770,6 @@ function addDualResponse(data){
   wordBtn.addEventListener('click',function(){exportWord(exportBar);});
   exportBar.appendChild(copyBtn2);
   exportBar.appendChild(wordBtn);
-  // Add map button if coordinates found
-  var allText = (data.llm2||'')+(data.llm1||'');
-  var mapBtn = showMapBtn(exportBar, allText);
-  if(mapBtn) exportBar.appendChild(mapBtn);
 
   div.innerHTML = html;
   div.appendChild(exportBar);
@@ -1032,15 +994,6 @@ function exportWordFromPanel(panel){
   toast('Report downloaded!');
 }
 
-function selectGeoMode(){
-  if(_accessTier === 'science'){
-    toast('GeoMind requires a full access code (GR-). Contact GreenRock AI.');
-    return;
-  }
-  selectMode('geo');
-}
-
-var _mapInstance = null;
 
 function openMap(coords, title){
   var modal = document.getElementById('map-modal');
@@ -1048,14 +1001,11 @@ function openMap(coords, title){
   if(mapTitle) mapTitle.textContent = '\u{1F6F0}\uFE0F Satellite Map — '+(title||'Target Coordinates');
   modal.classList.add('open');
 
-  // Load Leaflet if not loaded
   if(!window.L){
     var css = document.createElement('link');
     css.rel='stylesheet';
-    css.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
     document.head.appendChild(css);
     var script = document.createElement('script');
-    script.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
     script.onload = function(){ renderMap(coords); };
     document.head.appendChild(script);
   } else {
@@ -1170,20 +1120,6 @@ if('serviceWorker' in navigator){
 
 
 
-<!-- SATELLITE MAP MODAL -->
-<div id="map-modal" style="display:none;position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,0.92);">
-  <div style="position:absolute;inset:10px;background:#0c1829;border:1px solid rgba(16,185,129,0.3);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);">
-      <div>
-        <div style="font-size:14px;font-weight:800;color:#fff;">&#127758; Satellite Map — Drill Targets</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.4);" id="map-subtitle">Coordinates from DualMind analysis</div>
-      </div>
-      <button onclick="closeMap()" style="background:rgba(255,255,255,0.08);border:none;border-radius:8px;color:#fff;padding:6px 12px;cursor:pointer;font-size:12px;">&#x2715; Close</button>
-    </div>
-    <div id="satellite-map" style="flex:1;"></div>
-    <div id="map-coords-list" style="padding:8px 12px;max-height:120px;overflow-y:auto;border-top:1px solid rgba(255,255,255,0.06);font-size:11px;color:rgba(255,255,255,0.6);"></div>
-  </div>
-</div>
 
 </body>
 </html>
@@ -1325,15 +1261,7 @@ window.addEventListener('appinstalled', function(){
   <div style="position:absolute;inset:10px;background:#0c1829;border:1px solid rgba(16,185,129,0.3);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);">
       <div>
-        <div style="font-size:14px;font-weight:800;color:#fff;">&#127758; Satellite Map — Drill Targets</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.4);" id="map-subtitle">Coordinates from DualMind analysis</div>
-      </div>
-      <button onclick="closeMap()" style="background:rgba(255,255,255,0.08);border:none;border-radius:8px;color:#fff;padding:6px 12px;cursor:pointer;font-size:12px;">&#x2715; Close</button>
-    </div>
-    <div id="satellite-map" style="flex:1;"></div>
-    <div id="map-coords-list" style="padding:8px 12px;max-height:120px;overflow-y:auto;border-top:1px solid rgba(255,255,255,0.06);font-size:11px;color:rgba(255,255,255,0.6);"></div>
-  </div>
-</div>
+        
 
 </body>
 </html>

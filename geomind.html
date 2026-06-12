@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>DualMind — GreenRock AI</title>
 <script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
   --bg:#060e1a; --surface:#0c1829; --surface2:#111f35;
@@ -574,12 +575,23 @@ async function sendMessage(){
   // Add attached files
   for(var i=0;i<_attachedFiles.length;i++){
     var f = _attachedFiles[i];
-    var b64 = await readFileBase64(f);
     var ext = f.name.split('.').pop().toLowerCase();
     if(['png','jpg','jpeg'].includes(ext)){
+      var b64 = await readFileBase64(f);
       userContent.push({type:'image_url',image_url:{url:'data:image/'+ext+';base64,'+b64}});
+    } else if(ext === 'pdf'){
+      var b64 = await readFileBase64(f);
+      // Send PDF as base64 document for Claude to read natively
+      userContent.push({type:'text',text:'[PDF: '+f.name+'] (attached as document below)'});
+      userContent.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}});
+    } else if(['xlsx','xls'].includes(ext)){
+      // Parse Excel as readable text using SheetJS
+      var xlsText = await readExcelAsText(f);
+      userContent.push({type:'text',text:'[Excel: '+f.name+']\n'+xlsText});
     } else {
-      userContent.push({type:'text',text:'[File: '+f.name+']\n'+atob(b64).substring(0,3000)});
+      // CSV, TXT, JSON etc - read as plain text
+      var text2 = await readFileAsText(f);
+      userContent.push({type:'text',text:'[File: '+f.name+']\n'+text2.substring(0,8000)});
     }
   }
 
@@ -598,10 +610,15 @@ async function sendMessage(){
           if(pfrom&&pfrom.value&&pto&&pto.value) pageNote=' [Pages '+pfrom.value+'-'+pto.value+']';
           if(['png','jpg','jpeg'].includes(gext)){
             userContent.push({type:'image_url',image_url:{url:'data:image/'+gext+';base64,'+gb64}});
+          } else if(gext === 'pdf'){
+            userContent.push({type:'text',text:'['+slot.num+'. '+slot.name+pageNote+': '+gf.name+'] (PDF attached below)'});
+            userContent.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:gb64}});
+          } else if(['xlsx','xls'].includes(gext)){
+            var xlsText2 = await readExcelAsText(gf);
+            userContent.push({type:'text',text:'['+slot.num+'. '+slot.name+pageNote+': '+gf.name+']\n'+xlsText2});
           } else {
-            var textContent = '';
-            try{ textContent = atob(gb64).substring(0,4000); }catch(e){ textContent = '[binary file]'; }
-            userContent.push({type:'text',text:'['+slot.num+'. '+slot.name+pageNote+': '+gf.name+']\n'+textContent});
+            var textContent = await readFileAsText(gf);
+            userContent.push({type:'text',text:'['+slot.num+'. '+slot.name+pageNote+': '+gf.name+']\n'+textContent.substring(0,8000)});
           }
         }
       }
@@ -676,6 +693,32 @@ function readFileBase64(file){
     r.onload=function(){ resolve(r.result.split(',')[1]||''); };
     r.readAsDataURL(file);
   });
+}
+
+function readFileAsText(file){
+  return new Promise(function(resolve){
+    var r = new FileReader();
+    r.onload=function(){ resolve(r.result||''); };
+    r.onerror=function(){ resolve('[Could not read file]'); };
+    r.readAsText(file);
+  });
+}
+
+async function readExcelAsText(file){
+  try{
+    if(typeof XLSX === 'undefined') return '[Excel parsing not available - please upload as CSV]';
+    var b64 = await readFileBase64(file);
+    var wb = XLSX.read(b64, {type:'base64'});
+    var result = '';
+    wb.SheetNames.forEach(function(sheetName){
+      var ws = wb.Sheets[sheetName];
+      var csv = XLSX.utils.sheet_to_csv(ws);
+      result += '[Sheet: '+sheetName+']\n'+csv+'\n';
+    });
+    return result.substring(0, 12000);
+  }catch(e){
+    return '[Excel read error: '+e.message+' — please convert to CSV and re-upload]';
+  }
 }
 
 // ── RENDER MESSAGES ───────────────────────────────────────

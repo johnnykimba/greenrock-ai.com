@@ -267,13 +267,17 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
 
 .modal-overlay.open { display: flex; }
 
-.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; position: relative; }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 1.5rem; width: 100%; max-width: 1100px; max-height: 92vh; overflow-y: auto; position: relative; }
 
 .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.3rem; }
 
 .modal-close-btn { background: rgba(255, 68, 68, 0.1); border: 1px solid rgba(255, 68, 68, 0.3); color: rgb(255, 128, 128); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
 
 .modal-close-btn:hover { background: rgba(255, 68, 68, 0.2); }
+
+.filter-tab { padding:4px 12px; border-radius:8px; border:1px solid var(--border); background:rgba(255,255,255,0.04); color:var(--text-muted); font-size:0.7rem; font-weight:600; cursor:pointer; transition:all 0.2s; font-family:'Exo 2',sans-serif; }
+.filter-tab:hover { border-color:rgba(0,180,216,0.4); color:var(--cyan); }
+.active-tab { background:rgba(0,180,216,0.12); border-color:rgba(0,180,216,0.4); color:var(--cyan); }
 
 .modal h2 { font-family: Orbitron, monospace; font-size: 1rem; font-weight: 700; }
 
@@ -461,82 +465,114 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
     </div>
     <div id="admin-panel">
       <div class="modal-header">
-        <h2>Admin Panel</h2>
+        <div>
+          <h2>&#9881; Admin Panel</h2>
+          <p class="modal-sub" style="margin:2px 0 0;">GreenRock AI &mdash; Access Codes &amp; AI Cost Dashboard</p>
+        </div>
         <button class="modal-close-btn">&#x2715;</button>
       </div>
-      <p class="modal-sub" style="margin-bottom:1rem;">GreenRock AI — Access Codes &amp; AI Cost Dashboard</p>
 
-      <!-- TWO COLUMN LAYOUT -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <!-- MAIN 2-COLUMN LAYOUT -->
+      <div style="display:grid;grid-template-columns:360px 1fr;gap:1.2rem;margin-top:1rem;">
 
-        <!-- LEFT: Controls -->
-        <div>
+        <!-- ── LEFT COLUMN ── -->
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+
           <!-- WORKER URL -->
-          <div class="a-section" style="margin-bottom:1rem;">
-            <h3>WORKER URL</h3>
-            <div class="fg"><input type="text" id="worker-url" placeholder="https://greenrock-worker.kasongokimba.workers.dev" style="font-size:0.75rem;"></div>
-            <button class="save-btn" id="save-worker-btn" style="margin-top:0.5rem;width:100%;">Save URL</button>
+          <div class="a-section">
+            <h3>&#128279; WORKER URL</h3>
+            <div class="fg" style="margin-bottom:0.4rem;">
+              <input type="text" id="worker-url" placeholder="https://greenrock-worker.kasongokimba.workers.dev" style="font-size:0.72rem;">
+            </div>
+            <button class="save-btn" id="save-worker-btn" style="width:100%;">Save URL</button>
             <div class="save-confirm" id="save-confirm">Saved!</div>
           </div>
 
           <!-- GENERATE CODE -->
-          <div class="a-section" style="margin-bottom:1rem;">
-            <h3>GENERATE CODE</h3>
-            <div class="fg" style="margin-bottom:0.5rem;">
-              <label>Client Name</label>
-              <input type="text" id="new-code-name" placeholder="e.g. Andries, DMR-Client">
+          <div class="a-section">
+            <h3>&#9889; GENERATE ACCESS CODE</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem;">
+              <div class="fg" style="margin:0;">
+                <label>Access Type</label>
+                <select id="new-code-type" onchange="updateCodePrefix(this.value)" style="width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.5rem;color:var(--text);font-size:0.78rem;outline:none;">
+                  <option value="GR">GR- Full Access</option>
+                  <option value="SC">SC- Science Only</option>
+                </select>
+              </div>
+              <div class="fg" style="margin:0;">
+                <label>Duration</label>
+                <select id="new-code-duration" onchange="updateDefaultPrice(this.value)" style="width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.5rem;color:var(--text);font-size:0.78rem;outline:none;">
+                  <option value="7">1 Week</option>
+                  <option value="30" selected>1 Month</option>
+                  <option value="365">1 Year</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem;">
+              <div class="fg" style="margin:0;">
+                <label>Client Name</label>
+                <input type="text" id="new-code-name" placeholder="e.g. Andries">
+              </div>
+              <div class="fg" style="margin:0;">
+                <label>Price (USD)</label>
+                <input type="number" id="new-code-price" value="45" min="0" step="1" style="background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.5rem;color:var(--text);font-size:0.82rem;width:100%;outline:none;">
+              </div>
             </div>
             <div class="fg" style="margin-bottom:0.5rem;">
-              <label>Duration</label>
-              <select id="new-code-duration" onchange="updateDefaultPrice(this.value)" style="width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.6rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.82rem;outline:none;">
-                <option value="7">1 Week</option>
-                <option value="30" selected>1 Month</option>
-                <option value="365">1 Year</option>
-              </select>
+              <label>Custom Code (optional — leave blank to auto-generate)</label>
+              <input type="text" id="new-code-value" placeholder="AUTO-GENERATE" style="text-transform:uppercase;">
             </div>
-            <div class="fg" style="margin-bottom:0.5rem;">
-              <label>Price (USD) — charged to client</label>
-              <input type="number" id="new-code-price" value="45" min="0" step="1" placeholder="e.g. 45" style="width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.6rem;color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.82rem;outline:none;">
-            </div>
-            <div class="fg" style="margin-bottom:0.5rem;">
-              <label>Custom Code (optional)</label>
-              <input type="text" id="new-code-value" placeholder="Leave blank to auto-generate" style="text-transform:uppercase;">
-            </div>
-            <button class="btn-p" id="gen-code-btn" style="width:100%;">+ Generate Code</button>
+            <button class="btn-p" id="gen-code-btn" style="width:100%;padding:0.7rem;font-size:0.85rem;">&#9889; Generate Code</button>
             <div id="gen-result" style="margin-top:0.5rem;font-size:0.78rem;display:none;"></div>
           </div>
 
-          <!-- COST CONTROLS -->
+          <!-- AI COST CONTROLS -->
           <div class="a-section">
-            <h3>AI COST CONTROLS</h3>
-            <div style="display:flex;gap:6px;">
-              <button class="btn-p" id="load-usage-btn" style="flex:1;font-size:0.75rem;">Refresh</button>
-              <button class="btn-o" id="set-limit-btn" style="flex:1;font-size:0.75rem;">Set Limit %</button>
+            <h3>&#128200; AI COST CONTROLS</h3>
+            <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem;">
+              <button class="btn-p" id="load-usage-btn" style="flex:1;font-size:0.75rem;">&#8635; Refresh</button>
+              <button class="btn-o" id="set-limit-btn" style="flex:1;font-size:0.75rem;">&#9881; Set Limit %</button>
             </div>
-            <div id="usage-display" style="margin-top:0.6rem;font-size:0.78rem;color:var(--text-muted);">Click Refresh to load.</div>
+            <div id="usage-display" style="font-size:0.78rem;color:var(--text-muted);">Click Refresh to load.</div>
+          </div>
+
+          <!-- LOGOUT -->
+          <button class="btn-o red" id="admin-logout-btn" style="width:100%;margin-top:auto;">Logout</button>
+        </div>
+
+        <!-- ── RIGHT COLUMN: CODES TABLE ── -->
+        <div class="a-section" style="display:flex;flex-direction:column;min-height:500px;">
+
+          <!-- Table header bar -->
+          <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.7rem;flex-wrap:wrap;">
+            <h3 style="margin:0;white-space:nowrap;">&#128273; ALL ACCESS CODES</h3>
+            <div id="total-cost-badge" style="display:none;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);border-radius:8px;padding:2px 10px;font-size:0.72rem;font-weight:700;color:var(--gold);">Total AI Cost: $0.0000</div>
+            <button class="btn-p" id="load-codes-btn" style="margin-left:auto;font-size:0.72rem;padding:5px 14px;">Load</button>
+          </div>
+
+          <!-- Stats pills -->
+          <div id="codes-stats" style="display:flex;gap:6px;margin-bottom:0.6rem;flex-wrap:wrap;"></div>
+
+          <!-- Filter tabs -->
+          <div id="filter-tabs" style="display:flex;gap:6px;margin-bottom:0.7rem;">
+            <button onclick="filterCodes('all')" id="filter-all" class="filter-tab active-tab">All</button>
+            <button onclick="filterCodes('unused')" id="filter-unused" class="filter-tab">Not Used</button>
+            <button onclick="filterCodes('active')" id="filter-active" class="filter-tab">Active</button>
+            <button onclick="filterCodes('expired')" id="filter-expired" class="filter-tab" style="background:rgba(239,68,68,0.1);color:#ef4444;border-color:rgba(239,68,68,0.3);">Expired</button>
+          </div>
+
+          <!-- Table header row -->
+          <div style="display:grid;grid-template-columns:1.4fr 90px 80px 140px 26px;gap:6px;padding:5px 8px;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);border-bottom:1px solid var(--border);margin-bottom:4px;">
+            <span>Code</span><span>Status</span><span>Created</span><span>AI Cost (All)</span><span></span>
+          </div>
+
+          <!-- Table rows -->
+          <div id="codes-list" style="flex:1;overflow-y:auto;font-size:0.75rem;">
+            <p style="color:var(--text-muted);font-size:0.75rem;padding:10px;">Click Load to view codes.</p>
           </div>
         </div>
 
-        <!-- RIGHT: Codes table -->
-        <div>
-          <div class="a-section" style="height:100%;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;">
-              <h3 style="margin:0;">ACCESS CODES</h3>
-              <button class="btn-o" id="load-codes-btn" style="font-size:0.7rem;padding:4px 10px;">Load</button>
-            </div>
-            <div id="codes-stats" style="display:flex;gap:6px;margin-bottom:0.6rem;flex-wrap:wrap;"></div>
-            <!-- Table header -->
-            <div style="display:grid;grid-template-columns:1fr 70px 80px 24px;gap:4px;padding:4px 6px;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);border-bottom:1px solid var(--border);margin-bottom:4px;">
-              <span>Code</span><span>Status</span><span>AI Cost</span><span></span>
-            </div>
-            <div id="codes-list" style="max-height:380px;overflow-y:auto;font-size:0.75rem;">
-              <p style="color:var(--text-muted);font-size:0.75rem;">Click Load to view codes.</p>
-            </div>
-          </div>
-        </div>
       </div>
-
-      <button class="btn-o red" id="admin-logout-btn" style="width:100%;margin-top:1rem;">Logout</button>
     </div>  </div>
 </div>
 
@@ -671,15 +707,17 @@ window.addEventListener('DOMContentLoaded', function(){
   const loadCodesBtn = document.getElementById('load-codes-btn');
   if(loadCodesBtn) loadCodesBtn.addEventListener('click', loadCodesTable);
 
+  var _allCodesData = [];
+
   async function loadCodesTable(){
     const wurl = getWorkerURL();
     const codesList = document.getElementById('codes-list');
     const stats = document.getElementById('codes-stats');
+    const totalBadge = document.getElementById('total-cost-badge');
     if(!codesList) return;
-    codesList.innerHTML='<p style="color:var(--text-muted);font-size:0.75rem">Loading...</p>';
+    codesList.innerHTML='<p style="color:var(--text-muted);padding:10px;">Loading...</p>';
 
     try{
-      // Load codes + costs in parallel
       const [codesRes, costsRes] = await Promise.all([
         fetch(wurl,{method:'POST',headers:{'Content-Type':'application/json'},
           body:JSON.stringify({_appSecret:'greenrock-2024',action:'list-codes',adminKey:'Johnny11'})}),
@@ -689,79 +727,114 @@ window.addEventListener('DOMContentLoaded', function(){
       const codesData = await codesRes.json();
       const costsData = await costsRes.json();
 
-      // Build cost lookup map
       const costMap = {};
       if(costsData.ok && costsData.costs){
         costsData.costs.forEach(function(c){ costMap[c.code] = c; });
       }
 
       const now = Date.now();
-      // Filter out system keys
-      const codes = (codesData.codes || []).filter(function(c){
+      const COST_IN=2.75/1000000, COST_OUT=12.50/1000000;
+      const codes = (codesData.codes||[]).filter(function(c){
         return c.code !== 'COST_LIMIT_PCT' && !c.code.startsWith('usage:') && !c.code.startsWith('cost_');
+      });
+      _allCodesData = codes.map(function(c){
+        const cd = costMap[c.code]||{inputTokens:0,outputTokens:0,calls:0};
+        const cost = (cd.inputTokens||0)*COST_IN + (cd.outputTokens||0)*COST_OUT;
+        const planMap = {W:15,M:45,Y:400,SC:15,D:0};
+        const prefix = c.code.split('-')[0].toUpperCase();
+        const planPrice = (c.price!=null) ? c.price : (planMap[prefix]||45);
+        const pct = planPrice>0 ? Math.min(100,Math.round(cost/planPrice*100)) : 0;
+        const isExpired = c.expires && c.expires < now;
+        const daysLeft = c.expires ? Math.max(0,Math.round((c.expires-now)/(1000*60*60*24))) : 9999;
+        const typeLabel = c.type==='Y'?'1 Year':c.type==='M'?'1 Month':'1 Week';
+        const created = c.created ? new Date(c.created).toLocaleDateString('en-GB',{day:'2-digit',month:'short'}) : '—';
+        return { c, cd, cost, planPrice, pct, isExpired, daysLeft, typeLabel, created, calls:cd.calls||0 };
       });
 
       // Stats bar
       const total = codes.length;
-      const active = codes.filter(c=>c.expires && c.expires > now).length;
-      const expired = codes.filter(c=>c.expires && c.expires < now).length;
-      const unused = codes.filter(c=>!costMap[c.code] || !costMap[c.code].calls).length;
+      const active = codes.filter(function(c){ return c.expires && c.expires > now; }).length;
+      const expired = codes.filter(function(c){ return c.expires && c.expires < now; }).length;
+      const unused = _allCodesData.filter(function(d){ return !d.calls; }).length;
       const totalCost = costsData.globalCost || 0;
 
-      var sc1='background:rgba(0,180,216,0.15);border:1px solid rgba(0,180,216,0.3);border-radius:10px;padding:2px 8px;font-size:0.65rem;color:var(--cyan)';
-      var sc2='background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:10px;padding:2px 8px;font-size:0.65rem;color:#10b981';
-      var sc3='background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:2px 8px;font-size:0.65rem;color:#ef4444';
-      var sc4='background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);border-radius:10px;padding:2px 8px;font-size:0.65rem;color:var(--gold)';
-      if(stats) stats.innerHTML =
+      if(totalBadge){ totalBadge.style.display='block'; totalBadge.textContent='Total AI Cost (All): $'+totalCost.toFixed(4); }
+
+      var sc1='background:rgba(0,180,216,0.12);border:1px solid rgba(0,180,216,0.3);border-radius:10px;padding:2px 10px;font-size:0.68rem;font-weight:700;color:var(--cyan)';
+      var sc2='background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);border-radius:10px;padding:2px 10px;font-size:0.68rem;font-weight:700;color:#10b981';
+      var sc3='background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:2px 10px;font-size:0.68rem;font-weight:700;color:#ef4444';
+      var sc4='background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:10px;padding:2px 10px;font-size:0.68rem;font-weight:700;color:var(--gold)';
+      if(stats) stats.innerHTML=
         '<span style="'+sc1+'">Total: '+total+'</span>'+
+        '<span style="'+sc2+'">Unused: '+unused+'</span>'+
         '<span style="'+sc2+'">Active: '+active+'</span>'+
-        '<span style="'+sc3+'">Expired: '+expired+'</span>'+
-        '<span style="'+sc4+'">AI Cost: $'+totalCost.toFixed(4)+'</span>';
+        '<span style="'+sc3+'">Expired: '+expired+'</span>';
 
-      if(!codes.length){
-        codesList.innerHTML='<p style="color:var(--text-muted);font-size:0.75rem;">No codes yet.</p>';
-        return;
-      }
-
-      // Render table rows
-      const COST_IN=2.75/1000000, COST_OUT=12.50/1000000;
-      const planMap = {W:15,M:45,Y:400,D:0};
-
-      codesList.innerHTML = codes.map(function(c){
-        var cd = costMap[c.code]||{inputTokens:0,outputTokens:0,calls:0};
-        var cost = (cd.inputTokens||0)*COST_IN + (cd.outputTokens||0)*COST_OUT;
-        var prefix = c.code.charAt(0);
-        var planPrice = (c.price != null) ? c.price : (planMap[prefix]||45);
-        var pct = planPrice>0 ? Math.min(100,Math.round(cost/planPrice*100)) : 0;
-        var isExpired = c.expires && c.expires < now;
-        var daysLeft = c.expires ? Math.max(0,Math.round((c.expires-now)/(1000*60*60*24))) : 9999;
-        var typeLabel = c.type==='Y'?'1 Year':c.type==='M'?'1 Month':'1 Week';
-        var priceLabel = planPrice>0?'$'+planPrice:'Demo';
-        var statusColor = isExpired?'#ef4444':daysLeft<7?'#f59e0b':'#10b981';
-        var costColor = pct>=80?'#ef4444':pct>=50?'#f59e0b':'#10b981';
-        var statusText = isExpired?'Expired':(daysLeft===9999?'No expiry':daysLeft+'d left');
-        var row = document.createElement('div');
-        row.style.cssText = 'display:grid;grid-template-columns:1fr 70px 80px 24px;gap:4px;align-items:center;padding:5px 6px;border-bottom:1px solid rgba(255,255,255,0.04);';
-        row.innerHTML = '<div>'
-          +'<div style="font-weight:700;font-size:0.75rem;color:#fff;">'+c.code+'</div>'
-          +'<div style="font-size:0.62rem;color:var(--text-muted);">'+(c.name||'&mdash;')+' &middot; '+typeLabel+'</div>'
-          +'</div>'
-          +'<div style="font-size:0.68rem;color:'+statusColor+';">'+statusText+'</div>'
-          +'<div>'
-            +'<div style="font-size:0.7rem;color:'+costColor+';font-weight:700;">$'+cost.toFixed(4)+'</div>'
-            +'<div style="background:rgba(255,255,255,0.06);border-radius:2px;height:3px;margin-top:2px;overflow:hidden;">'
-              +'<div style="width:'+pct+'%;height:100%;background:'+costColor+';border-radius:2px;"></div>'
-            +'</div>'
-            +'<div style="font-size:0.6rem;color:var(--text-muted);">'+(cd.calls||0)+' calls &middot; '+pct+'%</div>'
-          +'</div>'
-          +'<button onclick="deleteCode(\'' +c.code+ '\')" style="background:none;border:none;color:rgba(255,255,255,0.2);cursor:pointer;font-size:12px;padding:2px;" title="Delete">&#128465;</button>';
-        return row.outerHTML;
-      }).join('');
+      filterCodes('all');
 
     }catch(e){
-      codesList.innerHTML='<p style="color:#ff8080;font-size:0.75rem;">Error: '+e.message+'</p>';
+      codesList.innerHTML='<p style="color:#ff8080;padding:10px;">Error: '+e.message+'</p>';
     }
   }
+
+  function filterCodes(filter){
+    // Update active tab
+    ['all','unused','active','expired'].forEach(function(f){
+      var el = document.getElementById('filter-'+f);
+      if(el){ el.classList.toggle('active-tab', f===filter); }
+    });
+    var now = Date.now();
+    var filtered = _allCodesData.filter(function(d){
+      if(filter==='unused') return !d.calls;
+      if(filter==='active') return !d.isExpired;
+      if(filter==='expired') return d.isExpired;
+      return true;
+    });
+    renderCodesTable(filtered);
+  }
+
+  function renderCodesTable(rows){
+    var codesList = document.getElementById('codes-list');
+    if(!rows.length){
+      codesList.innerHTML='<p style="color:var(--text-muted);padding:10px;">No codes found.</p>';
+      return;
+    }
+    codesList.innerHTML = rows.map(function(d){
+      var statusColor = d.isExpired?'#ef4444':d.daysLeft<7?'#f59e0b':'#10b981';
+      var costColor = d.pct>=80?'#ef4444':d.pct>=50?'#f59e0b':'#10b981';
+      var statusText = d.isExpired?'Expired':(d.daysLeft===9999?'No expiry':d.daysLeft+'d to use');
+      var priceLabel = d.planPrice>0?'$'+d.planPrice:'Demo';
+
+      var row = document.createElement('div');
+      row.style.cssText='display:grid;grid-template-columns:1.4fr 90px 80px 140px 26px;gap:6px;align-items:center;padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.04);';
+      row.onmouseover=function(){this.style.background='rgba(255,255,255,0.03)';}
+      row.onmouseout=function(){this.style.background='';}
+      row.innerHTML=
+        '<div>'+
+          '<div style="font-weight:700;font-size:0.78rem;color:#fff;letter-spacing:0.5px;">'+d.c.code+'</div>'+
+          '<div style="font-size:0.62rem;color:var(--text-muted);margin-top:1px;">'+(d.c.name||'—')+' &middot; '+d.typeLabel+' &middot; '+priceLabel+'</div>'+
+        '</div>'+
+        '<div style="font-size:0.7rem;font-weight:700;color:'+statusColor+';">'+statusText+'</div>'+
+        '<div style="font-size:0.7rem;color:var(--text-muted);">'+d.created+'</div>'+
+        '<div>'+
+          '<div style="font-size:0.72rem;font-weight:700;color:'+costColor+';">$'+d.cost.toFixed(4)+' / '+priceLabel+'</div>'+
+          '<div style="background:rgba(255,255,255,0.06);border-radius:2px;height:3px;margin:2px 0;overflow:hidden;">'+
+            '<div style="width:'+d.pct+'%;height:100%;background:'+costColor+';border-radius:2px;"></div>'+
+          '</div>'+
+          '<div style="font-size:0.6rem;color:var(--text-muted);">'+d.calls+' calls &middot; '+d.pct+'%</div>'+
+        '</div>'+
+        '<span class="del-placeholder"></span>';
+      // Add delete button separately to avoid quote issues
+      var delBtn = document.createElement('button');
+      delBtn.innerHTML = '&#128465;';
+      delBtn.title = 'Delete';
+      delBtn.style.cssText = 'background:none;border:none;color:rgba(255,255,255,0.2);cursor:pointer;font-size:13px;padding:2px;';
+      delBtn.addEventListener('click', function(){ deleteCode(d.c.code); });
+      row.querySelector('.del-placeholder').replaceWith(delBtn);
+      return row.outerHTML;
+    }).join('');
+  }
+
 
   async function deleteCode(code){
     if(!confirm('Delete code '+code+'?')) return;

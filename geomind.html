@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>DualMind — GreenRock AI</title>
 <script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
@@ -282,11 +285,11 @@ var _geoFiles = {}; // slot index -> {file, pages}
 
 // ── GEO FILE SLOTS ────────────────────────────────────────
 var GEO_SLOTS = [
-  {id:0, num:'1', name:'Collar Coordinates', desc:'Drillhole locations — Easting, Northing, Elevation', accepts:'.csv,.xlsx,.xls', optional:false},
+  {id:0, num:'1', name:'Collar Coordinates', desc:'Drillhole locations — Easting, Northing, Elevation', accepts:'.csv,.xlsx,.xls,.pdf', optional:false},
   {id:1, num:'2', name:'Downhole Survey', desc:'Inclination and azimuth measurements', accepts:'.csv,.xlsx,.xls', optional:false},
   {id:2, num:'3', name:'Assay Results', desc:'Cu grades, Co, Fe — linked by Hole ID', accepts:'.csv,.xlsx,.xls', optional:false},
   {id:3, num:'4', name:'Lithological Logs', desc:'Rock types (dol, rat, Br, sap) by Hole ID', accepts:'.csv,.xlsx,.xls', optional:false},
-  {id:4, num:'5', name:'Geological Context', desc:'Structure, alteration, mineralogy notes', accepts:'.csv,.xlsx,.xls,.txt,.pdf', optional:false},
+  {id:4, num:'5', name:'Geological Context', desc:'Structure, alteration, mineralogy notes', accepts:'.csv,.xlsx,.xls,.txt,.pdf,.png,.jpg,.jpeg', optional:false},
   {id:5, num:'6', name:'Target Area Polygon', desc:'Boundary coordinates — UTM WGS84', accepts:'.csv,.xlsx,.xls', optional:false},
   {id:6, num:'7', name:'Additional Information', desc:'Geophysics, maps, photos, reports — any extra data', accepts:'.csv,.xlsx,.xls,.pdf,.png,.jpg,.jpeg,.doc,.docx,.txt', optional:true},
 ];
@@ -762,7 +765,28 @@ function addDualResponse(data){
   var div = document.createElement('div');
   div.className='msg';
 
-  var parse = function(t){ return typeof marked!=='undefined'?marked.parse(t||''):t||''; };
+  var parse = function(t){
+    if(!t) return '';
+    var html = typeof marked!=='undefined' ? marked.parse(t) : t;
+    return html;
+  };
+
+  function renderMath(el){
+    if(typeof renderMathInElement !== 'undefined'){
+      try{
+        renderMathInElement(el, {
+          delimiters:[
+            {left:'$$',right:'$$',display:true},
+            {left:'$',right:'$',display:false},
+            {left:'\\(',right:'\\)',display:false},
+            {left:'\\[',right:'\\]',display:true}
+          ],
+          throwOnError:false,
+          output:'html'
+        });
+      }catch(e){}
+    }
+  }
 
   var llm1Clean = cleanText(data.llm1);
   var llm1bClean = cleanText(data.llm1b);
@@ -788,6 +812,8 @@ function addDualResponse(data){
 
   div.innerHTML = html;
   msgs.appendChild(div);
+  // Render LaTeX/math expressions in the response
+  renderMath(div);
   msgs.scrollTop=msgs.scrollHeight;
 
   // Show persistent Save Report button

@@ -316,20 +316,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 
 <div class="toast" id="toast"></div>
 
-<!-- SATELLITE MAP MODAL -->
-<div id="map-modal" style="display:none;position:fixed;inset:0;z-index:9990;background:rgba(0,0,0,0.92);">
-  <div style="position:absolute;inset:10px;background:#0c1829;border:1px solid rgba(16,185,129,0.3);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;">
-      <div>
-        <div style="font-size:14px;font-weight:800;color:#fff;">&#127758; Satellite Map — Drill Targets</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.4);" id="map-subtitle">GPS coordinates from DualMind analysis</div>
-      </div>
-      <button onclick="closeMap()" style="background:rgba(255,255,255,0.08);border:none;border-radius:8px;color:#fff;padding:6px 14px;cursor:pointer;font-size:12px;font-weight:600;">&#x2715; Close</button>
-    </div>
-    <div id="satellite-map" style="flex:1;min-height:300px;"></div>
-    <div id="map-coords-list" style="padding:8px 14px;border-top:1px solid rgba(255,255,255,0.06);font-size:11px;color:rgba(255,255,255,0.5);max-height:80px;overflow-y:auto;flex-shrink:0;"></div>
-  </div>
-</div>
+<!-- Map is now inline in responses -->
 
 <script>
 var WORKER_URL = 'https://greenrock-worker.kasongokimba.workers.dev';
@@ -931,9 +918,9 @@ function addDualResponse(data){
   msgs.appendChild(div);
   // Render LaTeX/math expressions in the response
   renderMath(div);
-  // Add map button if coordinates found in response
+  // Auto-show inline map if coordinates found (both geo and science modes)
   var allText = (data.llm2||'') + ' ' + (data.llm1||'');
-  addMapButton(div, allText);
+  addInlineMap(div, allText);
   msgs.scrollTop=msgs.scrollHeight;
 
   // Show persistent Save Report button
@@ -1408,59 +1395,8 @@ function clearAllAttached(){
 
 
 // ── SATELLITE MAP ─────────────────────────────────────────
-var _leafletMap = null;
-var _leafletMarkers = [];
 
-function openMap(coords){
-  var modal = document.getElementById('map-modal');
-  if(!modal){ toast('Map not available'); return; }
-  modal.style.display = 'block';
-
-  setTimeout(function(){
-    if(!_leafletMap){
-      _leafletMap = L.map('satellite-map');
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Esri World Imagery',
-        maxZoom: 19
-      }).addTo(_leafletMap);
-    }
-
-    // Clear old markers
-    _leafletMarkers.forEach(function(m){ _leafletMap.removeLayer(m); });
-    _leafletMarkers = [];
-
-    if(coords && coords.length){
-      var bounds = [];
-      var listHtml = '';
-      coords.forEach(function(c, i){
-        var icon = L.divIcon({
-          html: '<div style="background:linear-gradient(135deg,#10b981,#06b6d4);border:2px solid #fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.5);">'+(i+1)+'</div>',
-          className: '', iconSize: [22,22], iconAnchor: [11,11]
-        });
-        var marker = L.marker([c.lat, c.lng], {icon: icon})
-          .bindPopup('<b>'+c.label+'</b><br>'+c.lat.toFixed(5)+', '+c.lng.toFixed(5)+(c.note?'<br><i style="font-size:10px;">'+c.note+'</i>':''))
-          .addTo(_leafletMap);
-        _leafletMarkers.push(marker);
-        bounds.push([c.lat, c.lng]);
-        listHtml += '<span style="margin-right:14px;"><b style="color:#10b981">'+(i+1)+'.</b> '+c.label+' ('+c.lat.toFixed(4)+', '+c.lng.toFixed(4)+')</span>';
-      });
-      _leafletMap.fitBounds(bounds, {padding:[30,30]});
-      document.getElementById('map-subtitle').textContent = coords.length+' target'+(coords.length>1?'s':'')+' plotted on satellite imagery';
-      document.getElementById('map-coords-list').innerHTML = listHtml;
-    } else {
-      // Default to Copperbelt
-      _leafletMap.setView([-11.5, 27.5], 8);
-      document.getElementById('map-coords-list').innerHTML = '<i>No specific coordinates detected. Showing Copperbelt region (Zambia/DRC).</i>';
-      document.getElementById('map-subtitle').textContent = 'Copperbelt region overview';
-    }
-    _leafletMap.invalidateSize();
-  }, 150);
-}
-
-function closeMap(){
-  var modal = document.getElementById('map-modal');
-  if(modal) modal.style.display = 'none';
-}
+// Map is now inline — see addInlineMap()
 
 function parseCoordinates(text){
   var coords = [];
@@ -1560,17 +1496,70 @@ function parseCoordinates(text){
   return coords;
 }
 
-function addMapButton(div, allText){
+function addInlineMap(div, allText){
   var coords = parseCoordinates(allText || '');
-  var exportBar = div.querySelector('.export-bar');
-  if(!exportBar) return;
-  var mapBtn = document.createElement('button');
-  mapBtn.className = 'export-btn';
-  mapBtn.innerHTML = '&#127758; View on Map';
-  mapBtn.style.borderColor = 'rgba(16,185,129,0.4)';
-  mapBtn.style.color = '#10b981';
-  mapBtn.addEventListener('click', function(){ openMap(coords); });
-  exportBar.appendChild(mapBtn);
+  if(!coords || coords.length === 0) return; // no coords = no map
+
+  // Create inline map container inside the response
+  var mapWrap = document.createElement('div');
+  mapWrap.style.cssText = 'margin-top:10px;border:1px solid rgba(16,185,129,0.3);border-radius:12px;overflow:hidden;';
+
+  var mapHeader = document.createElement('div');
+  mapHeader.style.cssText = 'padding:8px 12px;background:rgba(16,185,129,0.1);display:flex;align-items:center;justify-content:space-between;';
+  mapHeader.innerHTML = '<span style="font-size:11px;font-weight:700;color:#10b981;">&#127758; ' + coords.length + ' Target' + (coords.length>1?'s':'') + ' — Satellite Map</span>'
+    + '<button onclick="toggleMapSize(this)" style="background:none;border:1px solid rgba(16,185,129,0.3);border-radius:5px;color:#10b981;font-size:10px;padding:2px 8px;cursor:pointer;">Expand</button>';
+
+  var mapDiv = document.createElement('div');
+  var mapId = 'inline-map-' + Date.now();
+  mapDiv.id = mapId;
+  mapDiv.style.cssText = 'height:280px;width:100%;';
+
+  var coordList = document.createElement('div');
+  coordList.style.cssText = 'padding:6px 12px;font-size:10px;color:rgba(255,255,255,0.5);background:rgba(0,0,0,0.2);border-top:1px solid rgba(255,255,255,0.06);';
+  coordList.innerHTML = coords.map(function(c,i){
+    return '<span style="margin-right:12px;"><b style="color:#10b981;">'+(i+1)+'.</b> '+c.label+' ('+c.lat.toFixed(4)+', '+c.lng.toFixed(4)+')'+(c.note?' <i>'+c.note+'</i>':'')+'</span>';
+  }).join('');
+
+  mapWrap.appendChild(mapHeader);
+  mapWrap.appendChild(mapDiv);
+  mapWrap.appendChild(coordList);
+  div.appendChild(mapWrap);
+
+  // Init Leaflet map after DOM insertion
+  setTimeout(function(){
+    if(typeof L === 'undefined') return;
+    var map = L.map(mapId, {zoomControl:true, attributionControl:false});
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom:19
+    }).addTo(map);
+    var bounds = [];
+    coords.forEach(function(c, i){
+      var icon = L.divIcon({
+        html: '<div style="background:linear-gradient(135deg,#10b981,#06b6d4);border:2px solid #fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.5);">'+(i+1)+'</div>',
+        className:'', iconSize:[22,22], iconAnchor:[11,11]
+      });
+      L.marker([c.lat,c.lng],{icon:icon})
+        .bindPopup('<b>'+c.label+'</b><br>'+c.lat.toFixed(5)+', '+c.lng.toFixed(5)+(c.note?'<br><i>'+c.note+'</i>':''))
+        .addTo(map);
+      bounds.push([c.lat,c.lng]);
+    });
+    if(bounds.length === 1) map.setView(bounds[0], 13);
+    else map.fitBounds(bounds, {padding:[20,20]});
+    // Store map ref for expand
+    mapDiv._leaflet = map;
+  }, 200);
+}
+
+function toggleMapSize(btn){
+  var mapDiv = btn.closest('div').nextElementSibling;
+  if(!mapDiv) return;
+  var isExpanded = mapDiv.style.height === '520px';
+  mapDiv.style.height = isExpanded ? '280px' : '520px';
+  btn.textContent = isExpanded ? 'Expand' : 'Collapse';
+  // Invalidate map size
+  setTimeout(function(){
+    if(mapDiv._leaflet) mapDiv._leaflet.invalidateSize();
+  }, 100);
 }
 
 </script>

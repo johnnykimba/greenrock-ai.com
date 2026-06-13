@@ -291,7 +291,10 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 
     <!-- PDF PAGE SELECTOR PANEL -->
     <div class="pdf-selector-panel" id="pdf-selector-panel">
-      <div class="pdf-selector-title">&#128195; SELECT PAGE RANGE FOR ANALYSIS</div>
+      <div class="pdf-selector-title" style="display:flex;align-items:center;justify-content:space-between;">
+        <span>&#128195; SELECT PAGE RANGE FOR ANALYSIS</span>
+        <button onclick="clearAllAttached()" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:7px;color:#ef4444;font-size:11px;font-weight:600;padding:4px 12px;cursor:pointer;">&#128465; Clear All Files</button>
+      </div>
       <div class="pdf-thumbs-wrap">
         <div class="pdf-thumbs" id="pdf-thumbs"></div>
       </div>
@@ -1244,8 +1247,9 @@ async function showPdfSelector(file){
       thumbs.appendChild(more);
     }
 
-    // Auto-select first 5 pages
+    // Auto-select first 5 pages and auto-confirm immediately
     updateThumbSelectionFromInputs();
+    validateAndConfirmPages(false);
 
   }catch(e){
     thumbs.innerHTML = '<span style="font-size:11px;color:var(--muted);padding:10px;">Preview unavailable — pages will still be sent by range.</span>';
@@ -1259,6 +1263,8 @@ function updatePageRange(){
   var pages = Array.from(selected).map(function(t){ return parseInt(t.dataset.page); }).sort(function(a,b){return a-b;});
   document.getElementById('pdf-from').value = pages[0];
   document.getElementById('pdf-to').value = pages[pages.length-1];
+  // Auto-confirm after thumb selection
+  validateAndConfirmPages(false);
 }
 
 function updateThumbSelectionFromInputs(){
@@ -1274,23 +1280,46 @@ function updateThumbSelectionFromInputs(){
 document.addEventListener('DOMContentLoaded', function(){
   var fromInput = document.getElementById('pdf-from');
   var toInput   = document.getElementById('pdf-to');
-  if(fromInput) fromInput.addEventListener('input', updateThumbSelectionFromInputs);
-  if(toInput)   toInput.addEventListener('input',   updateThumbSelectionFromInputs);
+  if(fromInput) fromInput.addEventListener('input', function(){ validateAndConfirmPages(); updateThumbSelectionFromInputs(); });
+  if(toInput)   toInput.addEventListener('input',   function(){ validateAndConfirmPages(); updateThumbSelectionFromInputs(); });
 
+  // Confirm button still available but auto-confirm happens on any change
   var confirmBtn = document.getElementById('pdf-confirm-btn');
-  if(confirmBtn) confirmBtn.addEventListener('click', function(){
-    var from = parseInt(document.getElementById('pdf-from').value)||1;
-    var to   = parseInt(document.getElementById('pdf-to').value)||from;
-    var count = to - from + 1;
-    _pdfConfirmed = true;
-    _selectedPages = {from: from, to: to};
-    var status = document.getElementById('pdf-status');
+  if(confirmBtn) confirmBtn.addEventListener('click', function(){ validateAndConfirmPages(true); });
+});
+
+function validateAndConfirmPages(showToast){
+  var fromEl = document.getElementById('pdf-from');
+  var toEl   = document.getElementById('pdf-to');
+  var status = document.getElementById('pdf-status');
+  var confirmBtn = document.getElementById('pdf-confirm-btn');
+  if(!fromEl || !toEl) return;
+
+  var totalPages = _pdfDoc ? _pdfDoc.numPages : 999;
+  var from = Math.max(1, parseInt(fromEl.value) || 1);
+  var to   = Math.max(1, parseInt(toEl.value)   || 5);
+
+  // Clamp: from >= 1, to <= totalPages, from <= to
+  from = Math.max(1, Math.min(from, totalPages));
+  to   = Math.max(from, Math.min(to, totalPages));
+
+  // Auto-correct inputs
+  fromEl.value = from;
+  toEl.value   = to;
+
+  var count = Math.max(0, to - from + 1);
+  _pdfConfirmed = true;
+  _selectedPages = {from: from, to: to};
+
+  if(status){
     status.textContent = '\u2713 ' + count + ' page(s) confirmed — ready!';
     status.style.display = 'block';
+  }
+  if(confirmBtn){
     confirmBtn.textContent = '\u2713 ' + count + ' page(s) confirmed — ready!';
-    toast(count + ' pages ready from PDF');
-  });
-});
+  }
+  if(showToast) toast(count + ' pages ready from PDF');
+}
 
 function hidePdfSelector(){
   var panel = document.getElementById('pdf-selector-panel');
@@ -1301,6 +1330,15 @@ function hidePdfSelector(){
   _selectedPages = [];
   var btn = document.getElementById('pdf-confirm-btn');
   if(btn) btn.textContent = '\u2713 Confirm Page Selection — Ready!';
+  var status = document.getElementById('pdf-status');
+  if(status){ status.style.display='none'; status.textContent=''; }
+}
+
+function clearAllAttached(){
+  _attachedFiles = [];
+  renderFilesPreview();
+  hidePdfSelector();
+  toast('All files cleared');
 }
 
 </script>

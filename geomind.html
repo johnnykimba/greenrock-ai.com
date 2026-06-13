@@ -652,12 +652,23 @@ async function sendMessage(){
     } else if(ext === 'pdf'){
       var b64 = await readFileBase64(f);
       var pageNote = '';
+      var fromPage = 1, toPage = 9999;
       if(_pdfConfirmed && _selectedPages.from){
-        pageNote = ' [Pages '+_selectedPages.from+'-'+_selectedPages.to+']';
+        fromPage = _selectedPages.from;
+        toPage   = _selectedPages.to;
+        pageNote = ' [Pages '+fromPage+'-'+toPage+']';
       }
-      // Send PDF as base64 document for Claude to read natively
-      userContent.push({type:'text',text:'[PDF: '+f.name+pageNote+'] (attached as document below)'});
-      userContent.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}});
+      // Extract text from PDF using PDF.js for GPT-4o
+      var pdfExtractedText = await extractPdfText(f, fromPage, toPage);
+      // Send text version (for GPT-4o) AND document version (for Claude)
+      userContent.push({
+        type: 'pdf_dual',
+        filename: f.name,
+        pageNote: pageNote,
+        text: pdfExtractedText,   // used by GPT-4o
+        base64: b64,              // used by Claude
+        mediaType: 'application/pdf'
+      });
     } else if(['xlsx','xls'].includes(ext)){
       // Parse Excel as readable text using SheetJS
       var xlsText = await readExcelAsText(f);
@@ -685,8 +696,20 @@ async function sendMessage(){
           if(['png','jpg','jpeg'].includes(gext)){
             userContent.push({type:'image_url',image_url:{url:'data:image/'+gext+';base64,'+gb64}});
           } else if(gext === 'pdf'){
-            userContent.push({type:'text',text:'['+slot.num+'. '+slot.name+pageNote+': '+gf.name+'] (PDF attached below)'});
-            userContent.push({type:'document',source:{type:'base64',media_type:'application/pdf',data:gb64}});
+            var gfFromPage = 1, gfToPage = 9999;
+            var pfrom2 = document.getElementById('pg-from-'+sid);
+            var pto2   = document.getElementById('pg-to-'+sid);
+            if(pfrom2 && pfrom2.value) gfFromPage = parseInt(pfrom2.value)||1;
+            if(pto2   && pto2.value)   gfToPage   = parseInt(pto2.value)||9999;
+            var geoPdfText = await extractPdfText(gf, gfFromPage, gfToPage);
+            userContent.push({
+              type: 'pdf_dual',
+              filename: slot.num+'. '+slot.name+pageNote+': '+gf.name,
+              pageNote: pageNote,
+              text: geoPdfText,
+              base64: gb64,
+              mediaType: 'application/pdf'
+            });
           } else if(['xlsx','xls'].includes(gext)){
             var xlsText2 = await readExcelAsText(gf);
             userContent.push({type:'text',text:'['+slot.num+'. '+slot.name+pageNote+': '+gf.name+']\n'+xlsText2});
@@ -768,6 +791,28 @@ function readFileBase64(file){
     r.onload=function(){ resolve(r.result.split(',')[1]||''); };
     r.readAsDataURL(file);
   });
+}
+
+async function extractPdfText(file, fromPage, toPage){
+  try{
+    if(typeof pdfjsLib === 'undefined') return '[PDF text extraction not available]';
+    fromPage = fromPage || 1;
+    toPage   = toPage   || 9999;
+    var arrayBuf = await file.arrayBuffer();
+    var pdf = await pdfjsLib.getDocument({data: arrayBuf}).promise;
+    var numPages = pdf.numPages;
+    toPage = Math.min(toPage, numPages);
+    var text = '';
+    for(var p = fromPage; p <= toPage && text.length < 50000; p++){
+      var page = await pdf.getPage(p);
+      var tc   = await page.getTextContent();
+      var pageText = tc.items.map(function(i){ return i.str; }).join(' ');
+      text += '--- Page '+p+' ---' + String.fromCharCode(10) + pageText + String.fromCharCode(10);
+    }
+    return text.trim().substring(0, 50000) || '[No text found in PDF — may be a scanned image]';
+  }catch(e){
+    return '[PDF text extraction error: '+e.message+']';
+  }
 }
 
 function readFileAsText(file){

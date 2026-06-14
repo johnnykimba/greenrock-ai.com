@@ -192,6 +192,10 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 .input-file-chip{background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:6px;padding:3px 8px;font-size:10px;color:var(--green);display:flex;align-items:center;gap:4px;}
 .input-file-chip button{background:none;border:none;color:var(--red);cursor:pointer;font-size:10px;padding:0;}
 .export-bar{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;}
+.memory-panel{background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.25);border-radius:12px;padding:10px 14px;margin-bottom:10px;display:none;}
+.memory-panel-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#a78bfa;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;}
+.memory-item{font-size:11px;color:var(--text);margin:2px 0;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.memory-item:last-child{border:none;}
 .export-btn{padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-size:11px;cursor:pointer;transition:all 0.2s;}
 .export-btn:hover{border-color:var(--cyan);color:var(--cyan);}
 
@@ -276,6 +280,18 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
   </div>
 
   <!-- CHAT -->
+  <!-- PROJECT MEMORY PANEL -->
+  <div class="memory-panel" id="memory-panel">
+    <div class="memory-panel-title">
+      <span>&#129504; Project Memory</span>
+      <div style="display:flex;gap:6px;">
+        <button onclick="editMemory()" style="background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.3);border-radius:5px;color:#a78bfa;font-size:9px;padding:2px 8px;cursor:pointer;">Edit</button>
+        <button onclick="clearMemory()" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:5px;color:#ef4444;font-size:9px;padding:2px 8px;cursor:pointer;">Clear</button>
+      </div>
+    </div>
+    <div id="memory-content"></div>
+  </div>
+
   <div class="chat-wrap">
     <div class="chat-messages" id="chat-messages"></div>
     <div class="input-bar">
@@ -498,6 +514,8 @@ function showModeSelector(){
   document.getElementById('access-gate').style.display='none';
   document.getElementById('app').style.display='flex';
   selectMode('geo');
+  // Load project memory from KV
+  loadMemory();
 }
 
 // ── MODE SELECTION ────────────────────────────────────────
@@ -872,6 +890,21 @@ function addDualResponse(data){
   var parse = function(t){
     if(!t) return '';
     var html = typeof marked!=='undefined' ? marked.parse(t) : t;
+    // Style confidence gap blocks
+    html = html.replace(
+      /(━+)([\s\S]*?)(━+)/g,
+      function(match, p1, p2, p3){
+        var isConfGap = p2.indexOf('CONFIDENCE') >= 0 || p2.indexOf('MISSING') >= 0 || p2.indexOf('CRITICAL') >= 0;
+        if(!isConfGap) return match;
+        return '<div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.35);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:12px;">'
+          + p1 + p2 + p3 + '</div>';
+      }
+    );
+    // Colour the emoji indicators
+    html = html.replace(/🔴 CRITICAL/g, '<span style="color:#ef4444;font-weight:700;">🔴 CRITICAL</span>');
+    html = html.replace(/🟡 IMPORTANT/g, '<span style="color:#f59e0b;font-weight:700;">🟡 IMPORTANT</span>');
+    html = html.replace(/🟢 USEFUL/g, '<span style="color:#10b981;font-weight:700;">🟢 USEFUL</span>');
+    html = html.replace(/⚠️/g, '<span style="color:#f59e0b;">⚠️</span>');
     return html;
   };
 
@@ -912,7 +945,14 @@ function addDualResponse(data){
   }
 
   // Export
-  html += '<div class="export-bar"><button class="export-btn" onclick="copyResponse(this)">Copy</button><button class="export-btn" onclick="exportWord(this)">Export Word</button></div>';
+  // Build export bar with all options
+  var exportBarDiv = document.createElement('div');
+  exportBarDiv.className = 'export-bar';
+  var b1=document.createElement('button'); b1.className='export-btn'; b1.innerHTML='&#128203; Copy'; b1.onclick=function(){copyResponse(b1);}; exportBarDiv.appendChild(b1);
+  var b2=document.createElement('button'); b2.className='export-btn'; b2.innerHTML='&#128196; Word'; b2.onclick=function(){exportWord(b2);}; exportBarDiv.appendChild(b2);
+  var b3=document.createElement('button'); b3.className='export-btn'; b3.innerHTML='&#128196; PDF'; b3.style.cssText='border-color:rgba(239,68,68,0.4);color:#ef4444;'; b3.onclick=function(){exportPDF(b3);}; exportBarDiv.appendChild(b3);
+  var b4=document.createElement('button'); b4.className='export-btn'; b4.innerHTML='&#128424; Print'; b4.style.cssText='border-color:rgba(6,182,212,0.4);color:var(--cyan);'; b4.onclick=function(){printResponse(b4);}; exportBarDiv.appendChild(b4);
+  div.appendChild(exportBarDiv);
 
   div.innerHTML = html;
   msgs.appendChild(div);
@@ -921,6 +961,8 @@ function addDualResponse(data){
   // Auto-show inline map if coordinates found (both geo and science modes)
   var allText = (data.llm2||'') + ' ' + (data.llm1||'');
   addInlineMap(div, allText);
+  // Update memory panel after response (worker auto-extracts async)
+  updateMemoryAfterResponse(data);
   msgs.scrollTop=msgs.scrollHeight;
 
   // Show persistent Save Report button
@@ -1081,6 +1123,74 @@ function copyResponse(btn){
   navigator.clipboard.writeText(text).then(function(){ toast('Copied!'); });
 }
 
+function buildReportHTML(panel, includeStyles){
+  if(!panel) return '';
+  var bodies = panel.querySelectorAll('.llm-panel-body');
+  var llm1  = bodies[0] ? bodies[0].innerHTML : '';
+  var llm1b = bodies[1] ? bodies[1].innerHTML : '';
+  var merged= bodies[2] ? bodies[2].innerHTML : '';
+  var scoreEl = panel.querySelector('.scorecard,.sci-confidence');
+  var scoreHtml = scoreEl ? scoreEl.outerHTML : '';
+  var modeLabel = _currentMode==='geo' ? 'GeoMind DualMind' : 'General Science DualMind';
+  var date = new Date().toLocaleString();
+
+  var styles = includeStyles ? `
+    body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.7;color:#1a1a2e;max-width:900px;margin:0 auto;padding:30px;}
+    h1{color:#0a3d1f;font-size:18pt;border-bottom:3px solid #10b981;padding-bottom:8px;margin-bottom:4px;}
+    h2,h3{color:#0a3d1f;font-size:13pt;margin-top:16px;}
+    .meta{font-size:9pt;color:#64748b;margin-bottom:20px;}
+    .section{border:1px solid #ddd;border-radius:8px;padding:16px;margin:14px 0;break-inside:avoid;}
+    .section-title{font-size:9pt;font-weight:700;text-transform:uppercase;color:#64748b;margin-bottom:10px;letter-spacing:0.5px;}
+    .section-llm1{border-left:4px solid #10b981;}
+    .section-llm2{border-left:4px solid #7c3aed;}
+    .section-merged{border-left:4px solid #06b6d4;background:#f0fdfa;}
+    .confidence-gap{background:#fffbeb;border:1px solid #f59e0b;border-radius:8px;padding:14px;margin:14px 0;}
+    @media print{body{padding:0;}@page{margin:1.5cm;size:A4;}h1{font-size:16pt;}.section{break-inside:avoid;}}
+  ` : '';
+
+  return '<!DOCTYPE html><html><head><meta charset="UTF-8">'
+    +(includeStyles?'<style>'+styles+'</style>':'')
+    +'</head><body>'
+    +'<h1>'+modeLabel+' Report</h1>'
+    +'<div class="meta">GreenRock AI &nbsp;|&nbsp; '+date+' &nbsp;|&nbsp; greenrock-ai.com</div>'
+    +'<div class="section section-llm1"><div class="section-title">LLM 1 — Independent Analysis</div>'+llm1+'</div>'
+    +'<div class="section section-llm2"><div class="section-title">LLM 2 — Independent Analysis</div>'+llm1b+'</div>'
+    +'<div class="section section-merged"><div class="section-title">DualMind — Verified Final Report</div>'+merged+'</div>'
+    +scoreHtml
+    +'</body></html>';
+}
+
+function exportPDF(panel){
+  // Use print-to-PDF via browser print dialog
+  var el = panel.closest ? panel.closest('.msg') : panel;
+  if(!el) el = panel;
+  var html = buildReportHTML(el, true);
+  var win = window.open('','_blank','width=900,height=700');
+  if(!win){ toast('Please allow popups to save PDF'); return; }
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  // Add print instructions
+  var info = win.document.createElement('div');
+  info.style.cssText='position:fixed;top:0;left:0;right:0;background:#1e293b;color:#fff;padding:10px 16px;font-family:sans-serif;font-size:12px;z-index:9999;display:flex;align-items:center;justify-content:space-between;';
+  info.innerHTML='<span>&#128196; To save as PDF: Press <b>Ctrl+P</b> → Change destination to <b>"Save as PDF"</b> → Save</span>'
+    +'<button onclick="this.parentElement.remove();window.print();" style="background:#10b981;border:none;border-radius:6px;color:#fff;padding:6px 14px;cursor:pointer;font-size:12px;">Print / Save PDF</button>';
+  win.document.body.insertBefore(info, win.document.body.firstChild);
+  setTimeout(function(){ win.print(); }, 800);
+}
+
+function printResponse(panel){
+  var el = panel.closest ? panel.closest('.msg') : panel;
+  if(!el) el = panel;
+  var html = buildReportHTML(el, true);
+  var win = window.open('','_blank','width=900,height=700');
+  if(!win){ toast('Please allow popups to print'); return; }
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(function(){ win.print(); win.close(); }, 600);
+}
+
 function exportLastReport(){
   // Export the most recent response
   var msgs = document.getElementById('chat-messages');
@@ -1104,27 +1214,7 @@ function exportWord(btn){
 }
 
 function exportWordFromPanel(panel){
-  var bodies = panel.querySelectorAll('.llm-panel-body');
-  var llm1 = bodies[0]?bodies[0].innerHTML:'';
-  var llm1b = bodies[1]?bodies[1].innerHTML:'';
-  var merged = bodies[2]?bodies[2].innerHTML:'';
-  var scoreEl = panel.querySelector('.scorecard,.sci-confidence');
-  var scoreHtml = scoreEl?scoreEl.outerHTML:'';
-  var modeLabel = _currentMode==='geo'?'GeoMind DualMind':'General Science DualMind';
-
-  var CSS='body{font-family:Calibri,sans-serif;font-size:11pt;line-height:1.7;padding:30px;color:#1a1a2e;max-width:860px;margin:0 auto;}'+
-    'h1{color:#0a3d1f;font-size:18pt;border-bottom:2px solid #0a3d1f;padding-bottom:6px;}'+
-    'h2,h3{color:#0a3d1f;font-size:12pt;}.section{border:1px solid #ddd;border-radius:6px;padding:14px;margin:12px 0;}'+
-    '.section-title{font-size:9pt;font-weight:700;text-transform:uppercase;color:#64748b;margin-bottom:8px;}'+
-    '@media print{body{padding:0;}@page{margin:1.5cm;}}';
-
-  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>'+CSS+'</style></head><body>'+
-    '<h1>'+modeLabel+' Report</h1>'+
-    '<p style="color:#64748b;font-size:9pt;">GreenRock AI · '+new Date().toLocaleString()+' · greenrock-ai.com</p><hr>'+
-    '<div class="section"><div class="section-title">LLM 1 — Analysis</div>'+llm1+'</div>'+
-    '<div class="section"><div class="section-title">LLM 2 — Analysis</div>'+llm1b+'</div>'+
-    '<div class="section"><div class="section-title">DualMind Verified Report</div>'+merged+'</div>'+
-    scoreHtml+'</body></html>';
+  var html = buildReportHTML(panel, true);
 
   var blob=new Blob([html],{type:'application/msword'});
   var url=URL.createObjectURL(blob);
@@ -1560,6 +1650,96 @@ function toggleMapSize(btn){
   setTimeout(function(){
     if(mapDiv._leaflet) mapDiv._leaflet.invalidateSize();
   }, 100);
+}
+
+
+// ── PROJECT MEMORY ────────────────────────────────────────
+var _projectMemory = null;
+
+async function loadMemory(){
+  if(!_activeCode || _activeCode === 'JOHNNY11') return;
+  try{
+    // Try localStorage first (fast)
+    var cached = localStorage.getItem('gr_mem_'+_activeCode);
+    if(cached){ _projectMemory = JSON.parse(cached); renderMemory(); }
+    // Then sync from KV
+    var res = await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({_appSecret:APP_SECRET,action:'get-memory',code:_activeCode})});
+    var data = await res.json();
+    if(data.memory){
+      _projectMemory = data.memory;
+      localStorage.setItem('gr_mem_'+_activeCode, JSON.stringify(_projectMemory));
+      renderMemory();
+    }
+  }catch(e){}
+}
+
+function renderMemory(){
+  var panel = document.getElementById('memory-panel');
+  var el    = document.getElementById('memory-content');
+  if(!_projectMemory || (!_projectMemory.drillholes?.length && !_projectMemory.anomalies?.length && !_projectMemory.projectContext)){
+    if(panel) panel.style.display='none';
+    return;
+  }
+  if(panel) panel.style.display='block';
+  var html = '';
+  if(_projectMemory.project)        html += '<div class="memory-item">&#128205; <b>Project:</b> '+_projectMemory.project+'</div>';
+  if(_projectMemory.location)       html += '<div class="memory-item">&#127758; <b>Location:</b> '+_projectMemory.location+'</div>';
+  if(_projectMemory.projectContext) html += '<div class="memory-item">&#128204; <b>Context:</b> '+_projectMemory.projectContext+'</div>';
+  if(_projectMemory.drillholes?.length){
+    html += '<div class="memory-item"><b>&#9874; Drillholes ('+_projectMemory.drillholes.length+'):</b> ';
+    html += _projectMemory.drillholes.slice(-5).map(function(d){
+      return '<span style="background:rgba(16,185,129,0.1);border-radius:4px;padding:1px 6px;margin:0 2px;font-size:10px;">'+d.id+' ('+d.status+')</span>';
+    }).join('')+'</div>';
+  }
+  if(_projectMemory.anomalies?.length){
+    html += '<div class="memory-item"><b>&#128200; Anomalies ('+_projectMemory.anomalies.length+'):</b> ';
+    html += _projectMemory.anomalies.slice(-5).map(function(a){
+      var col=a.status==='confirmed'?'#10b981':a.status==='drilled'?'#6b7280':'#f59e0b';
+      return '<span style="color:'+col+';background:rgba(255,255,255,0.05);border-radius:4px;padding:1px 6px;margin:0 2px;font-size:10px;">'+a.name+'</span>';
+    }).join('')+'</div>';
+  }
+  if(_projectMemory.notes?.length){
+    html += '<div class="memory-item"><b>&#128203; Last finding:</b> '+(_projectMemory.notes[_projectMemory.notes.length-1].text||'')+'</div>';
+  }
+  if(el) el.innerHTML = html;
+}
+
+function editMemory(){
+  var project  = prompt('Project name:', (_projectMemory&&_projectMemory.project)||'');
+  if(project === null) return;
+  var location = prompt('Location/area:', (_projectMemory&&_projectMemory.location)||'');
+  if(location === null) return;
+  var mem = _projectMemory || {code:_activeCode, drillholes:[], anomalies:[], notes:[]};
+  mem.project  = project;
+  mem.location = location;
+  _projectMemory = mem;
+  localStorage.setItem('gr_mem_'+_activeCode, JSON.stringify(mem));
+  fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({_appSecret:APP_SECRET,action:'save-memory',code:_activeCode,project:project,location:location})})
+  .then(function(){ renderMemory(); toast('Memory updated'); })
+  .catch(function(){ renderMemory(); toast('Saved locally'); });
+}
+
+function clearMemory(){
+  if(!confirm('Clear all project memory for this code?')) return;
+  _projectMemory = null;
+  localStorage.removeItem('gr_mem_'+_activeCode);
+  var panel = document.getElementById('memory-panel');
+  if(panel) panel.style.display='none';
+  fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({_appSecret:APP_SECRET,action:'save-memory',code:_activeCode,full:{code:_activeCode,drillholes:[],anomalies:[],notes:[],updatedAt:Date.now()}})})
+  .catch(function(){});
+  toast('Memory cleared');
+}
+
+// Update memory display after each response
+function updateMemoryAfterResponse(data){
+  if(!_activeCode || _activeCode==='JOHNNY11') return;
+  // Reload memory after a delay (auto-extraction runs async in worker)
+  setTimeout(function(){
+    loadMemory();
+  }, 4000);
 }
 
 </script>

@@ -193,6 +193,19 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 .input-file-chip button{background:none;border:none;color:var(--red);cursor:pointer;font-size:10px;padding:0;}
 .export-bar{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;}
 .memory-panel{background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.25);border-radius:12px;padding:10px 14px;margin-bottom:10px;display:none;}
+/* Settings Modal */
+.settings-overlay{display:none;position:fixed;inset:0;z-index:9980;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;}
+.settings-overlay.open{display:flex;}
+.settings-modal{background:var(--surface);border:1px solid rgba(16,185,129,0.3);border-radius:20px;padding:24px;width:100%;max-width:620px;max-height:88vh;overflow-y:auto;}
+.settings-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:4px;}
+.settings-sub{font-size:11px;color:var(--muted);margin-bottom:18px;}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.settings-field{display:flex;flex-direction:column;gap:4px;}
+.settings-field label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--muted);}
+.settings-select,.settings-input{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;color:#fff;padding:8px 10px;font-size:12px;font-family:inherit;outline:none;width:100%;transition:border-color 0.2s;}
+.settings-select:focus,.settings-input:focus{border-color:var(--green);}
+.settings-select option{background:#0c1829;color:#fff;}
+.settings-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;background:rgba(16,185,129,0.15);color:var(--green);border:1px solid rgba(16,185,129,0.3);margin-left:6px;}
 .memory-panel-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#a78bfa;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;}
 .memory-item{font-size:11px;color:var(--text);margin:2px 0;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
 .memory-item:last-child{border:none;}
@@ -328,6 +341,129 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
     </div>
   </div>
 
+</div>
+
+<!-- GEOMIND SETTINGS MODAL -->
+<div class="settings-overlay" id="settings-overlay">
+  <div class="settings-modal">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <div class="settings-title">&#9881; GeoMind Settings</div>
+      <button onclick="closeSettings()" style="background:rgba(255,255,255,0.08);border:none;border-radius:8px;color:#fff;padding:5px 12px;cursor:pointer;font-size:12px;">&#x2715;</button>
+    </div>
+    <div class="settings-sub">Configure GeoMind for your specific mineral project. Settings are saved per access code.</div>
+
+    <div class="settings-grid">
+      <div class="settings-field">
+        <label>Target Commodity</label>
+        <select class="settings-select" id="s-commodity">
+          <option value="Cu-Co">Copper-Cobalt (Cu-Co)</option>
+          <option value="Au">Gold (Au)</option>
+          <option value="Ag">Silver (Ag)</option>
+          <option value="Zn-Pb">Zinc-Lead (Zn-Pb)</option>
+          <option value="Ni">Nickel (Ni)</option>
+          <option value="PGE">Platinum Group Elements (PGE)</option>
+          <option value="Fe">Iron Ore (Fe)</option>
+          <option value="U">Uranium (U)</option>
+          <option value="Diamond">Diamond</option>
+          <option value="Coal">Coal</option>
+          <option value="Other">Other (specify below)</option>
+        </select>
+      </div>
+
+      <div class="settings-field">
+        <label>Deposit Type</label>
+        <select class="settings-select" id="s-deposit">
+          <option value="Stratiform Cu-Co">Stratiform Cu-Co (Copperbelt)</option>
+          <option value="Orogenic Gold">Orogenic Lode Gold</option>
+          <option value="Porphyry Cu-Au">Porphyry Cu-Au</option>
+          <option value="SEDEX">SEDEX (Sediment-Hosted)</option>
+          <option value="MVT">MVT (Mississippi Valley Type)</option>
+          <option value="VMS">VMS (Volcanic-Hosted Massive Sulfide)</option>
+          <option value="Skarn">Skarn</option>
+          <option value="Epithermal">Epithermal Au-Ag</option>
+          <option value="Laterite Ni">Laterite Nickel</option>
+          <option value="BIF">BIF Iron Ore</option>
+          <option value="Placer">Placer / Alluvial</option>
+          <option value="Kimberlite">Kimberlite (Diamond)</option>
+          <option value="Custom">Custom (specify below)</option>
+        </select>
+      </div>
+
+      <div class="settings-field">
+        <label>Geological Province</label>
+        <select class="settings-select" id="s-province">
+          <option value="Central African Copperbelt (Zambia/DRC)">Central African Copperbelt (Zambia/DRC)</option>
+          <option value="Witwatersrand Basin (South Africa)">Witwatersrand Basin — Au (South Africa)</option>
+          <option value="Bushveld Complex (South Africa)">Bushveld Complex — PGE (South Africa)</option>
+          <option value="Birimian Greenstone Belt (West Africa)">Birimian Greenstone Belt — Au (West Africa)</option>
+          <option value="Kibara Belt (DRC/Rwanda/Burundi)">Kibara Belt — Sn/W/Ta (DRC/Rwanda)</option>
+          <option value="Lufilian Arc (Zambia/DRC/Angola)">Lufilian Arc (Zambia/DRC/Angola)</option>
+          <option value="Yilgarn Craton (Western Australia)">Yilgarn Craton — Au/Ni (Australia)</option>
+          <option value="Pilbara (Western Australia)">Pilbara — Fe/Au (Australia)</option>
+          <option value="Sudbury Basin (Canada)">Sudbury Basin — Ni-Cu-PGE (Canada)</option>
+          <option value="Abitibi Greenstone Belt (Canada)">Abitibi Greenstone Belt — Au (Canada)</option>
+          <option value="Andes Cordillera (South America)">Andes Cordillera — Cu/Au (South America)</option>
+          <option value="Custom">Custom (specify below)</option>
+        </select>
+      </div>
+
+      <div class="settings-field">
+        <label>Coordinate System</label>
+        <select class="settings-select" id="s-coords">
+          <option value="UTM Zone 35S (WGS84) — Copperbelt default">UTM Zone 35S — Copperbelt (Zambia/DRC)</option>
+          <option value="UTM Zone 34S (WGS84)">UTM Zone 34S (Angola/Namibia)</option>
+          <option value="UTM Zone 36S (WGS84)">UTM Zone 36S (Tanzania/Mozambique)</option>
+          <option value="UTM Zone 33S (WGS84)">UTM Zone 33S (DRC West)</option>
+          <option value="UTM Zone 30N (WGS84)">UTM Zone 30N (West Africa)</option>
+          <option value="UTM Zone 37N (WGS84)">UTM Zone 37N (East Africa)</option>
+          <option value="WGS84 Decimal Degrees">WGS84 Decimal Degrees (Lat/Lon)</option>
+          <option value="Custom">Custom (specify below)</option>
+        </select>
+      </div>
+
+      <div class="settings-field">
+        <label>Cut-off Grade</label>
+        <div style="display:flex;gap:6px;">
+          <input class="settings-input" id="s-cutoff-val" type="number" value="0.5" min="0" step="0.1" style="width:80px;">
+          <select class="settings-select" id="s-cutoff-unit" style="flex:1;">
+            <option value="% Cu">% Cu</option>
+            <option value="% Co">% Co</option>
+            <option value="g/t Au">g/t Au</option>
+            <option value="g/t Ag">g/t Ag</option>
+            <option value="% Zn">% Zn</option>
+            <option value="% Ni">% Ni</option>
+            <option value="g/t PGE">g/t PGE</option>
+            <option value="% Fe">% Fe</option>
+            <option value="ppm U3O8">ppm U3O8</option>
+            <option value="ct/100t">ct/100t (Diamond)</option>
+            <option value="% Ash">% Ash (Coal)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="settings-field">
+        <label>Reporting Standard</label>
+        <select class="settings-select" id="s-standard">
+          <option value="JORC 2012">JORC 2012 (Australia/International)</option>
+          <option value="NI 43-101">NI 43-101 (Canada)</option>
+          <option value="SAMREC">SAMREC (South Africa)</option>
+          <option value="PERC">PERC (Europe)</option>
+          <option value="Internal">Internal / Exploration Stage</option>
+        </select>
+      </div>
+
+      <div class="settings-field" style="grid-column:1/-1;">
+        <label>Custom Context (optional — any additional geological context)</label>
+        <input class="settings-input" id="s-custom" type="text" placeholder="e.g. Thrust-controlled Au mineralization in Archean greenstones, targeting shear zones">
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button onclick="saveSettings()" style="flex:1;padding:10px;background:linear-gradient(135deg,var(--green),var(--cyan));border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">&#10003; Save Settings</button>
+      <button onclick="resetSettings()" style="padding:10px 16px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;color:#ef4444;font-size:12px;cursor:pointer;">Reset</button>
+    </div>
+    <div id="settings-saved-msg" style="display:none;text-align:center;font-size:11px;color:var(--green);margin-top:8px;">&#10003; Settings saved — GeoMind is now configured for your project</div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -516,10 +652,18 @@ function showModeSelector(){
   selectMode('geo');
   // Load project memory from KV
   loadMemory();
+  // Load GeoMind settings
+  loadSettings();
 }
 
 // ── MODE SELECTION ────────────────────────────────────────
 function selectMode(mode){
+  var btn = document.getElementById('geo-settings-btn');
+  var tag = document.getElementById('geo-settings-tag');
+  if(mode==='sci'){
+    if(btn) btn.style.display='none';
+    if(tag) tag.style.display='none';
+  }
   _currentMode = mode;
   document.getElementById('mode-selector').style.display='none';
   document.getElementById('app').style.display='flex';
@@ -764,7 +908,9 @@ async function sendMessage(){
         pipelineMode:geoMode,
         lang:lang,
         messages:_messages,
-        code:_activeCode
+        code:_activeCode,
+        geoSettings: _currentMode==='geo' ? _geoSettings : null,
+        settingsContext: _currentMode==='geo' ? buildSettingsContext() : null
       })
     });
     var data = await res.json();
@@ -1741,6 +1887,136 @@ function updateMemoryAfterResponse(data){
     loadMemory();
   }, 4000);
 }
+
+
+// ── GEOMIND SETTINGS ──────────────────────────────────────
+var _geoSettings = {
+  commodity: 'Cu-Co',
+  deposit: 'Stratiform Cu-Co',
+  province: 'Central African Copperbelt (Zambia/DRC)',
+  coords: 'UTM Zone 35S (WGS84) — Copperbelt default',
+  cutoffVal: '0.5',
+  cutoffUnit: '% Cu',
+  standard: 'JORC 2012',
+  custom: ''
+};
+
+function openSettings(){
+  // Load current settings into form
+  document.getElementById('s-commodity').value   = _geoSettings.commodity;
+  document.getElementById('s-deposit').value     = _geoSettings.deposit;
+  document.getElementById('s-province').value    = _geoSettings.province;
+  document.getElementById('s-coords').value      = _geoSettings.coords;
+  document.getElementById('s-cutoff-val').value  = _geoSettings.cutoffVal;
+  document.getElementById('s-cutoff-unit').value = _geoSettings.cutoffUnit;
+  document.getElementById('s-standard').value    = _geoSettings.standard;
+  document.getElementById('s-custom').value      = _geoSettings.custom||'';
+  document.getElementById('settings-saved-msg').style.display='none';
+  document.getElementById('settings-overlay').classList.add('open');
+}
+
+function closeSettings(){
+  document.getElementById('settings-overlay').classList.remove('open');
+}
+
+function saveSettings(){
+  _geoSettings = {
+    commodity:  document.getElementById('s-commodity').value,
+    deposit:    document.getElementById('s-deposit').value,
+    province:   document.getElementById('s-province').value,
+    coords:     document.getElementById('s-coords').value,
+    cutoffVal:  document.getElementById('s-cutoff-val').value,
+    cutoffUnit: document.getElementById('s-cutoff-unit').value,
+    standard:   document.getElementById('s-standard').value,
+    custom:     document.getElementById('s-custom').value
+  };
+
+  // Save to localStorage
+  localStorage.setItem('gr_geo_settings_'+(_activeCode||'default'), JSON.stringify(_geoSettings));
+
+  // Save to KV memory if logged in
+  if(_activeCode && _activeCode !== 'JOHNNY11'){
+    fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({_appSecret:APP_SECRET,action:'save-memory',code:_activeCode,
+        full:Object.assign(_projectMemory||{},{code:_activeCode,geoSettings:_geoSettings})})
+    }).catch(function(){});
+  }
+
+  // Update settings tag display
+  updateSettingsTag();
+
+  document.getElementById('settings-saved-msg').style.display='block';
+  setTimeout(function(){ closeSettings(); }, 1200);
+  toast('GeoMind configured: '+_geoSettings.commodity+' — '+_geoSettings.province.split('(')[0].trim());
+}
+
+function resetSettings(){
+  _geoSettings = {
+    commodity:'Cu-Co', deposit:'Stratiform Cu-Co',
+    province:'Central African Copperbelt (Zambia/DRC)',
+    coords:'UTM Zone 35S (WGS84) — Copperbelt default',
+    cutoffVal:'0.5', cutoffUnit:'% Cu', standard:'JORC 2012', custom:''
+  };
+  localStorage.removeItem('gr_geo_settings_'+(_activeCode||'default'));
+  document.getElementById('s-commodity').value   = _geoSettings.commodity;
+  document.getElementById('s-deposit').value     = _geoSettings.deposit;
+  document.getElementById('s-province').value    = _geoSettings.province;
+  document.getElementById('s-coords').value      = _geoSettings.coords;
+  document.getElementById('s-cutoff-val').value  = _geoSettings.cutoffVal;
+  document.getElementById('s-cutoff-unit').value = _geoSettings.cutoffUnit;
+  document.getElementById('s-standard').value    = _geoSettings.standard;
+  document.getElementById('s-custom').value      = '';
+  updateSettingsTag();
+  toast('Settings reset to Copperbelt Cu-Co defaults');
+}
+
+function loadSettings(){
+  // Load from localStorage first
+  var saved = localStorage.getItem('gr_geo_settings_'+(_activeCode||'default'));
+  if(saved){ try{ _geoSettings = JSON.parse(saved); }catch(e){} }
+  // Also check KV memory
+  if(_projectMemory && _projectMemory.geoSettings){
+    _geoSettings = _projectMemory.geoSettings;
+    localStorage.setItem('gr_geo_settings_'+(_activeCode||'default'), JSON.stringify(_geoSettings));
+  }
+  updateSettingsTag();
+}
+
+function updateSettingsTag(){
+  var tag = document.getElementById('geo-settings-tag');
+  if(!tag) return;
+  var isDefault = _geoSettings.commodity === 'Cu-Co' && _geoSettings.province.includes('Copperbelt');
+  if(isDefault){
+    tag.innerHTML = '<span style="color:var(--muted);font-size:10px;">Cu-Co · Copperbelt</span>';
+  } else {
+    tag.innerHTML = '<span style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:6px;padding:2px 8px;font-size:10px;color:var(--green);">'
+      +_geoSettings.commodity+' · '+_geoSettings.province.split('(')[0].trim()+'</span>';
+  }
+  tag.style.display = 'block';
+}
+
+function buildSettingsContext(){
+  var s = _geoSettings;
+  var ctx = '';
+  ctx += '\n\n## PROJECT CONFIGURATION (user-defined settings)\n';
+  ctx += 'TARGET COMMODITY: '+s.commodity+'\n';
+  ctx += 'DEPOSIT TYPE: '+s.deposit+'\n';
+  ctx += 'GEOLOGICAL PROVINCE: '+s.province+'\n';
+  ctx += 'COORDINATE SYSTEM: '+s.coords+'\n';
+  ctx += 'CUT-OFF GRADE: '+s.cutoffVal+' '+s.cutoffUnit+'\n';
+  ctx += 'REPORTING STANDARD: '+s.standard+'\n';
+  if(s.custom) ctx += 'ADDITIONAL CONTEXT: '+s.custom+'\n';
+  ctx += 'IMPORTANT: Use these settings throughout your analysis. Reference the correct commodity, deposit type, and geological province. Apply the specified cut-off grade. Format coordinates in the specified system.\n';
+  return ctx;
+}
+
+// Close settings on overlay click
+document.addEventListener('DOMContentLoaded', function(){
+  var overlay = document.getElementById('settings-overlay');
+  if(overlay) overlay.addEventListener('click', function(e){
+    if(e.target === overlay) closeSettings();
+  });
+});
 
 </script>
 </body>

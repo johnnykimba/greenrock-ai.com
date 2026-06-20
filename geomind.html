@@ -272,18 +272,43 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 
   <!-- GEOLOGY: FILE UPLOAD SECTION -->
   <div class="upload-section" id="geo-upload" style="display:none;">
-    <div class="upload-section-title" style="display:flex;align-items:center;justify-content:space-between;">
+    <div class="upload-section-title">
       <span>Upload Data Files — select all that apply</span>
-      <button id="geo-settings-btn-2" onclick="openSettings()" style="padding:5px 12px;border-radius:8px;border:1px solid rgba(16,185,129,0.4);background:rgba(16,185,129,0.08);color:var(--green);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">&#9881; Settings</button>
     </div>
     <div class="file-grid" id="file-grid"></div>
+
+    <!-- COMMODITY & MODE BAR -->
     <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <select id="geo-mode" style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:11px;padding:5px 10px;outline:none;">
         <option value="Exploration">Exploration Mode</option>
         <option value="Drill Plan">Drill Plan Mode</option>
         <option value="Report">Report Mode</option>
       </select>
-      <span id="cutoff-display" style="font-size:11px;color:var(--green);background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:7px;padding:5px 12px;">Cu cut-off: 0.5%</span>
+
+      <select id="quick-commodity" onchange="quickSetCommodity(this.value)" style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:11px;padding:5px 10px;outline:none;">
+        <option value="Cu|% Cu|Central African Copperbelt (Zambia/DRC)|Stratiform Cu">Copper (Cu)</option>
+        <option value="Co|% Co|Central African Copperbelt (Zambia/DRC)|Stratiform Co">Cobalt (Co)</option>
+        <option value="Cu-Co|% Cu|Central African Copperbelt (Zambia/DRC)|Stratiform Cu-Co">Copper-Cobalt (Cu-Co)</option>
+        <option value="Au|g/t Au|Witwatersrand Basin (South Africa)|Orogenic Gold">Gold (Au)</option>
+        <option value="Ag|g/t Ag|Custom|Epithermal">Silver (Ag)</option>
+        <option value="Li|% Li2O|Custom|Pegmatite (Spodumene)">Lithium (Li)</option>
+        <option value="Zn-Pb|% Zn|Custom|MVT">Zinc-Lead (Zn-Pb)</option>
+        <option value="Ni|% Ni|Custom|Laterite Ni">Nickel (Ni)</option>
+        <option value="PGE|g/t PGE|Bushveld Complex (South Africa)|Custom">PGE (Platinum Group)</option>
+        <option value="Fe|% Fe|Custom|BIF">Iron Ore (Fe)</option>
+        <option value="U|ppm U3O8|Custom|Custom">Uranium (U)</option>
+        <option value="Diamond|ct/100t|Custom|Kimberlite">Diamond</option>
+        <option value="Coal|% Ash|Custom|Custom">Coal</option>
+        <option value="Other|%|Custom|Custom">Other</option>
+      </select>
+
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:7px;padding:3px 4px 3px 10px;">
+        <span style="font-size:11px;color:var(--green);white-space:nowrap;">Cut-off:</span>
+        <input id="quick-cutoff-val" type="number" value="0.5" min="0" step="0.1" onchange="updateCutoffLabel()" style="width:50px;background:transparent;border:none;color:var(--green);font-size:11px;font-weight:700;outline:none;padding:4px 2px;">
+        <span id="quick-cutoff-unit-label" style="font-size:11px;color:var(--green);white-space:nowrap;padding-right:6px;">% Cu</span>
+      </div>
+
+      <button onclick="openSettings()" style="font-size:10px;color:var(--muted);background:none;border:none;text-decoration:underline;cursor:pointer;white-space:nowrap;">Advanced settings</button>
       <span id="completeness-badge" style="font-size:11px;color:var(--muted);margin-left:auto;">0/7 files</span>
     </div>
   </div>
@@ -352,9 +377,12 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
       <div class="settings-field">
         <label>Target Commodity</label>
         <select class="settings-select" id="s-commodity">
+          <option value="Cu">Copper (Cu)</option>
+          <option value="Co">Cobalt (Co)</option>
           <option value="Cu-Co">Copper-Cobalt (Cu-Co)</option>
           <option value="Au">Gold (Au)</option>
           <option value="Ag">Silver (Ag)</option>
+          <option value="Li">Lithium (Li)</option>
           <option value="Zn-Pb">Zinc-Lead (Zn-Pb)</option>
           <option value="Ni">Nickel (Ni)</option>
           <option value="PGE">Platinum Group Elements (PGE)</option>
@@ -381,6 +409,8 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
           <option value="BIF">BIF Iron Ore</option>
           <option value="Placer">Placer / Alluvial</option>
           <option value="Kimberlite">Kimberlite (Diamond)</option>
+          <option value="Pegmatite (Spodumene)">Pegmatite — Lithium (Spodumene)</option>
+          <option value="Brine/Salar">Brine / Salar — Lithium</option>
           <option value="Custom">Custom (specify below)</option>
         </select>
       </div>
@@ -399,6 +429,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
           <option value="Sudbury Basin (Canada)">Sudbury Basin — Ni-Cu-PGE (Canada)</option>
           <option value="Abitibi Greenstone Belt (Canada)">Abitibi Greenstone Belt — Au (Canada)</option>
           <option value="Andes Cordillera (South America)">Andes Cordillera — Cu/Au (South America)</option>
+          <option value="Lithium Triangle (Chile/Argentina/Bolivia)">Lithium Triangle — Li Brines (Chile/Argentina/Bolivia)</option>
           <option value="Custom">Custom (specify below)</option>
         </select>
       </div>
@@ -687,15 +718,6 @@ function showModeSelector(){
 
 // ── MODE SELECTION ────────────────────────────────────────
 function selectMode(mode){
-  var btn = document.getElementById('geo-settings-btn');
-  var tag = document.getElementById('geo-settings-tag');
-  if(mode==='sci'){
-    if(btn) btn.style.display='none';
-    if(tag) tag.style.display='none';
-  } else {
-    if(btn) btn.style.display='block';
-    if(tag) tag.style.display='block';
-  }
   _currentMode = mode;
   document.getElementById('mode-selector').style.display='none';
   document.getElementById('app').style.display='flex';
@@ -706,7 +728,7 @@ function selectMode(mode){
     document.getElementById('pill-sci').classList.remove('active','sci');
     document.getElementById('chat-input').placeholder='Ask GeoMind... e.g. "Analyse uploaded assay data and recommend drill targets"';
     addWelcome('geo');
-    refreshCutoffDisplay();
+    syncQuickSelectorFromSettings();
   } else {
     document.getElementById('geo-upload').style.display='none';
     document.getElementById('pill-sci').classList.add('active','sci');
@@ -1982,6 +2004,71 @@ var _geoSettings = {
   custom: ''
 };
 
+// ── QUICK COMMODITY SELECTOR (inline, no modal) ────────────
+function quickSetCommodity(packedValue){
+  var parts = packedValue.split('|');
+  var commodity = parts[0];
+  var unit      = parts[1];
+  var province  = parts[2];
+  var deposit   = parts[3];
+
+  _geoSettings.commodity  = commodity;
+  _geoSettings.cutoffUnit = unit;
+  if(province !== 'Custom') _geoSettings.province = province;
+  if(deposit  !== 'Custom') _geoSettings.deposit   = deposit;
+
+  // Reset cutoff value to a sensible default per commodity
+  var defaults = {
+    'Cu':0.5, 'Co':0.1, 'Cu-Co':0.5, 'Au':0.5, 'Ag':30, 'Li':1.0, 'Zn-Pb':3, 'Ni':0.3,
+    'PGE':1.0, 'Fe':30, 'U':100, 'Diamond':5, 'Coal':15, 'Other':1
+  };
+  _geoSettings.cutoffVal = defaults[commodity] != null ? defaults[commodity] : 0.5;
+
+  var valInput = document.getElementById('quick-cutoff-val');
+  if(valInput) valInput.value = _geoSettings.cutoffVal;
+
+  updateCutoffLabel();
+  persistGeoSettings();
+  toast('GeoMind set to: ' + commodity);
+}
+
+function updateCutoffLabel(){
+  var valInput = document.getElementById('quick-cutoff-val');
+  var unitLabel = document.getElementById('quick-cutoff-unit-label');
+  if(valInput) _geoSettings.cutoffVal = valInput.value;
+  if(unitLabel) unitLabel.textContent = _geoSettings.cutoffUnit;
+  persistGeoSettings();
+}
+
+function persistGeoSettings(){
+  try{
+    localStorage.setItem('gr_geo_settings_'+(_activeCode||'default'), JSON.stringify(_geoSettings));
+  }catch(e){}
+  if(_activeCode && _activeCode !== 'JOHNNY11'){
+    fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({_appSecret:APP_SECRET,action:'save-memory',code:_activeCode,
+        full:Object.assign(_projectMemory||{},{code:_activeCode,geoSettings:_geoSettings})})
+    }).catch(function(){});
+  }
+}
+
+function syncQuickSelectorFromSettings(){
+  var sel = document.getElementById('quick-commodity');
+  var valInput = document.getElementById('quick-cutoff-val');
+  var unitLabel = document.getElementById('quick-cutoff-unit-label');
+  if(sel){
+    // Try to find matching option by commodity prefix
+    for(var i=0;i<sel.options.length;i++){
+      if(sel.options[i].value.split('|')[0] === _geoSettings.commodity){
+        sel.selectedIndex = i;
+        break;
+      }
+    }
+  }
+  if(valInput)  valInput.value = _geoSettings.cutoffVal;
+  if(unitLabel) unitLabel.textContent = _geoSettings.cutoffUnit;
+}
+
 function openSettings(){
   // Load current settings into form
   document.getElementById('s-commodity').value   = _geoSettings.commodity;
@@ -2060,32 +2147,17 @@ function loadSettings(){
     _geoSettings = _projectMemory.geoSettings;
     localStorage.setItem('gr_geo_settings_'+(_activeCode||'default'), JSON.stringify(_geoSettings));
   }
-  updateSettingsTag();
+  syncQuickSelectorFromSettings();
 }
 
 // Ensure cutoff display updates immediately when geo mode is shown
 function refreshCutoffDisplay(){
-  var cutoffDisp = document.getElementById('cutoff-display');
-  if(cutoffDisp) cutoffDisp.textContent = 'Cut-off: ' + _geoSettings.cutoffVal + ' ' + _geoSettings.cutoffUnit;
+  syncQuickSelectorFromSettings();
 }
 
 function updateSettingsTag(){
-  var tag = document.getElementById('geo-settings-tag');
-  var cutoffDisp = document.getElementById('cutoff-display');
-
-  if(cutoffDisp){
-    cutoffDisp.textContent = 'Cut-off: ' + _geoSettings.cutoffVal + ' ' + _geoSettings.cutoffUnit;
-  }
-
-  if(!tag) return;
-  var isDefault = _geoSettings.commodity === 'Cu-Co' && _geoSettings.province.includes('Copperbelt');
-  if(isDefault){
-    tag.innerHTML = '<span style="color:var(--muted);font-size:10px;">Cu-Co · Copperbelt</span>';
-  } else {
-    tag.innerHTML = '<span style="background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:6px;padding:2px 8px;font-size:10px;color:var(--green);">'
-      +_geoSettings.commodity+' · '+_geoSettings.province.split('(')[0].trim()+'</span>';
-  }
-  tag.style.display = 'block';
+  // Sync the inline quick-selector to match current settings
+  syncQuickSelectorFromSettings();
 }
 
 function buildSettingsContext(){

@@ -1,0 +1,1103 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>
+@charset "utf-8";
+
+:root { --blue-deep: #020b18; --blue-mid: #0a2a4a; --blue-bright: #00b4d8; --cyan: #00f5ff; --gold: #f0c040; --surface: #071e33; --surface2: #0d2a42; --text: #e0f4ff; --text-muted: #5a8fa8; --border: rgba(0,180,216,0.15); --red: #ff4444; }
+
+*, ::before, ::after { box-sizing: border-box; margin: 0px; padding: 0px; }
+
+html { scroll-behavior: smooth; }
+
+body { font-family: "Exo 2", sans-serif; background: var(--blue-deep); color: var(--text); overflow-x: hidden; }
+
+.bg-grid { position: fixed; inset: 0px; z-index: 0; pointer-events: none; background-image: linear-gradient(rgba(0, 180, 216, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 180, 216, 0.03) 1px, transparent 1px); background-size: 50px 50px; }
+
+nav { position: fixed; top: 0px; left: 0px; right: 0px; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: rgba(2, 11, 24, 0.97); border-bottom: 1px solid var(--border); }
+
+.logo { font-family: Orbitron, monospace; font-weight: 900; font-size: 1.1rem; color: var(--text); text-decoration: none; }
+
+.logo span { color: var(--blue-bright); }
+
+.nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
+
+.nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+
+.nav-links a:hover { color: var(--blue-bright); }
+
+.nav-admin { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 0.4rem 0.9rem; border-radius: 6px; font-size: 0.78rem; cursor: pointer; font-family: "Exo 2", sans-serif; transition: 0.2s; }
+
+.nav-admin:hover { border-color: var(--blue-bright); color: var(--blue-bright); }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 5px; background: none; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; }
+
+.hamburger span { display: block; width: 24px; height: 2px; background: var(--text-muted); border-radius: 2px; transition: 0.3s; }
+
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+
+.hamburger.open span:nth-child(2) { opacity: 0; }
+
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+.mobile-menu { display: none; position: fixed; top: 60px; left: 0px; right: 0px; background: rgba(2, 11, 24, 0.98); border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; z-index: 99; flex-direction: column; gap: 1rem; }
+
+.mobile-menu.open { display: flex; }
+
+.mobile-menu a { color: var(--text-muted); text-decoration: none; font-size: 1rem; padding: 0.5rem 0px; border-bottom: 1px solid var(--border); }
+
+.mobile-menu a:hover { color: var(--blue-bright); }
+
+.mobile-menu button { background: var(--blue-bright); color: var(--blue-deep); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 8px; padding: 0.7rem; font-family: Orbitron, monospace; font-weight: 700; font-size: 0.82rem; cursor: pointer; margin-top: 0.5rem; }
+
+#hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 6rem 2rem 4rem; position: relative; z-index: 1; }
+
+.hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0, 180, 216, 0.08); border: 1px solid rgba(0, 180, 216, 0.25); border-radius: 100px; padding: 0.4rem 1.2rem; font-size: 0.75rem; color: var(--blue-bright); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem; }
+
+.badge-pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); animation: 2s ease 0s infinite normal none running pulse; }
+
+@keyframes pulse { 
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+h1 { font-family: Orbitron, monospace; font-size: clamp(1.8rem, 5vw, 3.8rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.2rem; }
+
+h1 .accent { color: var(--blue-bright); }
+
+h1 .gold { color: var(--gold); }
+
+.hero-sub { font-size: 1rem; color: var(--text-muted); line-height: 1.8; max-width: 540px; margin: 0px auto 2.5rem; }
+
+.globe-wrap { position: relative; width: 200px; height: 200px; margin: 0px auto 2.5rem; }
+
+.globe { width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle at 35% 35%, rgb(13, 74, 122), rgb(2, 11, 24)); border: 1px solid rgba(0, 180, 216, 0.3); box-shadow: rgba(0, 180, 216, 0.15) 0px 0px 60px; position: relative; overflow: hidden; }
+
+.globe::before { content: ""; position: absolute; inset: 0px; background: repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(0, 180, 216, 0.05) 18px, rgba(0, 180, 216, 0.05) 19px); }
+
+.globe::after { content: ""; position: absolute; inset: 0px; background: repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(0, 180, 216, 0.05) 18px, rgba(0, 180, 216, 0.05) 19px); }
+
+.globe-ring { position: absolute; inset: -15px; border-radius: 50%; border: 1px dashed rgba(0, 180, 216, 0.2); animation: 20s linear 0s infinite normal none running spin; }
+
+@keyframes spin { 
+  100% { transform: rotate(360deg); }
+}
+
+.globe-dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); animation: 2s ease-in-out 0s infinite normal none running dotP; }
+
+.globe-dot:nth-child(1) { top: 30%; left: 40%; }
+
+.globe-dot:nth-child(2) { top: 55%; left: 60%; animation-delay: 0.7s; }
+
+.globe-dot:nth-child(3) { top: 70%; left: 35%; animation-delay: 1.4s; }
+
+@keyframes dotP { 
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.6); }
+}
+
+.hero-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--blue-bright); color: var(--blue-deep); padding: 0.85rem 2.2rem; border-radius: 8px; font-family: Orbitron, monospace; font-weight: 700; font-size: 0.82rem; text-decoration: none; letter-spacing: 0.08em; box-shadow: rgba(0, 180, 216, 0.3) 0px 4px 30px; transition: 0.2s; }
+
+.hero-btn:hover { background: var(--cyan); transform: translateY(-2px); }
+
+#services { padding: 5rem 2rem; position: relative; z-index: 1; max-width: 900px; margin: 0px auto; }
+
+.section-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--blue-bright); margin-bottom: 0.8rem; text-align: center; }
+
+.section-title { font-family: Orbitron, monospace; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; text-align: center; margin-bottom: 2.5rem; }
+
+.services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+.svc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.8rem; transition: 0.3s; }
+
+.svc-card:hover { transform: translateY(-4px); border-color: rgba(0, 180, 216, 0.3); }
+
+.svc-icon { font-size: 2rem; margin-bottom: 1rem; }
+
+.svc-card h3 { font-family: Orbitron, monospace; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.8rem; color: rgb(144, 224, 239); }
+
+.svc-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; }
+
+.svc-tag { display: inline-block; margin-top: 1rem; background: rgba(0, 180, 216, 0.08); border: 1px solid rgba(0, 180, 216, 0.2); border-radius: 100px; padding: 0.2rem 0.8rem; font-size: 0.68rem; color: var(--blue-bright); font-weight: 600; }
+
+.minerals { text-align: center; padding: 1rem 2rem 4rem; position: relative; z-index: 1; }
+
+.mineral-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.7rem; margin-top: 1.2rem; }
+
+.mchip { background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 0.4rem 1rem; font-size: 0.8rem; transition: 0.2s; cursor: default; }
+
+.mchip:hover { border-color: var(--blue-bright); color: var(--blue-bright); }
+
+.mchip .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 0.4rem; }
+
+#portal { padding: 4rem 2rem; position: relative; z-index: 1; max-width: 700px; margin: 0px auto; }
+
+.portal-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+
+.portal-head { background: linear-gradient(135deg,var(--blue-mid),var(--surface2)); padding: 1.5rem 2rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+
+.portal-head-left { display: flex; align-items: center; gap: 1rem; }
+
+.portal-head-icon { width: 44px; height: 44px; background: rgba(0, 180, 216, 0.12); border: 1px solid rgba(0, 180, 216, 0.25); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+
+.portal-head h3 { font-family: Orbitron, monospace; font-size: 0.95rem; font-weight: 700; }
+
+.portal-head p { font-size: 0.78rem; color: var(--text-muted); }
+
+.portal-close { background: rgba(255, 68, 68, 0.1); border: 1px solid rgba(255, 68, 68, 0.3); color: rgb(255, 128, 128); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+
+.portal-close:hover { background: rgba(255, 68, 68, 0.2); }
+
+.portal-body { padding: 1.8rem; }
+
+.code-entry { text-align: center; }
+
+.code-entry h4 { font-family: Orbitron, monospace; font-size: 0.95rem; margin-bottom: 0.5rem; }
+
+.code-entry p { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.2rem; }
+
+.code-row { display: flex; gap: 0.5rem; max-width: 360px; margin: 0px auto 0.8rem; }
+
+.code-row input { flex: 1 1 0%; background: var(--blue-deep); border: 1px solid var(--border); border-radius: 8px; padding: 0.8rem 1rem; color: var(--text); font-family: Orbitron, monospace; font-size: 1rem; letter-spacing: 0.15em; text-align: center; outline: none; transition: border-color 0.2s; }
+
+.code-row input:focus { border-color: var(--blue-bright); }
+
+.btn-p { background: var(--blue-bright); color: var(--blue-deep); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 8px; padding: 0.8rem 1.2rem; font-family: Orbitron, monospace; font-weight: 700; font-size: 0.78rem; cursor: pointer; white-space: nowrap; transition: 0.2s; }
+
+.btn-p:hover { background: var(--cyan); }
+
+.btn-p:disabled { background: var(--surface2); color: var(--text-muted); cursor: not-allowed; }
+
+#analysis-area { display: none; }
+
+.steps-bar { display: flex; gap: 0.3rem; margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: 0.3rem; }
+
+.step-dot { flex: 1 1 0%; min-width: 60px; text-align: center; padding: 0.4rem 0.3rem; background: var(--blue-deep); border: 1px solid var(--border); border-radius: 8px; font-size: 0.62rem; color: var(--text-muted); transition: 0.2s; }
+
+.step-dot.done { border-color: var(--cyan); color: var(--cyan); }
+
+.file-cards { display: flex; flex-direction: column; gap: 0.8rem; }
+
+.file-card { background: var(--blue-deep); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 0.8rem; transition: 0.2s; flex-wrap: wrap; }
+
+.file-card.uploaded { border-color: var(--cyan); }
+
+.file-card-icon { font-size: 1.5rem; min-width: 32px; text-align: center; }
+
+.file-card-info { flex: 1 1 0%; min-width: 120px; }
+
+.file-card-info h4 { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.2rem; }
+
+.file-card-info p { font-size: 0.72rem; color: var(--text-muted); }
+
+.file-card-status { font-size: 0.72rem; color: var(--text-muted); }
+
+.file-card-status.ok { color: var(--cyan); }
+
+.upload-btn-small { background: rgba(0, 180, 216, 0.1); border: 1px solid rgba(0, 180, 216, 0.25); border-radius: 6px; color: var(--blue-bright); padding: 0.35rem 0.7rem; font-size: 0.72rem; cursor: pointer; font-family: "Exo 2", sans-serif; transition: 0.2s; white-space: nowrap; }
+
+.upload-btn-small:hover { background: rgba(0, 180, 216, 0.2); }
+
+.upload-btn-small.done { background: rgba(0, 245, 255, 0.08); border-color: var(--cyan); color: var(--cyan); }
+
+.options-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem; margin: 1.2rem 0px; }
+
+.opt-group label { display: block; font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; font-weight: 600; }
+
+.opt-group select { width: 100%; background: var(--blue-deep); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.8rem; color: var(--text); font-family: "Exo 2", sans-serif; font-size: 0.82rem; outline: none; cursor: pointer; }
+
+.opt-group select:focus { border-color: var(--blue-bright); }
+
+.uses-badge { text-align: center; margin: 0.8rem 0px; font-size: 0.72rem; color: var(--text-muted); }
+
+.uses-badge span { color: var(--gold); font-weight: 600; }
+
+.expiry-badge { text-align: center; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 1rem; }
+
+.expiry-badge span { color: rgb(255, 144, 96); font-weight: 600; }
+
+.run-btn { width: 100%; background: var(--blue-bright); color: var(--blue-deep); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 10px; padding: 0.9rem; font-family: Orbitron, monospace; font-weight: 700; font-size: 0.82rem; cursor: pointer; margin-top: 1rem; letter-spacing: 0.06em; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+
+.run-btn:hover { background: var(--cyan); }
+
+.run-btn:disabled { background: var(--surface2); color: var(--text-muted); cursor: not-allowed; }
+
+.progress-wrap { display: none; margin-top: 1rem; }
+
+.progress-label { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.5rem; text-align: center; }
+
+.progress-bar { height: 6px; background: var(--blue-deep); border-radius: 3px; overflow: hidden; }
+
+.progress-fill { height: 100%; background: linear-gradient(90deg,var(--blue-bright),var(--cyan)); border-radius: 3px; width: 0%; transition: width 0.5s; }
+
+#result-area { display: none; margin-top: 1.5rem; }
+
+.result-box { background: var(--blue-deep); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem; font-size: 0.85rem; line-height: 1.8; white-space: pre-wrap; max-height: 400px; overflow-y: auto; color: var(--text); }
+
+.result-actions { display: flex; gap: 0.8rem; margin-top: 0.8rem; flex-wrap: wrap; }
+
+.btn-o { flex: 1 1 0%; min-width: 120px; background: transparent; border: 1px solid var(--blue-bright); color: var(--blue-bright); border-radius: 8px; padding: 0.7rem; font-family: Orbitron, monospace; font-size: 0.68rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
+
+.btn-o:hover { background: rgba(0, 180, 216, 0.1); }
+
+.btn-o.red { border-color: rgb(255, 128, 128); color: rgb(255, 128, 128); }
+
+.btn-o.red:hover { background: rgba(255, 80, 80, 0.1); }
+
+#err-box { display: none; margin-top: 0.8rem; background: rgba(255, 80, 80, 0.08); border: 1px solid rgba(255, 80, 80, 0.2); border-radius: 8px; padding: 0.8rem; color: rgb(255, 128, 128); font-size: 0.82rem; }
+
+#contact { padding: 4rem 2rem; position: relative; z-index: 1; max-width: 700px; margin: 0px auto; text-align: center; }
+
+.contact-grid { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-top: 2rem; }
+
+.citem { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem 1.5rem; min-width: 160px; transition: 0.2s; }
+
+.citem:hover { border-color: rgba(0, 180, 216, 0.3); transform: translateY(-3px); }
+
+.citem-icon { font-size: 1.3rem; margin-bottom: 0.5rem; }
+
+.citem-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+
+.citem-val { font-size: 0.82rem; }
+
+.citem-val a { color: var(--blue-bright); text-decoration: none; }
+
+footer { border-top: 1px solid var(--border); padding: 1.2rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; position: relative; z-index: 1; }
+
+footer p { font-size: 0.75rem; color: var(--text-muted); }
+
+.modal-overlay { display: none; position: fixed; inset: 0px; z-index: 200; background: rgba(2, 11, 24, 0.96); align-items: center; justify-content: center; padding: 1rem; }
+
+.modal-overlay.open { display: flex; }
+
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 1.5rem; width: 100%; max-width: 1100px; max-height: 92vh; overflow-y: auto; position: relative; }
+
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.3rem; }
+
+.modal-close-btn { background: rgba(255, 68, 68, 0.1); border: 1px solid rgba(255, 68, 68, 0.3); color: rgb(255, 128, 128); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+
+.modal-close-btn:hover { background: rgba(255, 68, 68, 0.2); }
+
+.filter-tab { padding:4px 12px; border-radius:8px; border:1px solid var(--border); background:rgba(255,255,255,0.04); color:var(--text-muted); font-size:0.7rem; font-weight:600; cursor:pointer; transition:all 0.2s; font-family:'Exo 2',sans-serif; }
+.filter-tab:hover { border-color:rgba(0,180,216,0.4); color:var(--cyan); }
+.active-tab { background:rgba(0,180,216,0.12); border-color:rgba(0,180,216,0.4); color:var(--cyan); }
+
+.modal h2 { font-family: Orbitron, monospace; font-size: 1rem; font-weight: 700; }
+
+.modal-sub { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+.fg { margin-bottom: 1rem; }
+
+.fg label { display: block; font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; font-weight: 600; }
+
+.fg input, .fg textarea { width: 100%; background: var(--blue-deep); border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem 1rem; color: var(--text); font-family: "Exo 2", sans-serif; font-size: 0.88rem; outline: none; transition: border-color 0.2s; }
+
+.fg input:focus, .fg textarea:focus { border-color: var(--blue-bright); }
+
+.fg textarea { resize: vertical; min-height: 80px; }
+
+.a-section { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+
+.a-section:last-child { border-bottom-width: medium; border-bottom-style: none; border-bottom-color: currentcolor; margin-bottom: 0px; }
+
+.a-section h3 { font-family: Orbitron, monospace; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.8rem; color: rgb(144, 224, 239); }
+
+.save-btn { width: 100%; background: var(--blue-bright); color: var(--blue-deep); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 8px; padding: 0.8rem; font-family: Orbitron, monospace; font-weight: 700; font-size: 0.82rem; cursor: pointer; margin-top: 0.5rem; transition: 0.2s; }
+
+.save-btn:hover { background: var(--cyan); }
+
+.save-confirm { display: none; text-align: center; color: var(--cyan); font-size: 0.8rem; margin-top: 0.5rem; }
+
+.code-chip { display: flex; align-items: center; justify-content: space-between; background: var(--blue-deep); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.8rem; margin-bottom: 0.4rem; font-family: Orbitron, monospace; font-size: 0.72rem; flex-wrap: wrap; gap: 0.3rem; }
+
+.cu { font-size: 0.65rem; color: var(--text-muted); }
+
+.cu.warn { color: var(--gold); }
+
+.cu.dead { color: rgb(255, 96, 96); }
+
+.cc { background: rgba(0, 180, 216, 0.1); border: 1px solid rgba(0, 180, 216, 0.2); border-radius: 4px; color: var(--blue-bright); padding: 0.15rem 0.5rem; font-size: 0.65rem; cursor: pointer; font-family: "Exo 2", sans-serif; }
+
+#admin-panel { display: none; }
+
+.worker-info { background: rgba(0, 180, 216, 0.05); border: 1px solid rgba(0, 180, 216, 0.15); border-radius: 8px; padding: 0.8rem; margin-bottom: 1rem; font-size: 0.78rem; color: var(--text-muted); }
+
+.worker-info strong { color: var(--blue-bright); }
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .services-grid { grid-template-columns: 1fr; }
+  .options-row { grid-template-columns: 1fr; }
+  footer { flex-direction: column; text-align: center; }
+  .result-actions { flex-direction: column; }
+}
+
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="6qaDK9WfePT3KPsbkW4ocp8ywbCRqfJLv0Q_syjZCr8">
+<title>GreenRock AI | AI-Powered Mineral Exploration</title>
+<meta name="description" content="GreenRock AI uses artificial intelligence and geophysics to optimise drill plans and discover new mineralisation across Africa and globally.">
+<meta name="keywords" content="AI mineral exploration, drill plan optimisation, geophysics AI, copper exploration Africa, drillhole prediction, Copperbelt mining AI">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.greenrock-ai.com/">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&amp;family=Exo+2:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+
+
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Green<span>Rock</span> AI</a>
+  <ul class="nav-links">
+    <li>
+      <select id="site-lang" onchange="setSiteLang(this.value)" style="background:#ffffff;border:1px solid rgba(0,180,216,0.4);border-radius:6px;color:#1a1a2e;font-size:11px;padding:5px 10px;outline:none;cursor:pointer;font-family:'Exo 2',sans-serif;font-weight:600;">
+        <option value="en" style="background:#fff;color:#1a1a2e;">🌐 English</option>
+        <option value="fr" style="background:#fff;color:#1a1a2e;">🇫🇷 Français</option>
+        <option value="zh" style="background:#fff;color:#1a1a2e;">🇨🇳 中文 Chinese</option>
+        <option value="pt" style="background:#fff;color:#1a1a2e;">🇵🇹 Português</option>
+        <option value="ar" style="background:#fff;color:#1a1a2e;">🇸🇦 العربية Arabic</option>
+      </select>
+    </li>
+    <li><a href="#services">Services</a></li>
+    
+    <li><a href="#contact">Contact</a></li>
+    <li><button class="nav-admin">Admin</button></li>
+    <li><a href="geomind.html" id="dualmind-nav-btn" style="padding:7px 16px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:8px;color:#fff;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">&#9889; DualMind</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#services">Services</a>
+  
+  <a href="#contact">Contact</a>
+  <button>Admin</button>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-badge"><span class="badge-pulse"></span> AI-Powered Mineral Exploration</div>
+  <h1>Find the <span class="accent">ore.</span><br>Drill with <span class="gold">precision.</span><br>Generate returns.</h1>
+  <p class="hero-sub">GreenRock AI combines geophysics, geochemistry and artificial intelligence to tell you exactly where to drill — before you spend a cent on the rig.</p>
+  <div class="globe-wrap">
+    <div class="globe"><div class="globe-dot"></div><div class="globe-dot"></div><div class="globe-dot"></div></div>
+    <div class="globe-ring"></div>
+  </div>
+  <a href="geomind.html" class="hero-btn">&#9889; Launch DualMind</a>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label">What We Do</div>
+  <h2 class="section-title">GreenRock <span style="color:var(--blue-bright)">Services</span></h2>
+  <div class="services-grid">
+    <div class="svc-card"><div class="svc-icon">🎯</div><h3>Drill Plan Optimisation</h3><p>Using your existing drillhole data — geochemical assays, lithological logs, and grade intervals — our AI models predict exactly where the next hole should be drilled to intersect high-grade mineralisation.</p><span class="svc-tag">High Precision · Fast · Cost Effective</span></div>
+    <div class="svc-card"><div class="svc-icon">📡</div><h3>Geophysics &amp; New Discovery</h3><p>GreenRock deploys ground geophysics instruments in the field — IP, EM, and Magnetics — then processes datasets through our AI engine to detect and map new mineralisation zones.</p><span class="svc-tag">IP · EM · Magnetics · AI</span></div>
+  </div>
+</section>
+
+<!-- MINERALS -->
+<div class="minerals">
+  <div class="section-label">Commodity Coverage</div>
+  <div class="mineral-chips">
+    <div class="mchip"><span class="dot" style="background:#c8753a"></span>Copper</div>
+    <div class="mchip"><span class="dot" style="background:#f0d080"></span>Gold</div>
+    <div class="mchip"><span class="dot" style="background:#6090e0"></span>Cobalt</div>
+    <div class="mchip"><span class="dot" style="background:#a0c080"></span>Nickel</div>
+    <div class="mchip"><span class="dot" style="background:#d0a0f0"></span>Zinc</div>
+    <div class="mchip"><span class="dot" style="background:#e0e0e0"></span>PGMs</div>
+    <div class="mchip"><span class="dot" style="background:#80c0d0"></span>Lead</div>
+    <div class="mchip"><span class="dot" style="background:#f09060"></span>Uranium</div>
+    <div class="mchip"><span class="dot" style="background:#90e090"></span>REEs</div>
+    <div class="mchip"><span class="dot" style="background:#f0f060"></span>Manganese
+    <div class="svc-card" style="border:1.5px solid rgba(16,185,129,0.4);background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(6,182,212,0.05));">
+      <div class="svc-icon">🧠</div>
+      <h3>GeoMind DualMind AI</h3>
+      <p>Dual AI verification pipeline — GPT-4o analyses, Claude verifies. Confidence scorecard with drill recommendations for every interpretation.</p>
+      <a href="geomind.html" style="display:inline-block;margin-top:12px;padding:8px 18px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:8px;color:#fff;font-size:12px;font-weight:700;text-decoration:none;">Launch DualMind →</a>
+    </div></div>
+  </div>
+</div>
+
+<!-- PORTAL -->
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Get In Touch</div>
+  <h2 class="section-title">Ready to find <span style="color:var(--blue-bright)">your next orebody?</span></h2>
+  <div class="contact-grid">
+    <div class="citem"><div class="citem-icon">📞</div><div class="citem-label">Phone</div><div class="citem-val"><a href="tel:+27662998028">+27 66 299 8028</a></div></div>
+    <div class="citem"><div class="citem-icon">✉️</div><div class="citem-label">Email</div><div class="citem-val"><a href="mailto:kimba@greenrock-ai.com">kimba@greenrock-ai.com</a></div></div>
+    <div class="citem"><div class="citem-icon">🌐</div><div class="citem-label">Website</div><div class="citem-val"><a href="http://www.greenrock-ai.com/">www.greenrock-ai.com</a></div></div>
+    <div class="citem"><div class="citem-icon">📍</div><div class="citem-label">Address</div><div class="citem-val" style="font-size:0.75rem">114 Nicholson Rd, Unit 10<br>Sunward Park, Boksburg<br>Gauteng, South Africa</div></div>
+  </div>
+</section>
+
+
+<section style="background:linear-gradient(135deg,#060e1a,#0c1829);padding:60px 20px;text-align:center;border-top:1px solid rgba(255,255,255,0.06);">
+  <div style="max-width:600px;margin:0 auto;">
+    <div style="font-size:40px;margin-bottom:12px;">⛏️🧠</div>
+    <h2 style="font-size:28px;font-weight:800;color:#fff;margin-bottom:8px;">GeoMind DualMind</h2>
+    <p style="font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:24px;line-height:1.7;">Upload your geophysical data, drill results, or maps.<br>Two AI models analyse and verify every interpretation.<br>Get a confidence scorecard with drill recommendations.</p>
+    <a href="geomind.html" style="display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:12px;color:#fff;font-size:16px;font-weight:800;text-decoration:none;box-shadow:0 4px 20px rgba(16,185,129,0.3);">Launch GeoMind AI &rarr;</a>
+  </div>
+</section>
+<footer>
+  <span class="logo">Green<span>Rock</span> AI</span>
+  <p>© 2026 GreenRock AI · Boksburg, South Africa</p>
+</footer>
+
+<!-- ADMIN MODAL -->
+<div class="modal-overlay" id="admin-modal">
+  <div class="modal">
+    <div id="admin-login">
+      <div class="modal-header">
+        <h2>Admin Access</h2>
+        <button class="modal-close-btn">✕</button>
+      </div>
+      <p class="modal-sub">Enter your admin password</p>
+      <div class="fg"><label>Password</label><input type="password" id="admin-pass" placeholder="••••••••" wfd-id="id7"></div>
+      <button class="btn-p" style="width:100%">Login →</button>
+      <div id="pass-error" style="color:#ff8080;font-size:0.8rem;margin-top:0.6rem;display:none">Incorrect password</div>
+    </div>
+    <div id="admin-panel">
+      <div class="modal-header">
+        <div>
+          <h2>&#9881; Admin Panel</h2>
+          <p class="modal-sub" style="margin:2px 0 0;">GreenRock AI &mdash; Access Codes &amp; AI Cost Dashboard</p>
+        </div>
+        <button class="modal-close-btn">&#x2715;</button>
+      </div>
+
+      <!-- MAIN 2-COLUMN LAYOUT -->
+      <div style="display:grid;grid-template-columns:360px 1fr;gap:1.2rem;margin-top:1rem;">
+
+        <!-- ── LEFT COLUMN ── -->
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+
+          <!-- WORKER URL -->
+          <div class="a-section">
+            <h3>&#128279; WORKER URL</h3>
+            <div class="fg" style="margin-bottom:0.4rem;">
+              <input type="text" id="worker-url" placeholder="https://greenrock-worker.kasongokimba.workers.dev" style="font-size:0.72rem;">
+            </div>
+            <button class="save-btn" id="save-worker-btn" style="width:100%;">Save URL</button>
+            <div class="save-confirm" id="save-confirm">Saved!</div>
+          </div>
+
+          <!-- GENERATE CODE -->
+          <div class="a-section">
+            <h3>&#9889; GENERATE ACCESS CODE</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem;">
+              <div class="fg" style="margin:0;">
+                <label>Access Type</label>
+                <select id="new-code-type" onchange="updateCodePrefix(this.value)" style="width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.5rem;color:var(--text);font-size:0.78rem;outline:none;">
+                  <option value="GR">GR- Full Access</option>
+                  <option value="SC">SC- Science Only</option>
+                </select>
+              </div>
+              <div class="fg" style="margin:0;">
+                <label>Duration</label>
+                <select id="new-code-duration" onchange="updateDefaultPrice(this.value)" style="width:100%;background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.5rem;color:var(--text);font-size:0.78rem;outline:none;">
+                  <option value="7">1 Week</option>
+                  <option value="30" selected>1 Month</option>
+                  <option value="365">1 Year</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem;">
+              <div class="fg" style="margin:0;">
+                <label>Client Name</label>
+                <input type="text" id="new-code-name" placeholder="e.g. Andries">
+              </div>
+              <div class="fg" style="margin:0;">
+                <label>Price (USD)</label>
+                <input type="number" id="new-code-price" value="45" min="0" step="1" style="background:var(--blue-deep);border:1px solid var(--border);border-radius:8px;padding:0.5rem;color:var(--text);font-size:0.82rem;width:100%;outline:none;">
+              </div>
+            </div>
+            <div class="fg" style="margin-bottom:0.5rem;">
+              <label>Custom Code (optional — leave blank to auto-generate)</label>
+              <input type="text" id="new-code-value" placeholder="AUTO-GENERATE" style="text-transform:uppercase;">
+            </div>
+            <button class="btn-p" id="gen-code-btn" style="width:100%;padding:0.7rem;font-size:0.85rem;">&#9889; Generate Code</button>
+            <div id="gen-result" style="margin-top:0.5rem;font-size:0.78rem;display:none;"></div>
+          </div>
+
+          <!-- AI COST CONTROLS -->
+          <div class="a-section">
+            <h3>&#128200; AI COST CONTROLS</h3>
+            <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem;">
+              <button class="btn-p" id="load-usage-btn" style="flex:1;font-size:0.75rem;">&#8635; Refresh</button>
+              <button class="btn-o" id="set-limit-btn" style="flex:1;font-size:0.75rem;">&#9881; Set Limit %</button>
+            </div>
+            <div id="usage-display" style="font-size:0.78rem;color:var(--text-muted);">Click Refresh to load.</div>
+          </div>
+
+          <!-- LOGOUT -->
+          <button class="btn-o red" id="admin-logout-btn" style="width:100%;margin-top:auto;">Logout</button>
+        </div>
+
+        <!-- ── RIGHT COLUMN: CODES TABLE ── -->
+        <div class="a-section" style="display:flex;flex-direction:column;min-height:500px;">
+
+          <!-- Table header bar -->
+          <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.7rem;flex-wrap:wrap;">
+            <h3 style="margin:0;white-space:nowrap;">&#128273; ALL ACCESS CODES</h3>
+            <div id="total-cost-badge" style="display:none;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);border-radius:8px;padding:2px 10px;font-size:0.72rem;font-weight:700;color:var(--gold);">Total AI Cost: $0.0000</div>
+            <button class="btn-p" id="load-codes-btn" style="margin-left:auto;font-size:0.72rem;padding:5px 14px;">Load</button>
+          </div>
+
+          <!-- Stats pills -->
+          <div id="codes-stats" style="display:flex;gap:6px;margin-bottom:0.6rem;flex-wrap:wrap;"></div>
+
+          <!-- Filter tabs -->
+          <div id="filter-tabs" style="display:flex;gap:6px;margin-bottom:0.7rem;">
+            <button onclick="filterCodes('all')" id="filter-all" class="filter-tab active-tab">All</button>
+            <button onclick="filterCodes('unused')" id="filter-unused" class="filter-tab">Not Used</button>
+            <button onclick="filterCodes('active')" id="filter-active" class="filter-tab">Active</button>
+            <button onclick="filterCodes('expired')" id="filter-expired" class="filter-tab" style="background:rgba(239,68,68,0.1);color:#ef4444;border-color:rgba(239,68,68,0.3);">Expired</button>
+          </div>
+
+          <!-- Table header row -->
+          <div style="display:grid;grid-template-columns:1.4fr 90px 80px 140px 26px;gap:6px;padding:5px 8px;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);border-bottom:1px solid var(--border);margin-bottom:4px;">
+            <span>Code</span><span>Status</span><span>Created</span><span>AI Cost (All)</span><span></span>
+          </div>
+
+          <!-- Table rows -->
+          <div id="codes-list" style="flex:1;overflow-y:auto;font-size:0.75rem;">
+            <p style="color:var(--text-muted);font-size:0.75rem;padding:10px;">Click Load to view codes.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>  </div>
+</div>
+
+
+
+
+
+<script>
+const WORKER_URL = 'https://greenrock-worker.kasongokimba.workers.dev';
+
+// ── HAMBURGER ──────────────────────────────────────────────
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+if(hamburger) hamburger.addEventListener('click', function(){
+  hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+});
+
+// ── ADMIN MODAL ────────────────────────────────────────────
+const adminModal = document.getElementById('admin-modal');
+function openAdmin(){ if(adminModal) adminModal.classList.add('open'); }
+function closeAdmin(){
+  if(adminModal) adminModal.classList.remove('open');
+  const al = document.getElementById('admin-login');
+  const ap = document.getElementById('admin-panel');
+  if(al) al.style.display='';
+  if(ap) ap.style.display='none';
+}
+document.querySelectorAll('.nav-admin').forEach(b=>b.addEventListener('click',openAdmin));
+document.querySelectorAll('.modal-close-btn').forEach(b=>b.addEventListener('click',closeAdmin));
+if(adminModal) adminModal.addEventListener('click',e=>{ if(e.target===adminModal) closeAdmin(); });
+
+function getWorkerURL(){
+  return localStorage.getItem('gr_worker_url') || WORKER_URL;
+}
+
+window.addEventListener('DOMContentLoaded', function(){
+
+  // Restore saved worker URL
+  const saved = localStorage.getItem('gr_worker_url');
+  if(saved){ const el=document.getElementById('worker-url'); if(el) el.value=saved; }
+
+  // ── ADMIN LOGIN ──────────────────────────────────────────
+  const loginBtn = document.querySelector('#admin-login .btn-p');
+  if(loginBtn) loginBtn.addEventListener('click', function(){
+    const pw = document.getElementById('admin-pass').value;
+    if(pw === 'Johnny22'){
+      document.getElementById('admin-login').style.display='none';
+      document.getElementById('admin-panel').style.display='block';
+    } else {
+      const pe = document.getElementById('pass-error');
+      if(pe){ pe.style.display='block'; pe.textContent='Incorrect password'; }
+    }
+  });
+
+  // Allow Enter key on password field
+  const passInput = document.getElementById('admin-pass');
+  if(passInput) passInput.addEventListener('keydown', function(e){
+    if(e.key==='Enter'){ const lb=document.querySelector('#admin-login .btn-p'); if(lb) lb.click(); }
+  });
+
+  // ── SAVE WORKER URL ──────────────────────────────────────
+  const saveWorkerBtn = document.getElementById('save-worker-btn');
+  if(saveWorkerBtn) saveWorkerBtn.addEventListener('click', function(){
+    const url = (document.getElementById('worker-url')||{}).value || '';
+    if(url.trim()) localStorage.setItem('gr_worker_url', url.trim());
+    const sc = document.getElementById('save-confirm');
+    if(sc){ sc.style.display='block'; setTimeout(()=>sc.style.display='none',2000); }
+  });
+
+  // ── ADMIN LOGOUT ─────────────────────────────────────────
+  const logoutBtn = document.getElementById('admin-logout-btn');
+  if(logoutBtn) logoutBtn.addEventListener('click', closeAdmin);
+
+  // Auto-set suggested price when duration changes
+  window.updateDefaultPrice = function(days){
+    var el = document.getElementById('new-code-price');
+    if(!el) return;
+    var d = parseInt(days);
+    if(d<=7) el.value=15;
+    else if(d<=31) el.value=45;
+    else el.value=400;
+  };
+
+  // ── GENERATE CODE ─────────────────────────────────────────
+  const genBtn = document.getElementById('gen-code-btn');
+  if(genBtn) genBtn.addEventListener('click', async function(){
+    const wurl = getWorkerURL();
+    const name = (document.getElementById('new-code-name')||{value:''}).value || '';
+    const days = parseInt(document.getElementById('new-code-duration').value) || 30;
+    const price = parseFloat(document.getElementById('new-code-price').value) || 0;
+    const customCode = ((document.getElementById('new-code-value')||{value:''}).value || '').trim().toUpperCase();
+    const code = customCode || 'GR-' + Math.random().toString(36).substring(2,7).toUpperCase();
+    const type = days<=7?'W':days<=31?'M':'Y';
+    const resultDiv = document.getElementById('gen-result');
+
+    genBtn.disabled=true; genBtn.textContent='Generating...';
+    try{
+      const res = await fetch(wurl, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          _appSecret:'greenrock-2024',
+          action:'generate-code',
+          adminKey:'Johnny11',
+          code:code, type:type, name:name, days:days, price:price
+        })
+      });
+      const data = await res.json();
+      if(data.success){
+        const exp = new Date(data.expires).toLocaleDateString();
+        resultDiv.style.display='block';
+        resultDiv.style.color='#10b981';
+        resultDiv.innerHTML='&#10003; Code: <strong>'+code+'</strong> | '+type+' | $'+price+' | Exp: '+exp+(name?' | '+name:'');
+        document.getElementById('new-code-value').value='';
+        document.getElementById('new-code-name').value='';
+        loadCodesTable();
+      } else {
+        resultDiv.style.display='block';
+        resultDiv.style.color='#ff8080';
+        resultDiv.textContent='Error: '+(data.error||'Unknown error');
+      }
+    }catch(e){
+      resultDiv.style.display='block';
+      resultDiv.style.color='#ff8080';
+      resultDiv.textContent='Connection error: '+e.message;
+    }
+    genBtn.disabled=false; genBtn.textContent='+ Generate Code';
+  });
+
+  // ── LOAD CODES LIST ───────────────────────────────────────
+  const loadCodesBtn = document.getElementById('load-codes-btn');
+  if(loadCodesBtn) loadCodesBtn.addEventListener('click', loadCodesTable);
+
+  var _allCodesData = [];
+
+  async function loadCodesTable(){
+    const wurl = getWorkerURL();
+    const codesList = document.getElementById('codes-list');
+    const stats = document.getElementById('codes-stats');
+    const totalBadge = document.getElementById('total-cost-badge');
+    if(!codesList) return;
+    codesList.innerHTML='<p style="color:var(--text-muted);padding:10px;">Loading...</p>';
+
+    try{
+      const [codesRes, costsRes] = await Promise.all([
+        fetch(wurl,{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({_appSecret:'greenrock-2024',action:'list-codes',adminKey:'Johnny11'})}),
+        fetch(wurl,{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({_appSecret:'greenrock-2024',action:'get-all-costs',adminKey:'Johnny11'})})
+      ]);
+      const codesData = await codesRes.json();
+      const costsData = await costsRes.json();
+
+      const costMap = {};
+      if(costsData.ok && costsData.costs){
+        costsData.costs.forEach(function(c){ costMap[c.code] = c; });
+      }
+
+      const now = Date.now();
+      const COST_IN=2.75/1000000, COST_OUT=12.50/1000000;
+      const codes = (codesData.codes||[]).filter(function(c){
+        return c.code !== 'COST_LIMIT_PCT' && !c.code.startsWith('usage:') && !c.code.startsWith('cost_');
+      });
+      // Sort newest first
+      codes.sort(function(a,b){ return (b.created||0) - (a.created||0); });
+      _allCodesData = codes.map(function(c){
+        const cd = costMap[c.code]||{inputTokens:0,outputTokens:0,calls:0};
+        const cost = (cd.inputTokens||0)*COST_IN + (cd.outputTokens||0)*COST_OUT;
+        const planMap = {W:15,M:45,Y:400,SC:15,D:0};
+        const prefix = c.code.split('-')[0].toUpperCase();
+        const planPrice = (c.price!=null) ? c.price : (planMap[prefix]||45);
+        const pct = planPrice>0 ? Math.min(100,Math.round(cost/planPrice*100)) : 0;
+        const isExpired = c.expires && c.expires < now;
+        const daysLeft = c.expires ? Math.max(0,Math.round((c.expires-now)/(1000*60*60*24))) : 9999;
+        const typeLabel = c.type==='Y'?'1 Year':c.type==='M'?'1 Month':'1 Week';
+        const created = c.created ? new Date(c.created).toLocaleDateString('en-GB',{day:'2-digit',month:'short'}) : '—';
+        return { c, cd, cost, planPrice, pct, isExpired, daysLeft, typeLabel, created, calls:cd.calls||0 };
+      });
+
+      // Stats bar
+      const total = codes.length;
+      const active = codes.filter(function(c){ return c.expires && c.expires > now; }).length;
+      const expired = codes.filter(function(c){ return c.expires && c.expires < now; }).length;
+      const unused = _allCodesData.filter(function(d){ return !d.calls; }).length;
+      const totalCost = costsData.globalCost || 0;
+
+      if(totalBadge){ totalBadge.style.display='block'; totalBadge.textContent='Total AI Cost (All): $'+totalCost.toFixed(4); }
+
+      var sc1='background:rgba(0,180,216,0.12);border:1px solid rgba(0,180,216,0.3);border-radius:10px;padding:2px 10px;font-size:0.68rem;font-weight:700;color:var(--cyan)';
+      var sc2='background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);border-radius:10px;padding:2px 10px;font-size:0.68rem;font-weight:700;color:#10b981';
+      var sc3='background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:2px 10px;font-size:0.68rem;font-weight:700;color:#ef4444';
+      var sc4='background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:10px;padding:2px 10px;font-size:0.68rem;font-weight:700;color:var(--gold)';
+      if(stats) stats.innerHTML=
+        '<span style="'+sc1+'">Total: '+total+'</span>'+
+        '<span style="'+sc2+'">Unused: '+unused+'</span>'+
+        '<span style="'+sc2+'">Active: '+active+'</span>'+
+        '<span style="'+sc3+'">Expired: '+expired+'</span>';
+
+      filterCodes('all');
+
+    }catch(e){
+      codesList.innerHTML='<p style="color:#ff8080;padding:10px;">Error: '+e.message+'</p>';
+    }
+  }
+
+  function filterCodes(filter){
+    // Update active tab
+    ['all','unused','active','expired'].forEach(function(f){
+      var el = document.getElementById('filter-'+f);
+      if(el){ el.classList.toggle('active-tab', f===filter); }
+    });
+    var now = Date.now();
+    var filtered = _allCodesData.filter(function(d){
+      if(filter==='unused') return !d.calls;
+      if(filter==='active') return !d.isExpired;
+      if(filter==='expired') return d.isExpired;
+      return true;
+    });
+    renderCodesTable(filtered);
+  }
+
+  // Event delegation for copy buttons in table
+  document.addEventListener('click', function(e){
+    if(e.target.classList.contains('copy-code-btn')){
+      copyCode(e.target.getAttribute('data-code'));
+    }
+  });
+
+  function renderCodesTable(rows){
+    var codesList = document.getElementById('codes-list');
+    if(!rows.length){
+      codesList.innerHTML='<p style="color:var(--text-muted);padding:10px;">No codes found.</p>';
+      return;
+    }
+    codesList.innerHTML = rows.map(function(d){
+      var statusColor = d.isExpired?'#ef4444':d.daysLeft<7?'#f59e0b':'#10b981';
+      var costColor = d.pct>=80?'#ef4444':d.pct>=50?'#f59e0b':'#10b981';
+      var statusText = d.isExpired?'Expired':(d.daysLeft===9999?'No expiry':d.daysLeft+'d to use');
+      var priceLabel = d.planPrice>0?'$'+d.planPrice:'Demo';
+
+      var row = document.createElement('div');
+      row.style.cssText='display:grid;grid-template-columns:1.4fr 90px 80px 140px 26px;gap:6px;align-items:center;padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.04);';
+      row.onmouseover=function(){this.style.background='rgba(255,255,255,0.03)';}
+      row.onmouseout=function(){this.style.background='';}
+      row.innerHTML=
+        '<div>'+
+          '<div style="font-weight:700;font-size:0.78rem;color:#fff;letter-spacing:0.5px;">'+d.c.code+
+          ' <span class="copy-code-btn" data-code="'+d.c.code+'" style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.3);border-radius:4px;color:var(--cyan);font-size:9px;padding:1px 6px;cursor:pointer;vertical-align:middle;" title="Copy">&#128203;</span>'+
+          '</div>'+
+          '<div style="font-size:0.62rem;color:var(--text-muted);margin-top:1px;">'+(d.c.name||'—')+' &middot; '+d.typeLabel+' &middot; '+priceLabel+'</div>'+
+        '</div>'+
+        '<div style="font-size:0.7rem;font-weight:700;color:'+statusColor+';">'+statusText+'</div>'+
+        '<div style="font-size:0.7rem;color:var(--text-muted);">'+d.created+'</div>'+
+        '<div>'+
+          '<div style="font-size:0.72rem;font-weight:700;color:'+costColor+';">$'+d.cost.toFixed(4)+' / '+priceLabel+'</div>'+
+          '<div style="background:rgba(255,255,255,0.06);border-radius:2px;height:3px;margin:2px 0;overflow:hidden;">'+
+            '<div style="width:'+d.pct+'%;height:100%;background:'+costColor+';border-radius:2px;"></div>'+
+          '</div>'+
+          '<div style="font-size:0.6rem;color:var(--text-muted);">'+d.calls+' calls &middot; '+d.pct+'%</div>'+
+        '</div>'+
+        '<span class="del-placeholder"></span>';
+      // Add delete button separately to avoid quote issues
+      var delBtn = document.createElement('button');
+      delBtn.innerHTML = '&#128465;';
+      delBtn.title = 'Delete';
+      delBtn.style.cssText = 'background:none;border:none;color:rgba(255,255,255,0.2);cursor:pointer;font-size:13px;padding:2px;';
+      delBtn.addEventListener('click', function(){ deleteCode(d.c.code); });
+      row.querySelector('.del-placeholder').replaceWith(delBtn);
+      return row.outerHTML;
+    }).join('');
+  }
+
+
+  function copyCode(code){
+    navigator.clipboard.writeText(code).then(function(){
+      toast('Copied: ' + code);
+    }).catch(function(){
+      // Fallback
+      var el = document.createElement('textarea');
+      el.value = code; document.body.appendChild(el);
+      el.select(); document.execCommand('copy');
+      document.body.removeChild(el);
+      toast('Copied: ' + code);
+    });
+  }
+
+  async function deleteCode(code){
+    if(!confirm('Delete code '+code+'?')) return;
+    // We don't have a delete endpoint yet — show message
+    toast('To delete: go to Cloudflare KV → GREENROCK_CODES → delete key "'+code+'"');
+  }
+
+  // ── AI USAGE / COST MONITOR ───────────────────────────────
+  const loadUsageBtn = document.getElementById('load-usage-btn');
+  if(loadUsageBtn) loadUsageBtn.addEventListener('click', loadFullCostReport);
+
+  async function loadFullCostReport(){
+    const wurl = getWorkerURL();
+    const display = document.getElementById('usage-display');
+    if(!display) return; // guard - element must exist
+    display.innerHTML='Loading...';
+    try{
+      const res = await fetch(wurl,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({_appSecret:'greenrock-2024',action:'get-all-costs',adminKey:'Johnny11'})
+      });
+      const data = await res.json();
+      if(data.ok){
+        const g = data.globalStats||{};
+        const COST_IN=2.75/1000000, COST_OUT=12.50/1000000;
+        const totalCost=((g.total_prompt_tokens||0)*COST_IN+(g.total_completion_tokens||0)*COST_OUT).toFixed(4);
+        display.innerHTML=
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">'
+          +'<div style="background:rgba(0,180,216,0.08);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">'
+          +'<div style="font-size:1.2rem;font-weight:900;color:var(--cyan)">'+(g.total_requests||0)+'</div>'
+          +'<div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase">Total Queries</div></div>'
+          +'<div style="background:rgba(0,180,216,0.08);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">'
+          +'<div style="font-size:1.2rem;font-weight:900;color:var(--gold)">$'+totalCost+'</div>'
+          +'<div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase">Total AI Cost</div></div>'
+          +'</div>'
+          +'<div style="font-size:0.7rem;color:var(--text-muted);line-height:1.8;">'
+          +'Input: '+(g.total_prompt_tokens||0).toLocaleString()+' tokens<br>'
+          +'Output: '+(g.total_completion_tokens||0).toLocaleString()+' tokens<br>'
+          +'Last query: '+(g.last_query?new Date(g.last_query).toLocaleString():'N/A')+'</div>';
+
+        // Per-code data is shown in the main codes table (right panel)
+        // No separate per-code section needed
+      } else {
+        display.innerHTML='<p style="color:#ff8080">'+(data.error||'Error loading costs')+'</p>';
+      }
+    }catch(e){
+      display.innerHTML='<p style="color:#ff8080">Error: '+e.message+'</p>';
+    }
+  }
+
+  // Set cost limit button
+  const setLimitBtn = document.getElementById('set-limit-btn');
+  if(setLimitBtn) setLimitBtn.addEventListener('click', async function(){
+    const pct = prompt('Set cost limit as % of plan price (default 70):', '70');
+    if(!pct) return;
+    const wurl = getWorkerURL();
+    try{
+      const res = await fetch(wurl,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({_appSecret:'greenrock-2024',action:'set-cost-limit',adminKey:'Johnny11',pct:parseFloat(pct)})});
+      const d = await res.json();
+      if(d.ok) toast('Cost limit set to '+pct+'%');
+      else toast('Error: '+(d.error||'failed'));
+    }catch(e){ toast('Error: '+e.message); }
+  });
+
+  function toast(msg){
+    var el=document.getElementById('toast')||document.createElement('div');
+    el.id='toast';
+    el.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1e293b;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 20px;font-size:12px;color:#fff;z-index:999;';
+    el.textContent=msg;
+    document.body.appendChild(el);
+    setTimeout(function(){el.remove();},2500);
+  }
+
+  // ── PORTAL FILE UPLOADS ──────────────────────────────────
+  for(let i=0;i<7;i++){
+    (function(idx){
+      const btn=document.querySelector('#fc-'+idx+' .upload-btn-small');
+      const inp=document.getElementById('fi-'+idx);
+      if(btn&&inp){
+        btn.addEventListener('click',()=>inp.click());
+        inp.addEventListener('change',function(){
+          if(inp.files[0]){
+            const fs=document.getElementById('fs-'+idx);
+            if(fs){fs.textContent='OK: '+inp.files[0].name;fs.style.color='#10b981';}
+            const fc=document.getElementById('fc-'+idx);
+            if(fc) fc.style.borderColor='rgba(16,185,129,0.4)';
+            updateRunBtn();
+          }
+        });
+      }
+    })(i);
+  }
+
+  function updateRunBtn(){
+    let n=0;
+    for(let i=0;i<6;i++){const f=document.getElementById('fi-'+i);if(f&&f.files&&f.files[0])n++;}
+    const extra=document.getElementById('fi-6');
+    const hasExtra=extra&&extra.files&&extra.files[0];
+    const btn=document.getElementById('run-btn');
+    if(btn){
+      btn.textContent=n===6?(hasExtra?'Run Analysis (7 files)':'Run Analysis'):'Upload required files ('+n+'/6)';
+      btn.disabled=n<6;
+    }
+  }
+
+  // ── PORTAL ACCESS CODE ────────────────────────────────────
+  const codeBtn=document.querySelector('#code-entry .btn-p');
+  if(codeBtn) codeBtn.addEventListener('click',async function(){
+    const code=((document.getElementById('access-code')||{value:''}).value||'').trim().toUpperCase();
+    const wurl=getWorkerURL();
+    const errBox=document.getElementById('code-error');
+    try{
+      const res=await fetch(wurl,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({_appSecret:'greenrock-2024',action:'validate-code',code:code})});
+      const data=await res.json();
+      if(data.valid){
+        document.getElementById('code-entry').style.display='none';
+        document.getElementById('analysis-area').style.display='block';
+      } else {
+        if(errBox){errBox.textContent=data.error||'Invalid code';errBox.style.display='block';}
+      }
+    }catch(e){if(errBox){errBox.textContent='Connection error';errBox.style.display='block';}}
+  });
+
+
+  // ── DOWNLOAD EXAMPLE FILES ────────────────────────────────
+  const dlBtn = document.getElementById('download-examples-btn');
+  if(dlBtn) dlBtn.addEventListener('click', function(){
+    const files = [
+      {
+        name: '1_Collar_Coordinates.csv',
+        data: 'HoleID,Easting,Northing,Elevation_m,TotalDepth_m,CRS\nDH001,471280,8764050,1124,200,WGS84 UTM Zone 35S\nDH002,471350,8763980,1118,180,WGS84 UTM Zone 35S\nDH003,471520,8764020,1121,220,WGS84 UTM Zone 35S\nDH004,471650,8763890,1115,160,WGS84 UTM Zone 35S\nDH005,471400,8763850,1110,240,WGS84 UTM Zone 35S'
+      },
+      {
+        name: '2_Downhole_Survey.csv',
+        data: 'HoleID,Depth_m,Dip_deg,Azimuth_deg\nDH001,0,-60,270\nDH001,50,-61,271\nDH001,100,-62,270\nDH002,0,-55,090\nDH002,50,-56,090\nDH003,0,-65,180\nDH003,50,-65,180\nDH003,100,-66,181\nDH004,0,-60,045\nDH004,50,-61,046\nDH005,0,-70,270\nDH005,100,-70,270\nDH005,200,-71,271'
+      },
+      {
+        name: '3_Assay_Results.csv',
+        data: 'HoleID,From_m,To_m,Cu_pct,Co_ppm,Fe_pct,S_pct\nDH001,42,44,0.38,120,14.2,0.8\nDH001,44,46,1.24,450,18.5,2.1\nDH001,46,48,2.87,890,22.1,3.4\nDH001,48,50,1.65,560,19.8,2.8\nDH002,32,34,0.72,280,16.4,1.5\nDH002,34,36,1.45,520,20.2,2.6\nDH002,36,38,0.88,310,17.5,1.9\nDH003,60,62,3.12,1200,24.5,4.2\nDH003,62,64,2.95,1100,23.8,4.0\nDH003,64,66,1.88,720,21.0,3.1\nDH003,66,68,0.55,180,15.2,1.1\nDH005,100,120,1.92,680,21.5,3.0\nDH005,120,140,3.45,1350,25.8,4.8\nDH005,140,160,2.10,800,22.4,3.5'
+      },
+      {
+        name: '4_Lithological_Logs.csv',
+        data: 'HoleID,From_m,To_m,LithCode,FullName,Description\nDH001,0,20,sap,Saprolite,Oxidised weathered material - brown clay\nDH001,20,40,rat,Polymictic Breccia,Angular clasts in clay matrix\nDH001,40,100,dol,Dolerite,Fresh dark green dolerite - primary Cu host\nDH001,100,200,dol,Dolerite,Weakly altered dolerite with disseminated sulphides\nDH002,0,15,sap,Saprolite,Deeply weathered - red-brown clay\nDH002,15,40,Br,Fault Breccia,Fault zone - crushed rock haematite-stained\nDH002,40,100,dol,Dolerite,Fresh mineralised dolerite\nDH003,0,25,rat,Polymictic Breccia,Coarse breccia angular dolerite clasts\nDH003,25,220,dol,Dolerite,Strongly mineralised fresh dolerite - main ore zone\nDH004,0,10,sap,Saprolite,Thin saprolite cover\nDH004,10,160,dol,Dolerite,Barren dolerite - outside mineralised zone\nDH005,0,30,rat,Polymictic Breccia,Breccia zone\nDH005,30,240,dol,Dolerite,Mineralised dolerite - high-grade intercepts at depth'
+      },
+      {
+        name: '5_Geological_Context.csv',
+        data: 'HoleID,From_m,To_m,Structure,LithCode,Alteration,MineralAssemblage,Notes\nDH001,40,100,Disseminated,dol,Chlorite-carbonate,Chalcopyrite-pyrite,Cu in dolerite - moderate grade\nDH001,20,40,Breccia contact,rat,Silicification,Haematite,Pre-mineralisation breccia\nDH002,15,40,Fault zone,Br,Haematite-chlorite,Pyrite-chalcopyrite,Post-mineral fault cuts mineralisation\nDH002,40,100,Flat lying,dol,Carbonate-chlorite,Chalcopyrite-bornite,Dolerite contact zone\nDH003,25,220,Fold hinge,dol,Strong chlorite,Chalcopyrite-bornite-malachite,High-grade fold axis control\nDH005,30,240,Fold limb,dol,Chlorite-carbonate,Chalcopyrite-pyrite,Deep fold-hosted mineralisation'
+      },
+      {
+        name: '6_Target_Area_Polygon.csv',
+        data: 'PointID,Easting,Northing,CRS,Notes\nT001,471222,8764165,WGS84 UTM Zone 35S,NW corner - polygon start\nT002,471415,8764163,WGS84 UTM Zone 35S,N boundary\nT003,471450,8763965,WGS84 UTM Zone 35S,NE inner point\nT004,471827,8763926,WGS84 UTM Zone 35S,E boundary\nT005,471822,8763757,WGS84 UTM Zone 35S,SE corner\nT006,471230,8763768,WGS84 UTM Zone 35S,SW corner - close polygon'
+      }
+    ];
+
+    files.forEach(function(file, i){
+      setTimeout(function(){
+        var blob = new Blob([file.data], {type:'text/csv'});
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url; a.download = file.name;
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a); URL.revokeObjectURL(url);
+      }, i * 400);
+    });
+
+    dlBtn.textContent = 'Downloading 6 files...';
+    setTimeout(function(){ dlBtn.textContent = 'Download 6 Example CSV Files'; }, 3500);
+  });
+
+
+});
+
+// Language selector
+var LANG_STRINGS = {
+  en: {
+    tagline: 'AI-Powered Mineral Exploration',
+    h1: 'Find the <span class="accent">ore.</span><br>Drill with <span class="gold">precision.</span><br>Generate returns.',
+    sub: 'GreenRock AI combines geophysics, geochemistry and artificial intelligence to tell you exactly where to drill — before you spend a cent on the rig.',
+    btn: '⚡ Launch DualMind'
+  },
+  fr: {
+    tagline: 'Exploration Minérale par IA',
+    h1: 'Trouvez le <span class="accent">minerai.</span><br>Forez avec <span class="gold">précision.</span><br>Générez des rendements.',
+    sub: "GreenRock AI combine la géophysique, la géochimie et l'intelligence artificielle pour vous dire exactement où forer — avant de dépenser un centime.",
+    btn: '⚡ Lancer DualMind'
+  },
+  zh: {
+    tagline: 'AI驱动矿产勘探',
+    h1: '找到 <span class="accent">矿石。</span><br>精准 <span class="gold">錢探。</span><br>创造回报。',
+    sub: 'GreenRock AI结合地球物理学、地球化学和人工智能，在您花一分酷之前精确告诉您在哪里錢探。',
+    btn: '⚡ 启动DualMind'
+  },
+  pt: {
+    tagline: 'Exploração Mineral com IA',
+    h1: 'Encontre o <span class="accent">minério.</span><br>Perfure com <span class="gold">precisão.</span><br>Gere retornos.',
+    sub: 'A GreenRock AI combina geofísica, geoquímica e inteligência artificial para lhe dizer exatamente onde perfurar — antes de gastar um cêntimo.',
+    btn: '⚡ Lançar DualMind'
+  },
+  ar: {
+    tagline: 'استكشاف المعادن بالذكاء الاصطناعي',
+    h1: 'اعثر على <span class="accent">الخام.</span><br>احفر بـ <span class="gold">دقة.</span><br>حقق العوائد.',
+    sub: 'تجمع GreenRock AI بين الجيوفيزياء والجيوكيمياء والذكاء الاصطناعي لتخبرك بالضبط أين تحفر.',
+    btn: '⚡ إطلاق DualMind'
+  }
+};
+
+function setSiteLang(lang){
+  var s = LANG_STRINGS[lang] || LANG_STRINGS['en'];
+  localStorage.setItem('gr_lang', lang);
+  var sel = document.getElementById('site-lang');
+  if(sel) sel.value = lang;
+
+  // Update hero h1
+  var h1 = document.querySelector('section h1');
+  if(h1) h1.innerHTML = s.h1;
+
+  // Update hero subtitle
+  var sub = document.querySelector('.hero-sub');
+  if(sub) sub.textContent = s.sub;
+
+  // Update hero badge
+  var badge = document.querySelector('.hero-badge');
+  if(badge) badge.innerHTML = '<span class="badge-pulse"></span> ' + s.tagline;
+
+  // Update hero button
+  var btn = document.querySelector('a.hero-btn');
+  if(btn) btn.innerHTML = s.btn;
+
+  // RTL support for Arabic
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+}
+
+window.addEventListener('DOMContentLoaded', function(){
+  var savedLang = localStorage.getItem('gr_lang') || 'en';
+  setSiteLang(savedLang);
+});
+
+</script>
+</body></html>

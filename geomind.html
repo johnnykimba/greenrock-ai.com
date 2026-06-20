@@ -272,7 +272,10 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
 
   <!-- GEOLOGY: FILE UPLOAD SECTION -->
   <div class="upload-section" id="geo-upload" style="display:none;">
-    <div class="upload-section-title">Upload Data Files — select all that apply</div>
+    <div class="upload-section-title" style="display:flex;align-items:center;justify-content:space-between;">
+      <span>Upload Data Files — select all that apply</span>
+      <button id="geo-settings-btn-2" onclick="openSettings()" style="padding:5px 12px;border-radius:8px;border:1px solid rgba(16,185,129,0.4);background:rgba(16,185,129,0.08);color:var(--green);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">&#9881; Settings</button>
+    </div>
     <div class="file-grid" id="file-grid"></div>
     <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <select id="geo-mode" style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:11px;padding:5px 10px;outline:none;">
@@ -280,14 +283,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
         <option value="Drill Plan">Drill Plan Mode</option>
         <option value="Report">Report Mode</option>
       </select>
-      <select id="cutoff-grade" style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:11px;padding:5px 10px;outline:none;">
-        <option value="0.5">Cu cut-off: 0.5%</option>
-        <option value="0.4">0.4%</option>
-        <option value="0.6">0.6%</option>
-        <option value="0.8">0.8%</option>
-        <option value="1.0">1.0%</option>
-        <option value="1.5">1.5%</option>
-      </select>
+      <span id="cutoff-display" style="font-size:11px;color:var(--green);background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:7px;padding:5px 12px;">Cu cut-off: 0.5%</span>
       <span id="completeness-badge" style="font-size:11px;color:var(--muted);margin-left:auto;">0/7 files</span>
     </div>
   </div>
@@ -521,10 +517,43 @@ function triggerFileInput(id){
   document.getElementById('fi-'+id).click();
 }
 
+function countAllGeoFilesByCategory(category){
+  var count = 0;
+  for(var sid in _geoFiles){
+    if(_geoFiles[sid] && _geoFiles[sid].files){
+      count += _geoFiles[sid].files.filter(function(f){ return getFileCategory(f.name)===category; }).length;
+    }
+  }
+  return count;
+}
+
+function validateGeoFileLimits(newFiles){
+  var accepted = [];
+  var rejected = [];
+  newFiles.forEach(function(f){
+    var cat = getFileCategory(f.name);
+    if(cat === 'other'){ accepted.push(f); return; }
+    var currentCount = countAllGeoFilesByCategory(cat);
+    var pendingCount = accepted.filter(function(a){return getFileCategory(a.name)===cat;}).length;
+    var limit = FILE_LIMITS[cat];
+    if(currentCount + pendingCount + 1 > limit){
+      rejected.push(f.name+' ('+cat.toUpperCase()+' limit: '+limit+')');
+    } else {
+      accepted.push(f);
+    }
+  });
+  if(rejected.length){
+    toast('Limit reached — skipped '+rejected.length+' file(s). Max across all slots: '+FILE_LIMITS.pdf+' PDF, '+FILE_LIMITS.image+' photos, '+FILE_LIMITS.excel+' Excel.');
+  }
+  return accepted;
+}
+
 function handleGeoFiles(slotId, files){
   if(!files||!files.length) return;
   if(!_geoFiles[slotId]) _geoFiles[slotId] = {files:[], pages:null};
-  var arr = Array.from(files);
+  var rawArr = Array.from(files);
+  var arr = validateGeoFileLimits(rawArr);
+  if(!arr.length) return;
   _geoFiles[slotId].files = _geoFiles[slotId].files.concat(arr);
 
   // Show PDF page selector if any PDF uploaded
@@ -663,6 +692,9 @@ function selectMode(mode){
   if(mode==='sci'){
     if(btn) btn.style.display='none';
     if(tag) tag.style.display='none';
+  } else {
+    if(btn) btn.style.display='block';
+    if(tag) tag.style.display='block';
   }
   _currentMode = mode;
   document.getElementById('mode-selector').style.display='none';
@@ -674,6 +706,7 @@ function selectMode(mode){
     document.getElementById('pill-sci').classList.remove('active','sci');
     document.getElementById('chat-input').placeholder='Ask GeoMind... e.g. "Analyse uploaded assay data and recommend drill targets"';
     addWelcome('geo');
+    refreshCutoffDisplay();
   } else {
     document.getElementById('geo-upload').style.display='none';
     document.getElementById('pill-sci').classList.add('active','sci');
@@ -727,12 +760,58 @@ function addWelcome(mode){
   msgs.appendChild(div);
 }
 
+// ── FILE UPLOAD LIMITS ─────────────────────────────────────
+var FILE_LIMITS = { pdf: 30, image: 10, excel: 10 };
+
+function getFileCategory(filename){
+  var ext = filename.split('.').pop().toLowerCase();
+  if(ext === 'pdf') return 'pdf';
+  if(['png','jpg','jpeg'].includes(ext)) return 'image';
+  if(['xlsx','xls'].includes(ext)) return 'excel';
+  return 'other';
+}
+
+function countAttachedByCategory(category){
+  return _attachedFiles.filter(function(f){ return getFileCategory(f.name) === category; }).length;
+}
+
+function validateFileLimits(newFiles){
+  var counts = { pdf:0, image:0, excel:0 };
+  newFiles.forEach(function(f){
+    var cat = getFileCategory(f.name);
+    if(counts[cat] !== undefined) counts[cat]++;
+  });
+
+  var rejected = [];
+  var accepted = [];
+
+  newFiles.forEach(function(f){
+    var cat = getFileCategory(f.name);
+    if(cat === 'other'){ accepted.push(f); return; }
+    var currentCount = countAttachedByCategory(cat);
+    var limit = FILE_LIMITS[cat];
+    var wouldBeCount = currentCount + accepted.filter(function(a){return getFileCategory(a.name)===cat;}).length + 1;
+    if(wouldBeCount > limit){
+      rejected.push(f.name + ' (' + cat.toUpperCase() + ' limit: ' + limit + ')');
+    } else {
+      accepted.push(f);
+    }
+  });
+
+  if(rejected.length){
+    toast('Limit reached — skipped: ' + rejected.length + ' file(s). Max: ' + FILE_LIMITS.pdf + ' PDF, ' + FILE_LIMITS.image + ' photos, ' + FILE_LIMITS.excel + ' Excel.');
+  }
+
+  return accepted;
+}
+
 // ── ATTACH FILES (chat input) ─────────────────────────────
 document.getElementById('attach-btn').addEventListener('click',function(){
   document.getElementById('attach-input').click();
 });
 document.getElementById('attach-input').addEventListener('change',function(e){
-  var files = Array.from(e.target.files);
+  var rawFiles = Array.from(e.target.files);
+  var files = validateFileLimits(rawFiles);
   var hasPdf = files.some(function(f){ return f.name.toLowerCase().endsWith('.pdf'); });
   files.forEach(function(f){ _attachedFiles.push(f); });
   renderFilesPreview();
@@ -871,11 +950,12 @@ async function sendMessage(){
     }
     // Add cutoff and mode
     var geoModeVal = document.getElementById('geo-mode').value;
-    var cutoff = document.getElementById('cutoff-grade').value;
+    var cutoffLabel = _geoSettings.cutoffVal + ' ' + _geoSettings.cutoffUnit;
     if(userContent.length>0){
       var lastText = userContent[userContent.length-1];
-      if(lastText.type==='text') lastText.text += '\n[Mode: '+geoModeVal+' | Cu cut-off: '+cutoff+'%]';
-      else userContent.push({type:'text',text:'[Mode: '+geoModeVal+' | Cu cut-off: '+cutoff+'%]'});
+      var modeNote = '\n[Mode: '+geoModeVal+' | Cut-off: '+cutoffLabel+' | Commodity: '+_geoSettings.commodity+']';
+      if(lastText.type==='text') lastText.text += modeNote;
+      else userContent.push({type:'text',text:modeNote});
     }
   }
 
@@ -1234,7 +1314,7 @@ function buildSciConfidence(text){
     {k:'reasoning_quality',l:'Reasoning Quality'},
     {k:'consensus_level',l:'Scientific Consensus'},
     {k:'completeness',l:'Answer Completeness'},
-    {k:'uncertainty_acknowledged',l:'Uncertainty Noted'}
+    {k:'uncertainty_acknowledged',l:'Limitations Flagged'}
   ];
 
   var html='<div class="sci-confidence">';
@@ -1381,6 +1461,7 @@ function toast(msg){
 }
 
 buildFileGrid();
+refreshCutoffDisplay();
 
 function quickAsk(text){
   if(text === 'Ask your own question...'){
@@ -1982,8 +2063,20 @@ function loadSettings(){
   updateSettingsTag();
 }
 
+// Ensure cutoff display updates immediately when geo mode is shown
+function refreshCutoffDisplay(){
+  var cutoffDisp = document.getElementById('cutoff-display');
+  if(cutoffDisp) cutoffDisp.textContent = 'Cut-off: ' + _geoSettings.cutoffVal + ' ' + _geoSettings.cutoffUnit;
+}
+
 function updateSettingsTag(){
   var tag = document.getElementById('geo-settings-tag');
+  var cutoffDisp = document.getElementById('cutoff-display');
+
+  if(cutoffDisp){
+    cutoffDisp.textContent = 'Cut-off: ' + _geoSettings.cutoffVal + ' ' + _geoSettings.cutoffUnit;
+  }
+
   if(!tag) return;
   var isDefault = _geoSettings.commodity === 'Cu-Co' && _geoSettings.province.includes('Copperbelt');
   if(isDefault){

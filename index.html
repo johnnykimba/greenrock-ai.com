@@ -392,17 +392,17 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
 
 <!-- SERVICES -->
 <section id="services">
-  <div class="section-label">What We Do</div>
-  <h2 class="section-title">GreenRock <span style="color:var(--blue-bright)">Services</span></h2>
+  <div class="section-label" id="t-what-we-do">What We Do</div>
+  <h2 class="section-title" id="t-services-title">GreenRock <span style="color:var(--blue-bright)">Services</span></h2>
   <div class="services-grid">
-    <div class="svc-card"><div class="svc-icon">🎯</div><h3>Drill Plan Optimisation</h3><p>Using your existing drillhole data — geochemical assays, lithological logs, and grade intervals — our AI models predict exactly where the next hole should be drilled to intersect high-grade mineralisation.</p><span class="svc-tag">High Precision · Fast · Cost Effective</span></div>
-    <div class="svc-card"><div class="svc-icon">📡</div><h3>Geophysics &amp; New Discovery</h3><p>GreenRock deploys ground geophysics instruments in the field — IP, EM, and Magnetics — then processes datasets through our AI engine to detect and map new mineralisation zones.</p><span class="svc-tag">IP · EM · Magnetics · AI</span></div>
+    <div class="svc-card"><div class="svc-icon">🎯</div><h3 id="t-svc1-title">Drill Plan Optimisation</h3><p id="t-svc1-desc">Using your existing drillhole data — geochemical assays, lithological logs, and grade intervals — our AI models predict exactly where the next hole should be drilled to intersect high-grade mineralisation.</p><span class="svc-tag" id="t-svc1-tag">High Precision · Fast · Cost Effective</span></div>
+    <div class="svc-card"><div class="svc-icon">📡</div><h3 id="t-svc2-title">Geophysics &amp; New Discovery</h3><p id="t-svc2-desc">GreenRock deploys ground geophysics instruments in the field — IP, EM, and Magnetics — then processes datasets through our AI engine to detect and map new mineralisation zones.</p><span class="svc-tag" id="t-svc2-tag">IP · EM · Magnetics · AI</span></div>
   </div>
 </section>
 
 <!-- MINERALS -->
 <div class="minerals">
-  <div class="section-label">Commodity Coverage</div>
+  <div class="section-label" id="t-commodity-label">Commodity Coverage</div>
   <div class="mineral-chips">
     <div class="mchip"><span class="dot" style="background:#c8753a"></span>Copper</div>
     <div class="mchip"><span class="dot" style="background:#f0d080"></span>Gold</div>
@@ -426,8 +426,8 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
 <!-- PORTAL -->
 <!-- CONTACT -->
 <section id="contact">
-  <div class="section-label">Get In Touch</div>
-  <h2 class="section-title">Ready to find <span style="color:var(--blue-bright)">your next orebody?</span></h2>
+  <div class="section-label" id="t-contact-label">Get In Touch</div>
+  <h2 class="section-title" id="t-contact-title">Ready to find <span style="color:var(--blue-bright)">your next orebody?</span></h2>
   <div class="contact-grid">
     <div class="citem"><div class="citem-icon">📞</div><div class="citem-label">Phone</div><div class="citem-val"><a href="tel:+27662998028">+27 66 299 8028</a></div></div>
     <div class="citem"><div class="citem-icon">✉️</div><div class="citem-label">Email</div><div class="citem-val"><a href="mailto:kimba@greenrock-ai.com">kimba@greenrock-ai.com</a></div></div>
@@ -1040,31 +1040,86 @@ var LANG_STRINGS = {
     tagline: 'AI-Powered Mineral Exploration',
     h1: 'Find the <span class="accent">ore.</span><br>Drill with <span class="gold">precision.</span><br>Generate returns.',
     sub: 'GreenRock AI combines geophysics, geochemistry and artificial intelligence to tell you exactly where to drill — before you spend a cent on the rig.',
-    btn: '⚡ Launch DualMind'
+    btn: '⚡ Launch DualMind',
+    whatWeDo: 'What We Do',
+    servicesTitle: 'GreenRock <span style="color:var(--blue-bright)">Services</span>',
+    svc1Title: 'Drill Plan Optimisation',
+    svc1Desc: 'Using your existing drillhole data — geochemical assays, lithological logs, and grade intervals — our AI models predict exactly where the next hole should be drilled to intersect high-grade mineralisation.',
+    svc1Tag: 'High Precision · Fast · Cost Effective',
+    svc2Title: 'Geophysics &amp; New Discovery',
+    svc2Desc: 'GreenRock deploys ground geophysics instruments in the field — IP, EM, and Magnetics — then processes datasets through our AI engine to detect and map new mineralisation zones.',
+    svc2Tag: 'IP · EM · Magnetics · AI',
+    commodityLabel: 'Commodity Coverage',
+    contactLabel: 'Get In Touch',
+    contactTitle: 'Ready to find <span style="color:var(--blue-bright)">your next orebody?</span>'
   },
   fr: {
     tagline: 'Exploration Minérale par IA',
     h1: 'Trouvez le <span class="accent">minerai.</span><br>Forez avec <span class="gold">précision.</span><br>Générez des rendements.',
     sub: "GreenRock AI combine la géophysique, la géochimie et l'intelligence artificielle pour vous dire exactement où forer — avant de dépenser un centime.",
-    btn: '⚡ Lancer DualMind'
+    btn: '⚡ Lancer DualMind',
+    whatWeDo: 'Notre Mission',
+    servicesTitle: 'Services <span style="color:var(--blue-bright)">GreenRock</span>',
+    svc1Title: 'Optimisation du Plan de Forage',
+    svc1Desc: "À partir de vos données de forage existantes — analyses géochimiques, levés lithologiques et intervalles de teneur — nos modèles d'IA prédisent exactement où le prochain trou devrait être foré pour intercepter une minéralisation à haute teneur.",
+    svc1Tag: 'Haute Précision · Rapide · Économique',
+    svc2Title: 'Géophysique &amp; Nouvelle Découverte',
+    svc2Desc: "GreenRock déploie des instruments géophysiques sur le terrain — IP, EM et Magnétisme — puis traite les données via notre moteur d'IA pour détecter et cartographier de nouvelles zones de minéralisation.",
+    svc2Tag: 'IP · EM · Magnétisme · IA',
+    commodityLabel: 'Couverture des Matières Premières',
+    contactLabel: 'Contactez-Nous',
+    contactTitle: 'Prêt à trouver <span style="color:var(--blue-bright)">votre prochain gisement?</span>'
   },
   zh: {
     tagline: 'AI驱动矿产勘探',
-    h1: '找到 <span class="accent">矿石。</span><br>精准 <span class="gold">錢探。</span><br>创造回报。',
-    sub: 'GreenRock AI结合地球物理学、地球化学和人工智能，在您花一分酷之前精确告诉您在哪里錢探。',
-    btn: '⚡ 启动DualMind'
+    h1: '找到 <span class="accent">矿石。</span><br>精准 <span class="gold">钻探。</span><br>创造回报。',
+    sub: 'GreenRock AI结合地球物理学、地球化学和人工智能，在您花一分钱之前精确告诉您在哪里钻探。',
+    btn: '⚡ 启动DualMind',
+    whatWeDo: '我们的服务',
+    servicesTitle: 'GreenRock <span style="color:var(--blue-bright)">服务</span>',
+    svc1Title: '钻探计划优化',
+    svc1Desc: '利用您现有的钻孔数据——地球化学分析、岩性记录和品位区间——我们的AI模型精确预测下一个钻孔应在何处钻探以截获高品位矿化。',
+    svc1Tag: '高精度 · 快速 · 经济高效',
+    svc2Title: '地球物理与新发现',
+    svc2Desc: 'GreenRock在现场部署地球物理仪器——IP、EM和磁法——然后通过我们的AI引擎处理数据集，以检测和绘制新的矿化区域。',
+    svc2Tag: 'IP · EM · 磁法 · AI',
+    commodityLabel: '商品覆盖范围',
+    contactLabel: '联系我们',
+    contactTitle: '准备找到 <span style="color:var(--blue-bright)">您的下一个矿体？</span>'
   },
   pt: {
     tagline: 'Exploração Mineral com IA',
     h1: 'Encontre o <span class="accent">minério.</span><br>Perfure com <span class="gold">precisão.</span><br>Gere retornos.',
     sub: 'A GreenRock AI combina geofísica, geoquímica e inteligência artificial para lhe dizer exatamente onde perfurar — antes de gastar um cêntimo.',
-    btn: '⚡ Lançar DualMind'
+    btn: '⚡ Lançar DualMind',
+    whatWeDo: 'O Que Fazemos',
+    servicesTitle: 'Serviços <span style="color:var(--blue-bright)">GreenRock</span>',
+    svc1Title: 'Otimização do Plano de Perfuração',
+    svc1Desc: 'Usando os seus dados de furos existentes — análises geoquímicas, registos litológicos e intervalos de teor — os nossos modelos de IA prevêem exatamente onde o próximo furo deve ser perfurado para interceptar mineralização de alto teor.',
+    svc1Tag: 'Alta Precisão · Rápido · Económico',
+    svc2Title: 'Geofísica &amp; Nova Descoberta',
+    svc2Desc: 'A GreenRock implementa instrumentos geofísicos no terreno — IP, EM e Magnetometria — e depois processa os conjuntos de dados através do nosso motor de IA para detetar e mapear novas zonas de mineralização.',
+    svc2Tag: 'IP · EM · Magnetometria · IA',
+    commodityLabel: 'Cobertura de Commodities',
+    contactLabel: 'Entre em Contacto',
+    contactTitle: 'Pronto para encontrar <span style="color:var(--blue-bright)">o seu próximo depósito?</span>'
   },
   ar: {
     tagline: 'استكشاف المعادن بالذكاء الاصطناعي',
     h1: 'اعثر على <span class="accent">الخام.</span><br>احفر بـ <span class="gold">دقة.</span><br>حقق العوائد.',
     sub: 'تجمع GreenRock AI بين الجيوفيزياء والجيوكيمياء والذكاء الاصطناعي لتخبرك بالضبط أين تحفر.',
-    btn: '⚡ إطلاق DualMind'
+    btn: '⚡ إطلاق DualMind',
+    whatWeDo: 'ماذا نقدم',
+    servicesTitle: 'خدمات <span style="color:var(--blue-bright)">GreenRock</span>',
+    svc1Title: 'تحسين خطة الحفر',
+    svc1Desc: 'باستخدام بيانات الحفر الحالية لديك — التحاليل الجيوكيميائية والسجلات الصخرية وفترات الدرجة — تتنبأ نماذج الذكاء الاصطناعي لدينا بدقة بمكان حفر البئر التالي لاعتراض التمعدن عالي الدرجة.',
+    svc1Tag: 'دقة عالية · سريع · فعال من حيث التكلفة',
+    svc2Title: 'الجيوفيزياء والاكتشاف الجديد',
+    svc2Desc: 'تنشر GreenRock أجهزة جيوفيزيائية ميدانية — IP وEM والمغناطيسية — ثم تعالج البيانات من خلال محرك الذكاء الاصطناعي لاكتشاف ورسم مناطق تمعدن جديدة.',
+    svc2Tag: 'IP · EM · مغناطيسية · ذكاء اصطناعي',
+    commodityLabel: 'تغطية السلع',
+    contactLabel: 'تواصل معنا',
+    contactTitle: 'مستعد للعثور على <span style="color:var(--blue-bright)">جسمك المعدني التالي؟</span>'
   }
 };
 
@@ -1089,6 +1144,20 @@ function setSiteLang(lang){
   // Update hero button
   var btn = document.querySelector('a.hero-btn');
   if(btn) btn.innerHTML = s.btn;
+
+  // Update Services section
+  var setText = function(id, val){ var el = document.getElementById(id); if(el && val!=null) el.innerHTML = val; };
+  setText('t-what-we-do',    s.whatWeDo);
+  setText('t-services-title',s.servicesTitle);
+  setText('t-svc1-title',    s.svc1Title);
+  setText('t-svc1-desc',     s.svc1Desc);
+  setText('t-svc1-tag',      s.svc1Tag);
+  setText('t-svc2-title',    s.svc2Title);
+  setText('t-svc2-desc',     s.svc2Desc);
+  setText('t-svc2-tag',      s.svc2Tag);
+  setText('t-commodity-label', s.commodityLabel);
+  setText('t-contact-label', s.contactLabel);
+  setText('t-contact-title', s.contactTitle);
 
   // RTL support for Arabic
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';

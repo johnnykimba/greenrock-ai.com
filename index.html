@@ -359,10 +359,10 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
         <option value="ar" style="background:#fff;color:#1a1a2e;">🇸🇦 العربية Arabic</option>
       </select>
     </li>
-    <li><a href="#services">Services</a></li>
+    <li><a href="#services" id="t-nav-services">Services</a></li>
     
-    <li><a href="#contact">Contact</a></li>
-    <li><button class="nav-admin">Admin</button></li>
+    <li><a href="#contact" id="t-nav-contact">Contact</a></li>
+    <li><button class="nav-admin" id="t-nav-admin">Admin</button></li>
     <li><a href="geomind.html" id="dualmind-nav-btn" style="padding:7px 16px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:8px;color:#fff;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">&#9889; DualMind</a></li>
   </ul>
   <button class="hamburger" id="hamburger">
@@ -372,10 +372,10 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
 
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobile-menu">
-  <a href="#services">Services</a>
+  <a href="#services" id="t-nav-services-2">Services</a>
   
-  <a href="#contact">Contact</a>
-  <button>Admin</button>
+  <a href="#contact" id="t-nav-contact-2">Contact</a>
+  <button id="t-nav-admin-2">Admin</button>
 </div>
 
 <!-- HERO -->
@@ -418,7 +418,7 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
       <div class="svc-icon">🧠</div>
       <h3>GeoMind DualMind AI</h3>
       <p>Dual AI verification pipeline — GPT-4o analyses, Claude verifies. Confidence scorecard with drill recommendations for every interpretation.</p>
-      <a href="geomind.html" style="display:inline-block;margin-top:12px;padding:8px 18px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:8px;color:#fff;font-size:12px;font-weight:700;text-decoration:none;">Launch DualMind →</a>
+      <a href="geomind.html" style="display:inline-block;margin-top:12px;padding:8px 18px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:8px;color:#fff;font-size:12px;font-weight:700;text-decoration:none;" id="t-svc1-launch">Launch DualMind →</a>
     </div></div>
   </div>
 </div>
@@ -429,10 +429,10 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
   <div class="section-label" id="t-contact-label">Get In Touch</div>
   <h2 class="section-title" id="t-contact-title">Ready to find <span style="color:var(--blue-bright)">your next orebody?</span></h2>
   <div class="contact-grid">
-    <div class="citem"><div class="citem-icon">📞</div><div class="citem-label">Phone</div><div class="citem-val"><a href="tel:+27662998028">+27 66 299 8028</a></div></div>
-    <div class="citem"><div class="citem-icon">✉️</div><div class="citem-label">Email</div><div class="citem-val"><a href="mailto:kimba@greenrock-ai.com">kimba@greenrock-ai.com</a></div></div>
-    <div class="citem"><div class="citem-icon">🌐</div><div class="citem-label">Website</div><div class="citem-val"><a href="http://www.greenrock-ai.com/">www.greenrock-ai.com</a></div></div>
-    <div class="citem"><div class="citem-icon">📍</div><div class="citem-label">Address</div><div class="citem-val" style="font-size:0.75rem">114 Nicholson Rd, Unit 10<br>Sunward Park, Boksburg<br>Gauteng, South Africa</div></div>
+    <div class="citem"><div class="citem-icon">📞</div><div class="citem-label" id="t-c-phone">Phone</div><div class="citem-val"><a href="tel:+27662998028">+27 66 299 8028</a></div></div>
+    <div class="citem"><div class="citem-icon">✉️</div><div class="citem-label" id="t-c-email">Email</div><div class="citem-val"><a href="mailto:kimba@greenrock-ai.com">kimba@greenrock-ai.com</a></div></div>
+    <div class="citem"><div class="citem-icon">🌐</div><div class="citem-label" id="t-c-website">Website</div><div class="citem-val"><a href="http://www.greenrock-ai.com/">www.greenrock-ai.com</a></div></div>
+    <div class="citem"><div class="citem-icon">📍</div><div class="citem-label" id="t-c-address">Address</div><div class="citem-val" style="font-size:0.75rem" id="t-c-address-val">114 Nicholson Rd, Unit 10<br>Sunward Park, Boksburg<br>Gauteng, South Africa</div></div>
   </div>
 </section>
 
@@ -440,9 +440,9 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
 <section style="background:linear-gradient(135deg,#060e1a,#0c1829);padding:60px 20px;text-align:center;border-top:1px solid rgba(255,255,255,0.06);">
   <div style="max-width:600px;margin:0 auto;">
     <div style="font-size:40px;margin-bottom:12px;">⛏️🧠</div>
-    <h2 style="font-size:28px;font-weight:800;color:#fff;margin-bottom:8px;">GeoMind DualMind</h2>
-    <p style="font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:24px;line-height:1.7;">Upload your geophysical data, drill results, or maps.<br>Two AI models analyse and verify every interpretation.<br>Get a confidence scorecard with drill recommendations.</p>
-    <a href="geomind.html" style="display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:12px;color:#fff;font-size:16px;font-weight:800;text-decoration:none;box-shadow:0 4px 20px rgba(16,185,129,0.3);">Launch GeoMind AI &rarr;</a>
+    <h2 style="font-size:28px;font-weight:800;color:#fff;margin-bottom:8px;" id="t-banner-title">GeoMind DualMind</h2>
+    <p style="font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:24px;line-height:1.7;" id="t-banner-desc">Upload your geophysical data, drill results, or maps.<br>Two AI models analyse and verify every interpretation.<br>Get a confidence scorecard with drill recommendations.</p>
+    <a href="geomind.html" style="display:inline-block;padding:14px 36px;background:linear-gradient(135deg,#10b981,#06b6d4);border-radius:12px;color:#fff;font-size:16px;font-weight:800;text-decoration:none;box-shadow:0 4px 20px rgba(16,185,129,0.3);" id="t-banner-launch">Launch GeoMind AI &rarr;</a>
   </div>
 </section>
 <footer>
@@ -1051,7 +1051,18 @@ var LANG_STRINGS = {
     svc2Tag: 'IP · EM · Magnetics · AI',
     commodityLabel: 'Commodity Coverage',
     contactLabel: 'Get In Touch',
-    contactTitle: 'Ready to find <span style="color:var(--blue-bright)">your next orebody?</span>'
+    contactTitle: 'Ready to find <span style="color:var(--blue-bright)">your next orebody?</span>',
+    navServices: 'Services',
+    navContact: 'Contact',
+    navAdmin: 'Admin',
+    cPhone: 'Phone',
+    cEmail: 'Email',
+    cWebsite: 'Website',
+    cAddress: 'Address',
+    svc1Launch: 'Launch DualMind &rarr;',
+    bannerTitle: 'GeoMind DualMind',
+    bannerDesc: 'Upload your geophysical data, drill results, or maps.<br>Two AI models analyse and verify every interpretation.<br>Get a confidence scorecard with drill recommendations.',
+    bannerLaunch: 'Launch GeoMind AI &rarr;'
   },
   fr: {
     tagline: 'Exploration Minérale par IA',
@@ -1068,7 +1079,18 @@ var LANG_STRINGS = {
     svc2Tag: 'IP · EM · Magnétisme · IA',
     commodityLabel: 'Couverture des Matières Premières',
     contactLabel: 'Contactez-Nous',
-    contactTitle: 'Prêt à trouver <span style="color:var(--blue-bright)">votre prochain gisement?</span>'
+    contactTitle: 'Prêt à trouver <span style="color:var(--blue-bright)">votre prochain gisement?</span>',
+    navServices: 'Services',
+    navContact: 'Contact',
+    navAdmin: 'Admin',
+    cPhone: 'Téléphone',
+    cEmail: 'E-mail',
+    cWebsite: 'Site Web',
+    cAddress: 'Adresse',
+    svc1Launch: 'Lancer DualMind &rarr;',
+    bannerTitle: 'GeoMind DualMind',
+    bannerDesc: 'Téléchargez vos données géophysiques, résultats de forage ou cartes.<br>Deux modèles d\'IA analysent et vérifient chaque interprétation.<br>Obtenez un tableau de confiance avec des recommandations de forage.',
+    bannerLaunch: 'Lancer GeoMind AI &rarr;'
   },
   zh: {
     tagline: 'AI驱动矿产勘探',
@@ -1085,7 +1107,18 @@ var LANG_STRINGS = {
     svc2Tag: 'IP · EM · 磁法 · AI',
     commodityLabel: '商品覆盖范围',
     contactLabel: '联系我们',
-    contactTitle: '准备找到 <span style="color:var(--blue-bright)">您的下一个矿体？</span>'
+    contactTitle: '准备找到 <span style="color:var(--blue-bright)">您的下一个矿体？</span>',
+    navServices: '服务',
+    navContact: '联系',
+    navAdmin: '管理',
+    cPhone: '电话',
+    cEmail: '电子邮件',
+    cWebsite: '网站',
+    cAddress: '地址',
+    svc1Launch: '启动DualMind &rarr;',
+    bannerTitle: 'GeoMind DualMind',
+    bannerDesc: '上传您的地球物理数据、钻探结果或地图。<br>两个AI模型分析并验证每个解释。<br>获取带有钻探建议的置信度评分卡。',
+    bannerLaunch: '启动GeoMind AI &rarr;'
   },
   pt: {
     tagline: 'Exploração Mineral com IA',
@@ -1102,7 +1135,18 @@ var LANG_STRINGS = {
     svc2Tag: 'IP · EM · Magnetometria · IA',
     commodityLabel: 'Cobertura de Commodities',
     contactLabel: 'Entre em Contacto',
-    contactTitle: 'Pronto para encontrar <span style="color:var(--blue-bright)">o seu próximo depósito?</span>'
+    contactTitle: 'Pronto para encontrar <span style="color:var(--blue-bright)">o seu próximo depósito?</span>',
+    navServices: 'Serviços',
+    navContact: 'Contacto',
+    navAdmin: 'Admin',
+    cPhone: 'Telefone',
+    cEmail: 'E-mail',
+    cWebsite: 'Website',
+    cAddress: 'Endereço',
+    svc1Launch: 'Lançar DualMind &rarr;',
+    bannerTitle: 'GeoMind DualMind',
+    bannerDesc: 'Carregue os seus dados geofísicos, resultados de furos ou mapas.<br>Dois modelos de IA analisam e verificam cada interpretação.<br>Obtenha um cartão de confiança com recomendações de perfuração.',
+    bannerLaunch: 'Lançar GeoMind AI &rarr;'
   },
   ar: {
     tagline: 'استكشاف المعادن بالذكاء الاصطناعي',
@@ -1119,7 +1163,18 @@ var LANG_STRINGS = {
     svc2Tag: 'IP · EM · مغناطيسية · ذكاء اصطناعي',
     commodityLabel: 'تغطية السلع',
     contactLabel: 'تواصل معنا',
-    contactTitle: 'مستعد للعثور على <span style="color:var(--blue-bright)">جسمك المعدني التالي؟</span>'
+    contactTitle: 'مستعد للعثور على <span style="color:var(--blue-bright)">جسمك المعدني التالي؟</span>',
+    navServices: 'الخدمات',
+    navContact: 'اتصل بنا',
+    navAdmin: 'الإدارة',
+    cPhone: 'الهاتف',
+    cEmail: 'البريد الإلكتروني',
+    cWebsite: 'الموقع',
+    cAddress: 'العنوان',
+    svc1Launch: 'إطلاق DualMind &rarr;',
+    bannerTitle: 'GeoMind DualMind',
+    bannerDesc: 'قم بتحميل بياناتك الجيوفيزيائية أو نتائج الحفر أو الخرائط.<br>يقوم نموذجان من الذكاء الاصطناعي بتحليل والتحقق من كل تفسير.<br>احصل على بطاقة ثقة مع توصيات الحفر.',
+    bannerLaunch: 'إطلاق GeoMind AI &rarr;'
   }
 };
 
@@ -1158,6 +1213,28 @@ function setSiteLang(lang){
   setText('t-commodity-label', s.commodityLabel);
   setText('t-contact-label', s.contactLabel);
   setText('t-contact-title', s.contactTitle);
+
+  // Nav links
+  setText('t-nav-services', s.navServices);
+  setText('t-nav-contact',  s.navContact);
+  setText('t-nav-admin',    s.navAdmin);
+  setText('t-nav-services-2', s.navServices);
+  setText('t-nav-contact-2',  s.navContact);
+  setText('t-nav-admin-2',    s.navAdmin);
+
+  // Contact card labels
+  setText('t-c-phone',   s.cPhone);
+  setText('t-c-email',   s.cEmail);
+  setText('t-c-website', s.cWebsite);
+  setText('t-c-address', s.cAddress);
+
+  // Service card 1 launch link
+  setText('t-svc1-launch', s.svc1Launch);
+
+  // Bottom GeoMind banner
+  setText('t-banner-title',  s.bannerTitle);
+  setText('t-banner-desc',   s.bannerDesc);
+  setText('t-banner-launch', s.bannerLaunch);
 
   // RTL support for Arabic
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';

@@ -336,6 +336,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
       <div class="input-bottom">
         <button class="input-attach" id="attach-btn">+ Attach files</button>
         <input type="file" id="attach-input" multiple accept=".csv,.xlsx,.xls,.pdf,.png,.jpg,.jpeg,.doc,.docx,.txt,.json" style="display:none">
+        <span style="font-size:9px;color:rgba(255,255,255,0.25);align-self:center;">max 60 pages/PDF · 30 PDF · 10 photos · 10 Excel</span>
         <div class="input-files-preview" id="files-preview"></div>
         <button id="save-report-btn" onclick="exportLastReport()" style="display:none;margin-left:auto;padding:5px 14px;border-radius:7px;border:1px solid rgba(16,185,129,0.4);background:rgba(16,185,129,0.1);color:var(--green);font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;">&#128190; Save Report</button>
       </div>
@@ -344,7 +345,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
     <!-- PDF PAGE SELECTOR PANEL -->
     <div class="pdf-selector-panel" id="pdf-selector-panel">
       <div class="pdf-selector-title" style="display:flex;align-items:center;justify-content:space-between;">
-        <span>&#128195; SELECT PAGE RANGE FOR ANALYSIS</span>
+        <span>&#128195; SELECT PAGE RANGE FOR ANALYSIS <span style="color:var(--muted);font-weight:400;font-size:10px;">(maximum 60 pages per upload)</span></span>
         <button onclick="clearAllAttached()" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:7px;color:#ef4444;font-size:11px;font-weight:600;padding:4px 12px;cursor:pointer;">&#128465; Clear All Files</button>
       </div>
       <div class="pdf-thumbs-wrap">
@@ -354,7 +355,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
         <label>From Page</label>
         <input type="number" id="pdf-from" min="1" value="1">
         <label>To Page</label>
-        <input type="number" id="pdf-to" min="1" value="1">
+        <input type="number" id="pdf-to" min="1" value="60">
         <span id="pdf-page-count" style="font-size:10px;color:var(--muted);"></span>
       </div>
       <div class="pdf-status" id="pdf-status"></div>
@@ -1593,12 +1594,12 @@ async function showPdfSelector(file){
     var numPages = _pdfDoc.numPages;
 
     document.getElementById('pdf-from').value = 1;
-    document.getElementById('pdf-to').value = Math.min(numPages, 5);
-    document.getElementById('pdf-page-count').textContent = numPages + ' pages total';
+    document.getElementById('pdf-to').value = Math.min(numPages, 60);
+    document.getElementById('pdf-page-count').textContent = numPages + ' pages total (max 60 per upload)';
 
     // Render thumbnails
     thumbs.innerHTML = '';
-    var maxThumbs = Math.min(numPages, 20);
+    var maxThumbs = Math.min(numPages, 60);
     for(var p = 1; p <= maxThumbs; p++){
       var thumbDiv = document.createElement('div');
       thumbDiv.className = 'pdf-thumb';
@@ -1686,6 +1687,7 @@ function validateAndConfirmPages(showToast){
   var confirmBtn = document.getElementById('pdf-confirm-btn');
   if(!fromEl || !toEl) return;
 
+  var MAX_PAGES_PER_UPLOAD = 60;
   var totalPages = _pdfDoc ? _pdfDoc.numPages : 999;
   var from = Math.max(1, parseInt(fromEl.value) || 1);
   var to   = Math.max(1, parseInt(toEl.value)   || 5);
@@ -1693,6 +1695,14 @@ function validateAndConfirmPages(showToast){
   // Clamp: from >= 1, to <= totalPages, from <= to
   from = Math.max(1, Math.min(from, totalPages));
   to   = Math.max(from, Math.min(to, totalPages));
+
+  // Enforce max 60 pages per upload
+  var rangeSize = to - from + 1;
+  var wasLimited = false;
+  if(rangeSize > MAX_PAGES_PER_UPLOAD){
+    to = from + MAX_PAGES_PER_UPLOAD - 1;
+    wasLimited = true;
+  }
 
   // Auto-correct inputs
   fromEl.value = from;
@@ -1702,8 +1712,12 @@ function validateAndConfirmPages(showToast){
   _pdfConfirmed = true;
   _selectedPages = {from: from, to: to};
 
+  if(wasLimited && typeof toast === 'function'){
+    toast('Maximum 60 pages per upload — range adjusted to ' + from + '-' + to);
+  }
+
   if(status){
-    status.textContent = '\u2713 ' + count + ' page(s) confirmed — ready!';
+    status.textContent = '\u2713 ' + count + ' page(s) confirmed — ready! (max 60 per upload)';
     status.style.display = 'block';
   }
   if(confirmBtn){

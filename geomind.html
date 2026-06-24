@@ -336,7 +336,6 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
       <div class="input-bottom">
         <button class="input-attach" id="attach-btn">+ Attach files</button>
         <input type="file" id="attach-input" multiple accept=".csv,.xlsx,.xls,.pdf,.png,.jpg,.jpeg,.doc,.docx,.txt,.json" style="display:none">
-        <span style="font-size:9px;color:rgba(255,255,255,0.25);align-self:center;">max 60 pages/PDF · 30 PDF · 10 photos · 10 Excel</span>
         <div class="input-files-preview" id="files-preview"></div>
         <button id="save-report-btn" onclick="exportLastReport()" style="display:none;margin-left:auto;padding:5px 14px;border-radius:7px;border:1px solid rgba(16,185,129,0.4);background:rgba(16,185,129,0.1);color:var(--green);font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;">&#128190; Save Report</button>
       </div>
@@ -345,7 +344,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
     <!-- PDF PAGE SELECTOR PANEL -->
     <div class="pdf-selector-panel" id="pdf-selector-panel">
       <div class="pdf-selector-title" style="display:flex;align-items:center;justify-content:space-between;">
-        <span>&#128195; SELECT PAGE RANGE FOR ANALYSIS <span style="color:var(--muted);font-weight:400;font-size:10px;">(maximum 60 pages per upload)</span></span>
+        <span>&#128195; SELECT PAGE RANGE FOR ANALYSIS</span>
         <button onclick="clearAllAttached()" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:7px;color:#ef4444;font-size:11px;font-weight:600;padding:4px 12px;cursor:pointer;">&#128465; Clear All Files</button>
       </div>
       <div class="pdf-thumbs-wrap">
@@ -355,8 +354,9 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
         <label>From Page</label>
         <input type="number" id="pdf-from" min="1" value="1">
         <label>To Page</label>
-        <input type="number" id="pdf-to" min="1" value="60">
+        <input type="number" id="pdf-to" min="1" value="1">
         <span id="pdf-page-count" style="font-size:10px;color:var(--muted);"></span>
+        <span style="font-size:10px;color:#f59e0b;">Max 60 pages</span>
       </div>
       <div class="pdf-status" id="pdf-status"></div>
       <button class="pdf-confirm-btn" id="pdf-confirm-btn">&#10003; Confirm Page Selection — Ready!</button>
@@ -1279,7 +1279,22 @@ function buildGeoScorecard(text){
       '<div class="score-val" style="color:'+c+'">'+v+'</div>'+
       '<div class="score-label">'+m.l+'</div></div>';
   });
-  html+='</div></div>';
+  html+='</div>';
+
+  if(scorecard.recommendations && scorecard.recommendations.length){
+    var metricLabels={data_quality:'Data Quality',geological_consistency:'Geo. Consistency',anomaly_strength:'Anomaly Strength',target_definition:'Target Definition',risk_assessment:'Risk Assessment',recommendation_clarity:'Clarity'};
+    html+='<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">';
+    html+='<div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">&#128161; To Improve Confidence</div>';
+    html+='<ul style="margin:0;padding-left:18px;">';
+    scorecard.recommendations.forEach(function(r){
+      var label=metricLabels[r.metric]||r.metric||'';
+      var text=(typeof r==='string')?r:(r.text||'');
+      html+='<li style="font-size:12px;color:#cbd5e1;line-height:1.6;margin-bottom:4px;"><strong style="color:var(--gold);">'+label+':</strong> '+text+'</li>';
+    });
+    html+='</ul></div>';
+  }
+
+  html+='</div>';
   return html;
 }
 
@@ -1594,12 +1609,12 @@ async function showPdfSelector(file){
     var numPages = _pdfDoc.numPages;
 
     document.getElementById('pdf-from').value = 1;
-    document.getElementById('pdf-to').value = Math.min(numPages, 60);
-    document.getElementById('pdf-page-count').textContent = numPages + ' pages total (max 60 per upload)';
+    document.getElementById('pdf-to').value = Math.min(numPages, 5);
+    document.getElementById('pdf-page-count').textContent = numPages + ' pages total';
 
     // Render thumbnails
     thumbs.innerHTML = '';
-    var maxThumbs = Math.min(numPages, 60);
+    var maxThumbs = Math.min(numPages, 20);
     for(var p = 1; p <= maxThumbs; p++){
       var thumbDiv = document.createElement('div');
       thumbDiv.className = 'pdf-thumb';
@@ -1680,6 +1695,8 @@ document.addEventListener('DOMContentLoaded', function(){
   if(confirmBtn) confirmBtn.addEventListener('click', function(){ validateAndConfirmPages(true); });
 });
 
+var MAX_PDF_PAGES = 60; // hard cap on total selectable pages per PDF
+
 function validateAndConfirmPages(showToast){
   var fromEl = document.getElementById('pdf-from');
   var toEl   = document.getElementById('pdf-to');
@@ -1687,7 +1704,6 @@ function validateAndConfirmPages(showToast){
   var confirmBtn = document.getElementById('pdf-confirm-btn');
   if(!fromEl || !toEl) return;
 
-  var MAX_PAGES_PER_UPLOAD = 60;
   var totalPages = _pdfDoc ? _pdfDoc.numPages : 999;
   var from = Math.max(1, parseInt(fromEl.value) || 1);
   var to   = Math.max(1, parseInt(toEl.value)   || 5);
@@ -1696,12 +1712,11 @@ function validateAndConfirmPages(showToast){
   from = Math.max(1, Math.min(from, totalPages));
   to   = Math.max(from, Math.min(to, totalPages));
 
-  // Enforce max 60 pages per upload
-  var rangeSize = to - from + 1;
-  var wasLimited = false;
-  if(rangeSize > MAX_PAGES_PER_UPLOAD){
-    to = from + MAX_PAGES_PER_UPLOAD - 1;
-    wasLimited = true;
+  // Enforce the 60-page combined-selection cap
+  var capped = false;
+  if((to - from + 1) > MAX_PDF_PAGES){
+    to = from + MAX_PDF_PAGES - 1;
+    capped = true;
   }
 
   // Auto-correct inputs
@@ -1712,18 +1727,14 @@ function validateAndConfirmPages(showToast){
   _pdfConfirmed = true;
   _selectedPages = {from: from, to: to};
 
-  if(wasLimited && typeof toast === 'function'){
-    toast('Maximum 60 pages per upload — range adjusted to ' + from + '-' + to);
-  }
-
   if(status){
-    status.textContent = '\u2713 ' + count + ' page(s) confirmed — ready! (max 60 per upload)';
+    status.textContent = '\u2713 ' + count + ' page(s) confirmed — ready!' + (capped ? ' (capped at ' + MAX_PDF_PAGES + ' max)' : '');
     status.style.display = 'block';
   }
   if(confirmBtn){
     confirmBtn.textContent = '\u2713 ' + count + ' page(s) confirmed — ready!';
   }
-  if(showToast) toast(count + ' pages ready from PDF');
+  if(showToast) toast(count + ' pages ready from PDF' + (capped ? ' — capped at ' + MAX_PDF_PAGES : ''));
 }
 
 function hidePdfSelector(){

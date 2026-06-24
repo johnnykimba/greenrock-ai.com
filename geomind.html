@@ -1609,8 +1609,8 @@ async function showPdfSelector(file){
     var numPages = _pdfDoc.numPages;
 
     document.getElementById('pdf-from').value = 1;
-    document.getElementById('pdf-to').value = Math.min(numPages, 5);
-    document.getElementById('pdf-page-count').textContent = numPages + ' pages total';
+    document.getElementById('pdf-to').value = Math.min(numPages, MAX_PDF_PAGES);
+    document.getElementById('pdf-page-count').textContent = numPages + ' pages total' + (numPages > MAX_PDF_PAGES ? ' (max ' + MAX_PDF_PAGES + ' selectable)' : '');
 
     // Render thumbnails
     thumbs.innerHTML = '';
@@ -1706,7 +1706,7 @@ function validateAndConfirmPages(showToast){
 
   var totalPages = _pdfDoc ? _pdfDoc.numPages : 999;
   var from = Math.max(1, parseInt(fromEl.value) || 1);
-  var to   = Math.max(1, parseInt(toEl.value)   || 5);
+  var to   = Math.max(1, parseInt(toEl.value)   || MAX_PDF_PAGES);
 
   // Clamp: from >= 1, to <= totalPages, from <= to
   from = Math.max(1, Math.min(from, totalPages));

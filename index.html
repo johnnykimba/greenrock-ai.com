@@ -735,6 +735,11 @@ window.addEventListener('DOMContentLoaded', function(){
       const now = Date.now();
       const COST_IN=2.75/1000000, COST_OUT=12.50/1000000;
       const codes = (codesData.codes||[]).filter(function(c){
+        // Defensive check: some entries in this shared KV namespace may
+        // not have a real string 'code' field (legacy or differently-
+        // shaped data) — calling .startsWith on undefined was the actual
+        // cause of the "Cannot read properties of undefined" crash.
+        if(!c || typeof c.code !== 'string') return false;
         return c.code !== 'COST_LIMIT_PCT' && !c.code.startsWith('usage:') && !c.code.startsWith('cost_');
       });
       // Sort newest first

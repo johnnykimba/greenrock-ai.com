@@ -356,7 +356,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-se
         <label>To Page</label>
         <input type="number" id="pdf-to" min="1" value="1">
         <span id="pdf-page-count" style="font-size:10px;color:var(--muted);"></span>
-        <span style="font-size:10px;color:#f59e0b;">Max 60 pages</span>
+        <span style="font-size:10px;color:#f59e0b;">Max 30 pages</span>
       </div>
       <div class="pdf-status" id="pdf-status"></div>
       <button class="pdf-confirm-btn" id="pdf-confirm-btn">&#10003; Confirm Page Selection — Ready!</button>
@@ -899,7 +899,7 @@ async function sendMessage(){
     var ext = f.name.split('.').pop().toLowerCase();
     if(['png','jpg','jpeg'].includes(ext)){
       var b64 = await readFileBase64(f);
-      userContent.push({type:'image_url',image_url:{url:'data:image/'+ext+';base64,'+b64}});
+      userContent.push({type:'image_url',image_url:{url:'data:image/'+ext+';base64,'+b64, detail:'high'}});
     } else if(ext === 'pdf'){
       var b64 = await readFileBase64(f);
       var pageNote = '';
@@ -1057,13 +1057,18 @@ async function extractPdfText(file, fromPage, toPage){
     var numPages = pdf.numPages;
     toPage = Math.min(toPage, numPages);
     var text = '';
-    for(var p = fromPage; p <= toPage && text.length < 50000; p++){
+    // Raised from 50,000 to 180,000 — a dense text page runs roughly
+    // 2,000-3,000 characters, so 60 pages could need up to this range.
+    // The old 50,000 cap was silently truncating well before reaching
+    // later pages of a genuinely long document.
+    var MAX_TEXT_CHARS = 180000;
+    for(var p = fromPage; p <= toPage && text.length < MAX_TEXT_CHARS; p++){
       var page = await pdf.getPage(p);
       var tc   = await page.getTextContent();
       var pageText = tc.items.map(function(i){ return i.str; }).join(' ');
       text += '--- Page '+p+' ---' + String.fromCharCode(10) + pageText + String.fromCharCode(10);
     }
-    return text.trim().substring(0, 50000) || '[No text found in PDF — may be a scanned image]';
+    return text.trim().substring(0, MAX_TEXT_CHARS) || '[No text found in PDF — may be a scanned image]';
   }catch(e){
     return '[PDF text extraction error: '+e.message+']';
   }
@@ -1695,7 +1700,7 @@ document.addEventListener('DOMContentLoaded', function(){
   if(confirmBtn) confirmBtn.addEventListener('click', function(){ validateAndConfirmPages(true); });
 });
 
-var MAX_PDF_PAGES = 60; // hard cap on total selectable pages per PDF
+var MAX_PDF_PAGES = 30; // hard cap on total selectable pages per PDF — reduced from 60 because GPT-4o failed on 60-page uploads (~47,000 tokens, exceeding a 30,000 token API limit) while Claude succeeded on the same input; 30 pages keeps both AI models reliable
 
 function validateAndConfirmPages(showToast){
   var fromEl = document.getElementById('pdf-from');

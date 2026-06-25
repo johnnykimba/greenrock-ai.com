@@ -1252,6 +1252,22 @@ function buildGeoScorecard(text){
   }catch(e){}
   if(!scorecard) return '';
 
+  // Hard enforcement of the 70% per-metric threshold for recommendations —
+  // does not rely on the AI perfectly following the prompt rule. Any
+  // recommendation whose named metric actually scores 70 or above is
+  // dropped here, regardless of what the AI included. Same proven logic
+  // as Smart Academy's Research/Professional mode.
+  var CONFIDENCE_THRESHOLD = 70;
+  if(Array.isArray(scorecard.recommendations)){
+    scorecard.recommendations = scorecard.recommendations.filter(function(rec){
+      if(!rec || typeof rec !== 'object' || !rec.metric) return false;
+      var metricScore = scorecard[rec.metric];
+      return typeof metricScore === 'number' && metricScore < CONFIDENCE_THRESHOLD;
+    });
+  } else {
+    scorecard.recommendations = [];
+  }
+
   var score=scorecard.combined_score||scorecard.overall_confidence||0;
   var grade=scorecard.grade||'';
   var verdict=scorecard.verdict||'';

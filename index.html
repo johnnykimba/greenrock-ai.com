@@ -2396,23 +2396,27 @@ function showLegalTab(tab){
         <p>Full access for a limited time. No code needed.</p>
         <div id="trial-countdown" style="display:none;">--:--</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
-          <button class="btn-trial" onclick="startTrial()" style="flex:1;min-width:140px;padding:10px 16px;font-size:13px;">🚀 Start Free Trial</button>
+          <button class="btn-trial" onclick="startTrial()" style="flex:1;min-width:140px;padding:10px 16px;font-size:13px;">🚀 Try Learner/Student Free</button>
           <button class="btn-trial" onclick="startResearchTrial()" style="flex:1;min-width:140px;padding:10px 16px;font-size:13px;background:linear-gradient(135deg,#7c3aed,#a78bfa);">🔬 Try Research Free</button>
         </div>
       </div>
 
-      <div class="hero-btns" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;">
-        <button class="btn-hero-primary" onclick="goToLearnerArea()" data-t="hero_cta_learner_start" style="flex:1;min-width:180px;">🎓 Learner / Student (Start)</button>
-        <button onclick="document.getElementById('section-learning').scrollIntoView({behavior:'smooth'})" style="flex:1;min-width:160px;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 16px;background:linear-gradient(135deg,#1a56db,#0891b2);border:none;border-radius:12px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">
+      <div class="hero-btns" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;justify-content:center;">
+        <button onclick="document.getElementById('section-learning').scrollIntoView({behavior:'smooth'})" style="flex:0 1 220px;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 16px;background:linear-gradient(135deg,#1a56db,#0891b2);border:none;border-radius:12px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">
           <span>📘</span>
           <span data-t="btn_guide_learner">User Guide — Student</span>
         </button>
-        <button onclick="window.open('help.html','_blank')" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 18px;background:linear-gradient(135deg,#ef4444,#dc2626);border:none;border-radius:12px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 14px rgba(239,68,68,0.4);">
+        <button onclick="window.open('help.html','_blank')" style="flex:0 1 140px;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 18px;background:linear-gradient(135deg,#ef4444,#dc2626);border:none;border-radius:12px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 14px rgba(239,68,68,0.4);">
           <span style="font-size:16px;font-weight:900;">?</span><span>Help</span>
         </button>
       </div>
 
-      
+      <!-- How to Pay link — landing page only -->
+      <div style="margin-top:14px;text-align:center;">
+        <a href="payment.html" style="display:inline-flex;align-items:center;gap:7px;padding:9px 18px;background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.3);border-radius:10px;color:#06b6d4;font-size:13px;font-weight:700;text-decoration:none;font-family:'DM Sans',sans-serif;">
+          ❓ How to Pay — Step by Step Guide
+        </a>
+      </div>
     </div>
     <div class="hero-visual" aria-hidden="true">
       <div class="nb-card">
@@ -4285,7 +4289,7 @@ function copyProofCode(){
           <!-- Hidden inputs -->
           <input type="file" id="file-input" accept="image/*,.heic,.heif" multiple onchange="handleFiles(this.files)" style="display:none;">
           <input type="file" id="camera-input" accept="image/*" capture="environment" onchange="handleFiles(this.files)" style="display:none;">
-          <input type="file" id="pdf-input" accept=".pdf,application/pdf,.xlsx,.xls" onchange="handlePDF(this.files[0])" style="display:none;">
+          <input type="file" id="pdf-input" accept=".pdf,application/pdf,.xlsx,.xls" onchange="handleAllFiles(this.files)" style="display:none;">
 
           <!-- Single upload zone -->
           <div class="upload-zone" id="upload-zone"
@@ -4561,11 +4565,19 @@ function copyProofCode(){
       <!-- QUESTION -->
       <div id="question-ui" style="min-height:100px;"></div>
 
-      <!-- Mobile toggle button — only visible on small screens, appears after submitting an answer -->
+      <!-- Mobile toggle button — only visible on small screens, appears after submitting an answer.
+           Made more noticeable (pulse animation + bouncing arrow) since some learners were
+           missing it and not scrolling down to see the solution/explanation. -->
       <button id="quiz-explanation-toggle" onclick="toggleQuizExplanation()"
-        style="display:none;margin:0 16px 8px;padding:12px 16px;background:linear-gradient(135deg,#1a56db,#06b6d4);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;width:calc(100% - 32px);text-align:left;">
-        📖 See Explanation &amp; Tutor ▼
+        style="display:none;margin:0 16px 8px;padding:14px 16px;background:linear-gradient(135deg,#1a56db,#06b6d4);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;width:calc(100% - 32px);text-align:center;animation:mobileTogglePulse 1.4s ease-in-out infinite;">
+        👇 On phone: scroll down / tap here to see the solution ▼
       </button>
+      <style>
+        @keyframes mobileTogglePulse{
+          0%,100%{ box-shadow:0 0 0 0 rgba(6,182,212,0.5); transform:scale(1); }
+          50%{ box-shadow:0 0 0 10px rgba(6,182,212,0); transform:scale(1.02); }
+        }
+      </style>
 
       <!-- CHAT -->
       <div id="chat-box" style="background:#111827;border-radius:14px;padding:14px;min-height:200px;max-height:calc(100vh - 160px);overflow-y:auto;display:flex;flex-direction:column;gap:12px;position:sticky;top:65px;"></div>
@@ -4873,14 +4885,15 @@ function toggleQuizExplanation(){
   var box = document.getElementById('chat-box');
   var btn = document.getElementById('quiz-explanation-toggle');
   if(!box || !btn) return;
+  btn.style.animation = 'none'; // stop pulsing once the student has interacted with it
   _quizExplVisible = !_quizExplVisible;
   if(_quizExplVisible){
     box.classList.add('mobile-visible');
-    btn.innerHTML = '📖 Hide Explanation &amp; Tutor ▲';
+    btn.innerHTML = '📖 Hide Solution ▲';
     setTimeout(function(){ box.scrollIntoView({behavior:'smooth', block:'start'}); }, 100);
   } else {
     box.classList.remove('mobile-visible');
-    btn.innerHTML = '📖 See Explanation &amp; Tutor ▼';
+    btn.innerHTML = '👇 On phone: scroll down / tap here to see the solution ▼';
   }
 }
 
@@ -4889,11 +4902,12 @@ function showMobileExplanationToggle(){
   var btn = document.getElementById('quiz-explanation-toggle');
   if(btn){
     btn.style.display = 'block';
+    btn.style.animation = 'mobileTogglePulse 1.4s ease-in-out infinite'; // re-enable pulse for each new question
     var box = document.getElementById('chat-box');
     if(box && !_quizExplVisible){
       _quizExplVisible = true;
       box.classList.add('mobile-visible');
-      btn.innerHTML = '📖 Hide Explanation &amp; Tutor ▲';
+      btn.innerHTML = '📖 Hide Solution ▲';
       setTimeout(function(){ box.scrollIntoView({behavior:'smooth', block:'start'}); }, 300);
     }
   }
@@ -5194,8 +5208,24 @@ function switchUploadTab(tab){
 // ════════════════════════════════════════════════
 // PDF HANDLING
 // ════════════════════════════════════════════════
-let pdfDoc = null;
+let pdfDoc = null;          // kept for backward-compat references elsewhere; points to the LAST loaded doc
+let pdfDocs = [];            // Bug fix: array of {doc, startPage, endPage} — one entry per uploaded PDF,
+                             // so multiple PDFs uploaded in the same session can each be looked up correctly
+                             // instead of only ever reading pages from whichever PDF was uploaded last.
 let pdfTotalPages = 0;
+
+// Given a GLOBAL page number (1-based, cumulative across all uploaded PDFs),
+// return the correct {doc, localPage} to call .getPage() on.
+function pdfDocForGlobalPage(globalPage){
+  for(var i=0; i<pdfDocs.length; i++){
+    var entry = pdfDocs[i];
+    if(globalPage >= entry.startPage && globalPage <= entry.endPage){
+      return { doc: entry.doc, localPage: globalPage - entry.startPage + 1 };
+    }
+  }
+  // Fallback (shouldn't happen): use the last doc with the page number as-is
+  return { doc: pdfDoc, localPage: globalPage };
+}
 
 async function handleAllFiles(files){
   if(!files || !files.length) return;
@@ -5214,23 +5244,71 @@ async function handleAllFiles(files){
   for(var i=0;i<pdfs.length;i++) await handlePDF(pdfs[i]);
 
   // Process Excel
-  if(excels.length && typeof XLSX !== 'undefined'){
-    var txt = '';
-    for(var j=0;j<excels.length;j++){
-      var buf = await excels[j].arrayBuffer();
-      var wb = XLSX.read(buf,{type:'array'});
-      wb.SheetNames.forEach(function(sn){
-        txt += '=== '+excels[j].name+' | '+sn+' ===\n'+XLSX.utils.sheet_to_csv(wb.Sheets[sn])+'\n\n';
-      });
+  if(excels.length){
+    // Bug fix: this used to silently do NOTHING if the XLSX library
+    // hadn't finished loading from its CDN script tag yet (e.g. on a slow
+    // connection, or if the script was still loading on first page visit).
+    // The user would see "Excel is not uploading" with no explanation.
+    // Now attempts to load the library on demand if it's not ready, and
+    // shows a clear error message if it genuinely can't be loaded.
+    if(typeof XLSX === 'undefined'){
+      toast('⏳ Loading Excel support...', 'ok');
+      try{
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js');
+      }catch(e){
+        console.warn('XLSX load failed:', e);
+      }
     }
-    saPDFText = (saPDFText ? saPDFText+'\n\n' : '') + txt;
-    if(!S.images||!S.images.length) S.images=[{type:'excel',data:''}];
-    var sessionSec=document.getElementById('session-section');
-    if(sessionSec) sessionSec.style.display='block';
+    if(typeof XLSX === 'undefined'){
+      toast('❌ Could not load Excel support. Please check your internet connection and try again.', 'err');
+    } else {
+      var txt = '';
+      for(var j=0;j<excels.length;j++){
+        try{
+          var buf = await excels[j].arrayBuffer();
+          var wb = XLSX.read(buf,{type:'array'});
+          wb.SheetNames.forEach(function(sn){
+            txt += '=== '+excels[j].name+' | '+sn+' ===\n'+XLSX.utils.sheet_to_csv(wb.Sheets[sn])+'\n\n';
+          });
+        }catch(e){
+          toast('Excel read error: '+excels[j].name, 'err');
+          console.warn('Excel parse error:', e);
+        }
+      }
+      if(txt){
+        saPDFText = (saPDFText ? saPDFText+'\n\n' : '') + txt;
+        if(!S.images||!S.images.length) S.images=[{type:'excel',data:''}];
+        var sessionSec=document.getElementById('session-section');
+        if(sessionSec) sessionSec.style.display='block';
+        // Bug fix: parsing succeeded but nothing on screen ever confirmed
+        // it — no counter update, no visible attachment shown. The file
+        // genuinely uploaded, but looked exactly like nothing happened.
+        var ctr = document.getElementById('upload-counter');
+        if(ctr){
+          ctr.textContent = '✅ ' + excels.length + ' Excel file' + (excels.length>1?'s':'') + ' loaded';
+          ctr.style.color = '#10b981';
+        }
+        // Add a visible badge for each Excel file into the thumbnail strip
+        var thumbStrip = document.getElementById('pdf-thumb-strip');
+        if(thumbStrip){
+          for(var xi=0; xi<excels.length; xi++){
+            var badge = document.createElement('div');
+            badge.style.cssText = 'flex-shrink:0;width:70px;height:90px;background:rgba(16,185,129,0.1);border:2px solid rgba(16,185,129,0.4);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px;text-align:center;';
+            badge.innerHTML = '<span style="font-size:22px;">📊</span><span style="font-size:9px;color:#10b981;font-weight:700;margin-top:4px;word-break:break-all;line-height:1.2;">' + excels[xi].name.slice(0,14) + '</span>';
+            thumbStrip.appendChild(badge);
+          }
+        }
+        toast('✅ Excel file' + (excels.length>1?'s':'') + ' loaded successfully!', 'ok');
+      }
+    }
   }
 
   var total = imgs.length+pdfs.length+excels.length;
   if(total>1) toast('✅ '+total+' files loaded ('+[imgs.length?imgs.length+' image':'',pdfs.length?pdfs.length+' PDF':'',excels.length?excels.length+' Excel':''].filter(Boolean).join(', ')+')','ok');
+  // Auto-click removed after repeated timing-related bugs with multiple
+  // PDF uploads — extraction is now always a deliberate, manual click on
+  // "Use Selected Pages for Quiz", once the user can see the correct
+  // combined page range for ALL uploaded files.
 }
 
 async function handleMultiplePDFs(files){
@@ -5250,15 +5328,26 @@ async function handleMultiplePDFs(files){
     var isImg = fname.endsWith('.jpg') || fname.endsWith('.jpeg') || fname.endsWith('.png');
     fileNames.push(file.name);
 
-    if(isExcel && typeof XLSX !== 'undefined'){
-      try {
-        var buf = await file.arrayBuffer();
-        var wb = XLSX.read(buf, {type:'array'});
-        wb.SheetNames.forEach(function(sn){
-          excelText += '=== FILE: ' + file.name + ' | Sheet: ' + sn + ' ===\n' + XLSX.utils.sheet_to_csv(wb.Sheets[sn]) + '\n\n';
-        });
-        excelCount++;
-      } catch(e){ toast('Excel error: ' + file.name, 'err'); }
+    if(isExcel){
+      // Same fix as handleAllFiles — attempt to load XLSX on demand
+      // instead of silently skipping if it isn't ready yet.
+      if(typeof XLSX === 'undefined'){
+        toast('⏳ Loading Excel support...', 'ok');
+        try{ await loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'); }
+        catch(e){ console.warn('XLSX load failed:', e); }
+      }
+      if(typeof XLSX === 'undefined'){
+        toast('❌ Could not load Excel support for: ' + file.name, 'err');
+      } else {
+        try {
+          var buf = await file.arrayBuffer();
+          var wb = XLSX.read(buf, {type:'array'});
+          wb.SheetNames.forEach(function(sn){
+            excelText += '=== FILE: ' + file.name + ' | Sheet: ' + sn + ' ===\n' + XLSX.utils.sheet_to_csv(wb.Sheets[sn]) + '\n\n';
+          });
+          excelCount++;
+        } catch(e){ toast('Excel error: ' + file.name, 'err'); }
+      }
 
     } else if(isPDF){
       // Each PDF adds its rendered pages to S.images via handlePDF
@@ -5299,6 +5388,7 @@ async function handleMultiplePDFs(files){
   var sessionSec = document.getElementById('session-section');
   if(sessionSec) sessionSec.style.display = 'block';
   toast('✅ ' + files.length + ' files loaded (' + parts.join(', ') + ')', 'ok');
+  // Auto-click removed — extraction is now always a deliberate manual click.
 }
 
 async function handlePDF(file){
@@ -5389,6 +5479,9 @@ async function handlePDF(file){
     const arrayBuffer = await file.arrayBuffer();
     pdfDoc = await window.pdfjsLib.getDocument({data: arrayBuffer}).promise;
     var newPages = pdfDoc.numPages;
+    var startPage = pdfTotalPages + 1;      // this new PDF's pages start right after the previous cumulative total
+    var endPage   = pdfTotalPages + newPages;
+    pdfDocs.push({ doc: pdfDoc, startPage: startPage, endPage: endPage });
     pdfTotalPages += newPages; // accumulate across multiple PDFs
 
     // Show cumulative count
@@ -5437,7 +5530,8 @@ async function renderPDFThumbs(count){
 
   const thumbs = [];
   for(let i=1; i<=count; i++){
-    const page = await pdfDoc.getPage(i);
+    var lookup = pdfDocForGlobalPage(i);
+    const page = await lookup.doc.getPage(lookup.localPage);
     const viewport = page.getViewport({scale:0.3});
     const canvas = document.createElement('canvas');
     canvas.width = viewport.width;
@@ -5492,11 +5586,15 @@ function validatePageRange(){
   info.style.color = '#10b981';
   info.textContent = `✅ ${count} page(s) selected (Pages ${from} to ${to})`;
 
-  // Auto-confirm: extract pages automatically after short delay
-  clearTimeout(window._autoExtractTimer);
-  window._autoExtractTimer = setTimeout(function(){
-    extractPDFPages();
-  }, 800);
+  // Bug fix: this used to auto-extract 800ms after EVERY single PDF
+  // upload via a setTimeout. When multiple PDFs were uploaded one after
+  // another (e.g. File 1 = 20 pages, File 2 = 15 pages), each upload
+  // scheduled its own auto-extract timer, and clearTimeout only ever
+  // cancelled the PREVIOUS timer — so whichever file's upload finished
+  // last effectively "won" and got extracted using only its own local
+  // page count, silently dropping pages from earlier files. Extraction
+  // now only runs when the user explicitly clicks "Use Selected Pages",
+  // once all files have finished uploading and the combined range is final.
 }
 
 async function extractPDFPages(){
@@ -5513,7 +5611,68 @@ async function extractPDFPages(){
   const existingCount = S.images.length;
   const sessionRemaining = Math.max(1, 30 - existingCount);
   const effectiveMax = Math.min(30, sessionRemaining);
-  if(count > effectiveMax){
+
+  // Bug fix: this used to always keep pages [from, from+effectiveMax-1] —
+  // a plain contiguous cut starting from the beginning of the range. With
+  // multiple PDFs uploaded (e.g. File 1 = 20 pages, File 2 = 30 pages,
+  // total 50), this meant ALL of File 1 was kept and only the first
+  // (effectiveMax - 20) pages of File 2 made it in — File 2 was
+  // overwhelmingly cut regardless of its own size. Now, when multiple
+  // files are involved and the total exceeds the cap, pages are selected
+  // PROPORTIONALLY from each file based on its share of the total pages,
+  // spread evenly through each file rather than always keeping the start.
+  var pagesToExtract = [];
+  var isMultiFile = (typeof pdfDocs !== 'undefined' && pdfDocs.length > 1);
+
+  if(count > effectiveMax && isMultiFile){
+    // Figure out which files fall (even partially) within [from, to]
+    var filesInRange = pdfDocs.filter(function(entry){
+      return entry.endPage >= from && entry.startPage <= to;
+    });
+    var totalPagesInRange = filesInRange.reduce(function(sum, entry){
+      var s = Math.max(entry.startPage, from);
+      var e = Math.min(entry.endPage, to);
+      return sum + (e - s + 1);
+    }, 0);
+
+    filesInRange.forEach(function(entry){
+      var fileStart = Math.max(entry.startPage, from);
+      var fileEnd   = Math.min(entry.endPage, to);
+      var fileTotal = fileEnd - fileStart + 1;
+      // This file's fair share of the overall cap, proportional to its size
+      var fileShare = Math.max(1, Math.round((fileTotal / totalPagesInRange) * effectiveMax));
+      if(fileShare >= fileTotal){
+        // Small enough to include entirely
+        for(var p = fileStart; p <= fileEnd; p++) pagesToExtract.push(p);
+      } else {
+        // Spread the selection evenly through this file rather than just
+        // taking its first N pages, so a large later file still gets
+        // representative pages from throughout, not only its start.
+        var step = fileTotal / fileShare;
+        for(var k = 0; k < fileShare; k++){
+          var pageNum = fileStart + Math.floor(k * step);
+          if(pageNum > fileEnd) pageNum = fileEnd;
+          pagesToExtract.push(pageNum);
+        }
+      }
+    });
+    // Trim/pad to exactly effectiveMax in case of rounding drift
+    pagesToExtract = Array.from(new Set(pagesToExtract)).sort(function(a,b){return a-b;});
+    if(pagesToExtract.length > effectiveMax) pagesToExtract = pagesToExtract.slice(0, effectiveMax);
+
+    to = pagesToExtract[pagesToExtract.length - 1];
+    count = pagesToExtract.length;
+    const toEl = document.getElementById('pdf-to');
+    if(toEl) toEl.value = to;
+
+    var multiFileNote = '\n\nNote: You uploaded ' + pdfDocs.length + ' PDF files (total ' + pdfTotalPages + ' pages combined). Since this exceeds the 30-page limit, pages were selected proportionally from EACH file (not just the first file) so every document is represented.';
+    if(existingCount > 0){
+      alert('⚠️ Session limit is 30 items total (combined photos/PDF/Excel).\n\nYou already have ' + existingCount + ' item(s) in this session. ' + count + ' pages will be added, spread fairly across your uploaded files.' + multiFileNote);
+    } else {
+      alert('⚠️ Learning mode is limited to 30 pages.\n\nYour combined PDFs have more than 30 pages. ' + count + ' pages will be used, spread fairly across your uploaded files.' + multiFileNote);
+    }
+  } else if(count > effectiveMax){
+    // Single file (or no pdfDocs tracking) — original simple contiguous cut
     to = from + effectiveMax - 1;
     count = effectiveMax;
     const toEl = document.getElementById('pdf-to');
@@ -5523,23 +5682,29 @@ async function extractPDFPages(){
     } else {
       alert('⚠️ Learning mode is limited to 30 pages.\n\nYour PDF has ' + count + ' pages. Only pages ' + from + ' to ' + to + ' will be used.\n\nTip: Upload 3–5 focused pages for best results.');
     }
+    for(var p2 = from; p2 <= to; p2++) pagesToExtract.push(p2);
+  } else {
+    // No cap needed — use the full requested range as-is
+    for(var p3 = from; p3 <= to; p3++) pagesToExtract.push(p3);
   }
+
   const info = document.getElementById('pdf-range-info');
-  info.textContent = `⏳ Extracting pages ${from} to ${to}...`;
+  info.textContent = `⏳ Extracting ${pagesToExtract.length} page(s)...`;
   info.style.color = '#1a56db';
 
   // Remove any previously-extracted PDF pages (re-extraction with a new
   // range) while preserving photos/Excel content already in the session.
   S.images = S.images.filter(function(img){ return img.pdfPage === undefined; });
 
-  const pageCount = (to - from + 1);
+  const pageCount = pagesToExtract.length;
   // Scale down resolution/quality when many pages are selected, to keep total payload reasonable
   // 1-3 pages: full quality for best OCR accuracy. 4+ pages: reduced to avoid oversized requests.
   const pdfScale   = pageCount <= 3 ? 2.0 : pageCount <= 6 ? 1.5 : 1.2;
   const pdfQuality = pageCount <= 3 ? 0.92 : pageCount <= 6 ? 0.85 : 0.78;
 
-  for(let i=from; i<=to; i++){
-    const page     = await pdfDoc.getPage(i);
+  for(const i of pagesToExtract){
+    var lookup    = pdfDocForGlobalPage(i);
+    const page     = await lookup.doc.getPage(lookup.localPage);
     const viewport = page.getViewport({scale:pdfScale});
     const canvas   = document.createElement('canvas');
     canvas.width   = viewport.width;
@@ -6740,23 +6905,21 @@ function selectQ(n){
 function handleDropAuto(event){
   const files = event.dataTransfer.files;
   if(!files||!files.length) return;
-  const file = files[0];
-  var fn0 = file.name.toLowerCase();
-  if(file.type === 'application/pdf' || fn0.endsWith('.pdf')){
-    handlePDF(file);
-  } else {
-    // Allow PNG and JPG images
-    const allImg = Array.from(files).every(f => {
-      var fn = f.name.toLowerCase();
-      return f.type === 'image/png' || f.type === 'image/jpeg' ||
-             fn.endsWith('.png') || fn.endsWith('.jpg') || fn.endsWith('.jpeg');
-    });
-    if(!allImg){
-      toast('Only PDF, Excel, PNG and JPG files are accepted','err');
-      return;
-    }
-    handleFiles(files);
+  // Route through handleAllFiles so multiple dropped files (including
+  // multiple PDFs) are all processed correctly, not just files[0] —
+  // this also gets the auto-extract-after-upload behavior for free.
+  var allowed = Array.from(files).every(function(f){
+    var fn = f.name.toLowerCase();
+    return f.type === 'application/pdf' || fn.endsWith('.pdf') ||
+           f.type === 'image/png' || f.type === 'image/jpeg' ||
+           fn.endsWith('.png') || fn.endsWith('.jpg') || fn.endsWith('.jpeg') ||
+           fn.endsWith('.xlsx') || fn.endsWith('.xls');
+  });
+  if(!allowed){
+    toast('Only PDF, Excel, PNG and JPG files are accepted','err');
+    return;
   }
+  handleAllFiles(files);
 }
 
 function handleFiles(files){
@@ -6826,6 +6989,7 @@ function clearAllUploads(){
   if(!confirm(saT('confirm_clear_all')||'Remove all uploaded pages?')) return;
   S.images = [];
   pdfDoc = null;
+  pdfDocs = [];
   pdfTotalPages = 0;
   // Bug fix (still relevant for Excel): this function used to only clear
   // S.images (the visual thumbnails) but never touched saPages/saPDFText —
@@ -7284,6 +7448,53 @@ async function initQuiz(){
     }
 
     S.questions = parsed.questions||[];
+
+    // ── SAFETY NET: detect and fix duplicate answer options ──────
+    // Even with an explicit instruction to the AI, options can still
+    // occasionally end up representing the same value (e.g. "6" and "√36",
+    // or "1/2" and "0.5"). This normalises each option to a comparable
+    // form and nudges any duplicate wrong answers so a student never sees
+    // two or more identical/equivalent choices in the same question.
+    function normalizeOptionValue(v){
+      if(v === null || v === undefined) return '';
+      var s = String(v).trim().toLowerCase();
+      // Strip LaTeX wrappers and common formatting so equivalent values compare equal
+      s = s.replace(/\\\(|\\\)|\\\[|\\\]/g, '');
+      s = s.replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, function(m,a,b){ return a+'/'+b; });
+      s = s.replace(/\s+/g, '');
+      // Try numeric comparison if it parses as a plain number or simple fraction
+      var fracMatch = s.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
+      if(fracMatch){
+        var num = parseFloat(fracMatch[1]), den = parseFloat(fracMatch[2]);
+        if(den !== 0) return String(Math.round((num/den)*1e6)/1e6);
+      }
+      if(/^-?\d+(\.\d+)?$/.test(s)) return String(Math.round(parseFloat(s)*1e6)/1e6);
+      return s;
+    }
+    S.questions.forEach(function(q){
+      if(!q.options) return;
+      var letters = Object.keys(q.options);
+      var seen = {};
+      letters.forEach(function(letter){
+        var norm = normalizeOptionValue(q.options[letter]);
+        if(norm === '') return;
+        if(seen[norm] !== undefined && letter !== q.correct){
+          // Duplicate found on a WRONG option — nudge it to a distinguishable
+          // near-value so the student never sees two identical choices.
+          // Only adjust non-correct options, so the right answer is untouched.
+          var original = q.options[letter];
+          var numMatch = String(original).match(/-?\d+(\.\d+)?/);
+          if(numMatch){
+            var n = parseFloat(numMatch[0]);
+            var nudged = n + (n !== 0 ? (n > 0 ? 1 : -1) : 1);
+            q.options[letter] = String(original).replace(numMatch[0], String(nudged));
+          }
+          console.warn('[Quiz] Duplicate option value detected and adjusted:', letter, 'in question:', q.text);
+        } else {
+          seen[norm] = letter;
+        }
+      });
+    });
 
     // ── FIX MATH WORD FORMS → SYMBOLS ────────────────────────────
     function fixMath(s){
@@ -7766,11 +7977,21 @@ function buildUserMsg(){
   else if(hasExcel)         sourceDescription = `an Excel spreadsheet (provided as text below)`;
   else                      sourceDescription = `${realImages.length} document image(s)`;
 
+  // Explicit even-distribution instruction — this matters especially when
+  // multiple separate documents/PDFs were uploaded together. Without this,
+  // vision-language models tend to naturally draw more questions from the
+  // earlier pages they process, even when generally told not to favor one
+  // source. Spelling out the page count and requiring a spread across the
+  // full range makes this much more reliable.
+  var distributionInstruction = realImages.length > 1
+    ? ` IMPORTANT — RANDOM DISTRIBUTION ACROSS ALL ${realImages.length} PAGES: You have been given ${realImages.length} pages total. Do NOT concentrate questions on only the first few pages. Actively pull questions from across the ENTIRE range — early, middle, AND late pages — so that every page has a genuine chance of being the source of at least one question. If there are more pages than questions, spread your question selection roughly evenly across the full page range rather than clustering near the start.`
+    : '';
+
   // OpenAI vision format — content array with text and image_url blocks
   const content = [
     {
       type:'text',
-      text:`Read ${sourceDescription}. ${mathSymbolInstruction} Each question must test a DIFFERENT aspect, drawing from ALL the material provided (images and/or spreadsheet data — do not favor one source over another). Vary question types, vary values, vary what is unknown. Session ID: ${Date.now()}-${Math.random().toString(36).slice(2,10)}. CRITICAL INSTRUCTION: ${diffInstruction} Return ONLY valid JSON as specified.`
+      text:`Read ${sourceDescription}. ${mathSymbolInstruction} Each question must test a DIFFERENT aspect, drawing from ALL the material provided (images and/or spreadsheet data — do not favor one source over another).${distributionInstruction} Vary question types, vary values, vary what is unknown. Session ID: ${Date.now()}-${Math.random().toString(36).slice(2,10)}. CRITICAL INSTRUCTION: ${diffInstruction} Return ONLY valid JSON as specified.`
     }
   ];
 
@@ -8840,12 +9061,22 @@ async function sendTutorMessage(){
         if(img.data) return img.data.split(',')[1];
         return img;
       }).filter(Boolean);
-      // Safety cap: if total base64 payload is too large (>6MB), drop later pages
-      // to avoid hitting API/request size limits that cause silent failures
+      // Safety cap: if total base64 payload is too large (>6MB), drop pages
+      // to avoid hitting API/request size limits that cause silent failures.
+      // Bug fix: this used to always .pop() from the END of the array,
+      // which silently favored whichever document was uploaded FIRST —
+      // if multiple PDFs were uploaded and the combined size was too large,
+      // the LAST document's pages were disproportionately dropped every
+      // time. Now removes pages evenly spaced across the whole set instead,
+      // so every uploaded document keeps a fair, representative share.
       var totalSize = imgs.reduce(function(sum,s){ return sum + s.length; }, 0);
       var MAX_PAYLOAD = 6 * 1024 * 1024; // 6MB of base64 text
       while(totalSize > MAX_PAYLOAD && imgs.length > 1){
-        var removed = imgs.pop();
+        // Remove from roughly the middle of the remaining set each time,
+        // so cuts are spread across all documents rather than concentrated
+        // at one end.
+        var cutIdx = Math.floor(imgs.length / 2);
+        var removed = imgs.splice(cutIdx, 1)[0];
         totalSize -= removed.length;
       }
     }
@@ -9285,7 +9516,7 @@ async function replaceQ(){
 }
 
 async function submitAns(){
-  if(!selectedOpt){toast('Please select an answer','err');return;}
+  if(!selectedOpt){toast('Please select an answer','err',15000);return;}
   const q = S.questions[S.currentQ];
 
   // ── BULLETPROOF CORRECT DETECTION ─────────────
@@ -9390,12 +9621,41 @@ async function submitAns(){
   removeTyping();
   checkMilestone();
 
-  const delay = correct ? 2200 : 4400;
-  setTimeout(()=>{
+  // Replaced all automatic timing with a manual "Next Question" button —
+  // the student clicks whenever they're ready, no countdown or forced delay.
+  // Made sticky at the bottom of the screen (instead of just appended at
+  // the end of the card) so it's always visible without needing to scroll
+  // down to find it, especially once the solution text pushes it further down.
+  var nextBtn = document.createElement('button');
+  var isLast = (S.currentQ + 1) >= S.questions.length;
+  nextBtn.id = 'quiz-next-btn';
+  nextBtn.textContent = isLast ? '📊 See Results ➤' : (saT('next_btn') || 'Next Question ➤');
+  nextBtn.style.cssText = 'position:sticky;bottom:12px;left:0;right:0;display:block;width:100%;margin-top:16px;padding:16px;background:linear-gradient(135deg,#1a56db,#06b6d4);border:none;border-radius:14px;color:#fff;font-size:16px;font-weight:800;cursor:pointer;font-family:\'DM Sans\',sans-serif;box-shadow:0 6px 24px rgba(6,182,212,0.45);z-index:15;animation:nextBtnPulse 1.6s ease-in-out infinite;';
+  nextBtn.onclick = function(){
+    nextBtn.disabled = true;
+    nextBtn.style.opacity = '0.6';
+    nextBtn.style.animation = 'none';
     const next = S.currentQ + 1;
     if(next < S.questions.length){ presentQ(next); }
     else{ document.getElementById('question-ui').innerHTML=''; endQuiz(); }
-  }, delay);
+  };
+  if(ui){
+    const card = ui.firstElementChild;
+    if(card) card.appendChild(nextBtn);
+    else ui.appendChild(nextBtn);
+  }
+  // Ensure the pulse animation exists (added once, reused every question)
+  if(!document.getElementById('next-btn-pulse-style')){
+    var pulseStyle = document.createElement('style');
+    pulseStyle.id = 'next-btn-pulse-style';
+    pulseStyle.textContent = '@keyframes nextBtnPulse{0%,100%{box-shadow:0 6px 24px rgba(6,182,212,0.45);}50%{box-shadow:0 6px 32px rgba(6,182,212,0.8);}}';
+    document.head.appendChild(pulseStyle);
+  }
+  // Backup: also scroll it into view in case sticky positioning doesn't
+  // apply cleanly in some scroll container configurations
+  setTimeout(function(){
+    nextBtn.scrollIntoView({behavior:'smooth', block:'end'});
+  }, 200);
 }
 
 async function buildFeedback(q, correct, conf){
@@ -9415,7 +9675,7 @@ async function buildFeedback(q, correct, conf){
 
     const qLabel = `Q${S.currentQ + 1} of ${S.questions.length}`;
 
-    const prevQ      = `📌 **${saT('prev_q')||'Previous question:'}** (${qLabel})\n${quizFracDisplay(q.text || '')}`;
+    const prevQ      = `📌 **${qLabel}**\n${quizFracDisplay(q.text || '')}`;
     const yourAns    = `\n\n👤 **${saT('your_ans')||'Your answer:'}** ${selOpt}) ${quizFracDisplay(selText)}`;
     const correctAns = `\n✅ **${saT('correct_ans')||'Correct answer:'}** ${corLet}) ${quizFracDisplay(corText)}`;
 
@@ -10503,6 +10763,7 @@ function resetQuiz(){
   S.currentQ   = 0;
   S.retryMode  = false;
   pdfDoc       = null;
+  pdfDocs = [];
   pdfTotalPages = 0;
 
   // Reset upload UI
@@ -10649,6 +10910,7 @@ function restartFull(){
   S.currentQ   = 0;
   S.images     = [];
   pdfDoc       = null;
+  pdfDocs = [];
   pdfTotalPages = 0;
   saPDFText    = '';
 
@@ -10833,7 +11095,27 @@ function showReport(){
     </div>
     <div class="report-section">
       <h3>Questions Needing Attention</h3>
-      <p>${inc.length?inc.map(a=>`Q${a.qIdx+1}: ${S.questions[a.qIdx]?.text||'–'}`).join('<br>'):'None — excellent performance!'}</p>
+      <p>${inc.length?inc.map(function(a){
+        var q = S.questions[a.qIdx];
+        var corLetter = q ? (q.correct || Object.keys(q.options||{}).find(function(k){ return q.options[k]===q.correctAnswer; }) || '?') : '?';
+        var corText = q ? (q.options && q.options[corLetter] || q.correctAnswer || '–') : '–';
+        return 'Q'+(a.qIdx+1)+': '+(q?.text||'–')+'<br><span style="color:#10b981;font-weight:700;">✔ Correct answer: '+corLetter+') '+corText+'</span>';
+      }).join('<br><br>'):'None — excellent performance!'}</p>
+    </div>
+    <div class="report-section">
+      <h3>Full Question Breakdown</h3>
+      <p style="line-height:2;">${S.answers.map(function(a,idx){
+        var q = S.questions[a.qIdx];
+        var corLetter = q ? (q.correct || Object.keys(q.options||{}).find(function(k){ return q.options[k]===q.correctAnswer; }) || '?') : '?';
+        var corText = q ? (q.options && q.options[corLetter] || q.correctAnswer || '–') : '–';
+        var yourLetter = a.chosen || '?';
+        var yourText = q ? (q.options && q.options[yourLetter] || '–') : '–';
+        var icon = a.correct ? '✅' : '❌';
+        var color = a.correct ? '#10b981' : '#ef4444';
+        return '<strong>Q'+(idx+1)+'.</strong> '+(q?.text||'–')+'<br>'
+          + '<span style="color:'+color+';">'+icon+' Your answer: '+yourLetter+') '+yourText+'</span>'
+          + (a.correct ? '' : '<br><span style="color:#10b981;font-weight:700;">✔ Correct answer: '+corLetter+') '+corText+'</span>');
+      }).join('<br><br>')}</p>
     </div>
     <div class="report-section">
       <h3>Educator Recommendation</h3>

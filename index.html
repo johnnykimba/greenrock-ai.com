@@ -375,7 +375,7 @@ footer p { font-size: 0.75rem; color: var(--text-muted); }
   <a href="#services" id="t-nav-services-2">Services</a>
   
   <a href="#contact" id="t-nav-contact-2">Contact</a>
-  <button class="nav-admin" id="t-nav-admin-2">Admin</button>
+  <button id="t-nav-admin-2">Admin</button>
 </div>
 
 <!-- HERO -->
@@ -735,6 +735,11 @@ window.addEventListener('DOMContentLoaded', function(){
       const now = Date.now();
       const COST_IN=2.75/1000000, COST_OUT=12.50/1000000;
       const codes = (codesData.codes||[]).filter(function(c){
+        // Defensive check: some entries in this shared KV namespace may
+        // not have a real string 'code' field (legacy or differently-
+        // shaped data) — calling .startsWith on undefined was the actual
+        // cause of the "Cannot read properties of undefined" crash.
+        if(!c || typeof c.code !== 'string') return false;
         return c.code !== 'COST_LIMIT_PCT' && !c.code.startsWith('usage:') && !c.code.startsWith('cost_');
       });
       // Sort newest first
@@ -862,8 +867,23 @@ window.addEventListener('DOMContentLoaded', function(){
 
   async function deleteCode(code){
     if(!confirm('Delete code '+code+'?')) return;
-    // We don't have a delete endpoint yet — show message
-    toast('To delete: go to Cloudflare KV → GREENROCK_CODES → delete key "'+code+'"');
+    const wurl = getWorkerURL();
+    try{
+      const res = await fetch(wurl, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({_appSecret:'greenrock-2024', action:'delete-code', adminKey:'Johnny11', code:code})
+      });
+      const data = await res.json();
+      if(data.success){
+        toast('Code '+code+' deleted');
+        loadCodesTable();
+      } else {
+        toast('Error: '+(data.error||'Failed to delete'));
+      }
+    }catch(e){
+      toast('Connection error: '+e.message);
+    }
   }
 
   // ── AI USAGE / COST MONITOR ───────────────────────────────

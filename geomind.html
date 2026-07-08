@@ -2099,6 +2099,7 @@ function persistGeoSettings(){
 }
 
 function syncQuickSelectorFromSettings(){
+  if(!_geoSettings || typeof _geoSettings.commodity === 'undefined') return;
   var sel = document.getElementById('quick-commodity');
   var valInput = document.getElementById('quick-cutoff-val');
   var unitLabel = document.getElementById('quick-cutoff-unit-label');
@@ -2185,12 +2186,14 @@ function resetSettings(){
 }
 
 function loadSettings(){
-  // Load from localStorage first
+  // Load from localStorage first — merge onto defaults rather than replace,
+  // so missing fields from older saved data fall back to the default values
+  // and never produce undefined.commodity (the real cause of the crash).
   var saved = localStorage.getItem('gr_geo_settings_'+(_activeCode||'default'));
-  if(saved){ try{ _geoSettings = JSON.parse(saved); }catch(e){} }
-  // Also check KV memory
+  if(saved){ try{ _geoSettings = Object.assign({}, _geoSettings, JSON.parse(saved)); }catch(e){} }
+  // Also check KV memory — same merge pattern
   if(_projectMemory && _projectMemory.geoSettings){
-    _geoSettings = _projectMemory.geoSettings;
+    _geoSettings = Object.assign({}, _geoSettings, _projectMemory.geoSettings);
     localStorage.setItem('gr_geo_settings_'+(_activeCode||'default'), JSON.stringify(_geoSettings));
   }
   syncQuickSelectorFromSettings();

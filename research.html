@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Research / Professional — Smart Academy AI</title>
+<script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+:root{
+  --bg:#0f2044; --surface:#1a2332; --surface2:#162435;
+  --border:rgba(255,255,255,0.1); --cyan:#06b6d4; --purple:#7c3aed;
+  --text:#e2e8f0; --muted:rgba(255,255,255,0.45);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(ellipse 1200px 600px at 20% -10%, rgba(180,210,255,0.18), transparent 60%),
+    radial-gradient(ellipse 900px 500px at 90% 15%, rgba(140,180,255,0.12), transparent 55%),
+    linear-gradient(155deg, #0a1530 0%, #122a52 35%, #1c3868 55%, #142d5c 75%, #0d1f42 100%);
+  background-attachment:fixed;
+  color:var(--text);font-family:'DM Sans',Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column;
+}
+
+.nav{background:rgba(8,15,30,0.85);backdrop-filter:blur(8px);border-bottom:1px solid rgba(180,210,255,0.15);padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.nav-logo{font-size:16px;font-weight:800;color:#fff;text-decoration:none;}
+.nav-logo span{color:var(--cyan);}
+.nav-btn{padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;}
+#rt-lang-select option{background:#1a2332;color:#fff;}
+.nav-btn:hover{background:rgba(255,255,255,0.06);color:#fff;}
+
+#access-gate{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;}
+.access-card{background:linear-gradient(165deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));border:1px solid rgba(180,210,255,0.18);border-top:1px solid rgba(200,225,255,0.35);border-radius:20px;padding:36px 28px;max-width:420px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);}
+.access-icon{font-size:44px;margin-bottom:14px;}
+.access-card h2{color:#fff;font-size:22px;font-weight:800;margin-bottom:8px;}
+.access-card p{color:var(--muted);font-size:13px;margin-bottom:22px;line-height:1.6;}
+.access-input{width:100%;padding:14px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.06);color:#fff;font-size:15px;font-weight:700;text-align:center;outline:none;margin-bottom:12px;}
+.access-error{color:#ef4444;font-size:12px;margin-bottom:12px;display:none;}
+.access-btn{width:100%;padding:14px;background:linear-gradient(135deg,#1a56db,var(--purple));border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;}
+.access-back{width:100%;padding:10px;margin-top:10px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:13px;cursor:pointer;}
+
+#main-content{flex:1;display:none;padding:24px 16px 60px;}
+.content-inner{max-width:780px;margin:0 auto;}
+.content-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+.content-title{color:var(--cyan);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;}
+.content-title-main{color:#fff;font-size:20px;font-weight:800;margin-top:2px;}
+
+.upload-zone{background:linear-gradient(165deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));border:1px solid rgba(180,210,255,0.18);border-top:1px solid rgba(200,225,255,0.35);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06);}
+.attach-btn{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:13px;padding:10px 18px;cursor:pointer;font-weight:600;}
+.attach-btn:hover{background:rgba(255,255,255,0.08);color:#fff;}
+.file-chip{background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:6px;padding:5px 10px;font-size:11px;color:#10b981;display:inline-flex;align-items:center;gap:6px;margin:4px 4px 0 0;}
+.file-chip button{background:none;border:none;color:#ef4444;cursor:pointer;font-size:13px;padding:0;}
+
+.pdf-panel{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-top:14px;display:none;}
+.pdf-thumbs{display:flex;gap:8px;overflow-x:auto;padding:6px 0;}
+.pdf-thumb{flex-shrink:0;cursor:pointer;border:2px solid rgba(255,255,255,0.15);border-radius:6px;overflow:hidden;position:relative;background:rgba(255,255,255,0.04);}
+.pdf-thumb.selected{border-color:var(--cyan);background:rgba(6,182,212,0.1);}
+.pdf-thumb canvas{display:block;width:64px;height:86px;object-fit:cover;}
+.pdf-thumb-label{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);font-size:9px;font-weight:700;color:#fff;text-align:center;padding:2px 0;}
+.page-inputs{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
+.page-inputs input{width:70px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:6px;color:#fff;padding:6px 8px;font-size:12px;text-align:center;outline:none;}
+.page-inputs label{font-size:11px;color:var(--muted);}
+
+textarea#question-input{width:100%;min-height:80px;padding:14px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.05);color:#fff;font-size:14px;font-family:inherit;resize:vertical;outline:none;margin-top:14px;}
+.analyze-btn{margin-top:12px;width:100%;padding:14px;background:linear-gradient(135deg,#1a56db,var(--cyan));border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;}
+.analyze-btn:disabled{opacity:0.6;cursor:not-allowed;}
+
+#results{margin-top:20px;display:none;}
+@keyframes aiPulse{0%,80%,100%{transform:scale(0.6);opacity:0.4;}40%{transform:scale(1.2);opacity:1;}}
+@keyframes shimmer{0%{background-position:200% center;}100%{background-position:-200% center;}}
+.loading-state{text-align:center;padding:30px 20px;}
+.loading-dots{display:flex;justify-content:center;gap:8px;margin-bottom:18px;}
+.loading-dot{width:14px;height:14px;border-radius:50%;background:var(--cyan);}
+.loading-text{color:#cbd5e1;font-size:14px;font-weight:600;margin-bottom:4px;}
+.loading-subtext{color:var(--muted);font-size:12px;}
+.loading-bar-track{margin:18px auto 0;width:220px;height:4px;background:rgba(255,255,255,0.1);border-radius:999px;overflow:hidden;}
+.loading-bar-fill{height:100%;width:100%;background:linear-gradient(90deg,#1a56db,#06b6d4,#1a56db);background-size:200% auto;border-radius:999px;animation:shimmer 1.5s ease infinite;}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:640px){.result-grid{grid-template-columns:1fr;}}
+.result-panel{border-radius:10px;padding:16px;font-size:13px;line-height:1.6;}
+.result-panel.gpt{background:rgba(26,86,219,0.08);border:1px solid rgba(26,86,219,0.25);}
+.result-panel.claude{background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.25);}
+.result-panel-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
+.result-merged{background:rgba(6,182,212,0.1);border:2px solid rgba(6,182,212,0.4);border-radius:12px;padding:18px;margin-top:12px;}
+.scorecard{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;}
+.scorecard-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:10px;}
+.scorecard-hero{text-align:center;padding:8px 0 12px;border-bottom:1px solid var(--border);margin-bottom:10px;}
+.scorecard-pct{font-size:40px;font-weight:900;line-height:1;}
+.scorecard-label{font-size:11px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;}
+.scorecard-verdict{display:inline-block;margin-top:8px;padding:4px 16px;border-radius:20px;font-size:13px;font-weight:800;background:rgba(255,255,255,0.06);}
+.scorecard-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+@media(min-width:500px){.scorecard-grid{grid-template-columns:repeat(3,1fr);}}
+.score-item{text-align:center;}
+.score-bar{height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin-bottom:4px;}
+.score-bar-fill{height:100%;border-radius:3px;}
+.score-val{font-size:14px;font-weight:800;}
+.score-label{font-size:10px;color:var(--muted);margin-top:2px;}
+.download-row{display:flex;gap:10px;margin-top:14px;}
+.download-btn{flex:1;padding:10px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;}
+.download-btn:hover{background:rgba(255,255,255,0.1);}
+.result-merged-title{font-size:12px;font-weight:800;color:var(--cyan);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+.result-merged-body{font-size:14px;color:#fff;line-height:1.7;overflow-wrap:break-word;word-wrap:break-word;}
+.result-merged-body table,.result-panel table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;}
+.result-merged-body th,.result-panel th{background:rgba(6,182,212,0.15);color:var(--cyan);font-weight:700;padding:8px 12px;border:1px solid rgba(6,182,212,0.3);text-align:left;}
+.result-merged-body td,.result-panel td{padding:7px 12px;border:1px solid rgba(255,255,255,0.1);color:#e2e8f0;vertical-align:top;}
+.result-merged-body tr:nth-child(even) td,.result-panel tr:nth-child(even) td{background:rgba(255,255,255,0.03);}
+.result-merged-body tr:hover td,.result-panel tr:hover td{background:rgba(6,182,212,0.06);}
+.result-merged-body pre{background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px;overflow-x:auto;font-size:12px;}
+.result-merged-body code{background:rgba(255,255,255,0.08);border-radius:4px;padding:2px 6px;font-size:12px;}
+.result-merged-body ul,.result-merged-body ol,.result-panel ul,.result-panel ol{padding-left:20px;margin:8px 0;}
+.result-merged-body li,.result-panel li{margin-bottom:4px;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">Smart <span>Academy AI</span></a>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <select id="rt-lang-select" onchange="rtSetLanguage(this.value)" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;padding:6px 8px;cursor:pointer;">
+      <option value="en">🇬🇧 English</option>
+      <option value="fr">🇫🇷 Français</option>
+      <option value="pt">🇵🇹 Português</option>
+      <option value="sw">🇰🇪 Kiswahili</option>
+      <option value="zu">🇿🇦 isiZulu</option>
+      <option value="af">🇿🇦 Afrikaans</option>
+      <option value="es">🇪🇸 Español</option>
+      <option value="ar">🇸🇦 العربية</option>
+      <option value="hi">🇮🇳 हिन्दी</option>
+      <option value="zh">🇨🇳 中文</option>
+    </select>
+    <a href="index.html" class="nav-btn" data-rt="back_home">🏠 Back to Home</a>
+  </div>
+</nav>
+
+<!-- ACCESS GATE -->
+<div id="access-gate">
+  <div class="access-card">
+    <div class="access-icon">🔬</div>
+    <h2 data-rt="gate_title">Research / Professional Access</h2>
+    <p data-rt="gate_desc">Enter your Research access code (starts with RM-, RS-, or RY-) to unlock document analysis.</p>
+    <input id="gate-code-input" class="access-input" type="text" placeholder="e.g. RM-XXXXXXX" maxlength="14"
+      oninput="this.value=this.value.toUpperCase()"
+      onkeydown="if(event.key==='Enter') verifyGate()">
+    <div id="gate-error" class="access-error"></div>
+    <button class="access-btn" onclick="verifyGate()" data-rt="unlock_btn">🚀 Unlock Research Mode</button>
+    <button class="access-back" onclick="window.location.href='index.html'" data-rt="back_home_arrow">← Back to Home</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <div class="content-inner">
+    <div class="content-header">
+      <div>
+        <div class="content-title">🔬 Research / Professional Mode</div>
+        <div class="content-title-main" data-rt="doc_analysis">Document Analysis</div>
+      </div>
+    </div>
+
+    <div class="upload-zone">
+      <button class="attach-btn" id="attach-btn" data-rt="attach_files">📎 Attach files — PDF, photos, Excel, Word</button>
+      <input type="file" id="attach-input" multiple accept=".csv,.xlsx,.xls,.pdf,.png,.jpg,.jpeg,.doc,.docx" style="display:none;">
+      <div id="files-preview" style="margin-top:10px;"></div>
+
+      <div class="pdf-panel" id="pdf-panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:13px;font-weight:700;color:#fff;" data-rt="select_pages">📋 Select Page Range</span>
+          <button onclick="clearAllFiles()" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:7px;color:#ef4444;font-size:11px;padding:4px 12px;cursor:pointer;" data-rt="clear_all">🗑️ Clear All</button>
+        </div>
+        <div class="pdf-thumbs" id="pdf-thumbs"></div>
+        <div class="page-inputs">
+          <label data-rt="from_lbl">From</label>
+          <input type="number" id="pdf-from" min="1" value="1">
+          <label data-rt="to_lbl">To</label>
+          <input type="number" id="pdf-to" min="1" value="1">
+          <button onclick="selectAllPages()" style="background:rgba(6,182,212,0.12);border:1px solid rgba(6,182,212,0.35);border-radius:7px;color:var(--cyan);font-size:11px;font-weight:700;padding:5px 12px;cursor:pointer;white-space:nowrap;">✓ Select All Pages</button>
+          <span id="page-count-label" style="font-size:10px;color:var(--muted);"></span>
+          <span style="font-size:10px;color:#f59e0b;" data-rt="max_pages">Max 200 pages &nbsp;|&nbsp; <span style="color:rgba(6,182,212,0.7);">DualMind best at ≤30</span></span>
+        </div>
+        <div id="pdf-status" style="font-size:11px;color:#10b981;margin-top:6px;display:none;"></div>
+      </div>
+
+      <textarea id="question-input" placeholder="Ask a question about your document (e.g. 'Summarize the key findings')" data-rt-ph="question_ph"></textarea>
+
+      <div style="display:flex;gap:10px;margin-top:12px;">
+        <button class="analyze-btn" id="analyze-btn" onclick="runAnalysis()" style="flex:1;">🔬 DualMind (GPT + Claude)</button>
+        <button class="analyze-btn" id="claude-btn" onclick="runClaudeOnly()" style="flex:1;background:linear-gradient(135deg,#7c3aed,#a78bfa);">🧠 Claude Only</button>
+      </div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-top:6px;text-align:center;">🔬 DualMind = best for up to 30 pages &nbsp;|&nbsp; 🧠 Claude = up to 200 pages</div>
+    </div>
+
+    <div id="results"></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// PROFESSIONAL / RESEARCHER MODE — standalone page
+// Self-contained, no dependency on index.html's .page system.
+// ════════════════════════════════════════════════════════════
+
+// ════════════════════════════════════════════════════════════
+// RESEARCH/PROFESSIONAL — STANDALONE TRANSLATION SYSTEM
+// Self-contained, independent from index.html's i18n system,
+// since this is a standalone page. Covers 10 core languages.
+// ════════════════════════════════════════════════════════════
+var RT_DICT = {
+  en:{back_home:'🏠 Back to Home', gate_title:'Research / Professional Access', gate_desc:'Enter your Research access code (starts with RM-, RS-, or RY-) to unlock document analysis.', unlock_btn:'🚀 Unlock Research Mode', back_home_arrow:'← Back to Home', doc_analysis:'Document Analysis', attach_files:'📎 Attach files — PDF, photos, Excel, Word', select_pages:'📋 Select Page Range', clear_all:'🗑️ Clear All', from_lbl:'From', to_lbl:'To', max_pages:'Max 200 pages', question_ph:"Ask a question about your document (e.g. 'Summarize the key findings')", analyze_btn:'🔬 Analyze Document'},
+  fr:{back_home:'🏠 Retour à l\'accueil', gate_title:'Accès Recherche / Professionnel', gate_desc:'Entrez votre code d\'accès Recherche (commence par RM-, RS- ou RY-) pour débloquer l\'analyse de documents.', unlock_btn:'🚀 Débloquer le Mode Recherche', back_home_arrow:'← Retour à l\'accueil', doc_analysis:'Analyse de Document', attach_files:'📎 Joindre des fichiers — PDF, photos, Excel, Word', select_pages:'📋 Sélectionner la Plage de Pages', clear_all:'🗑️ Tout Effacer', from_lbl:'De', to_lbl:'À', max_pages:'Max 200 pages', question_ph:"Posez une question sur votre document (ex. 'Résumez les points clés')", analyze_btn:'🔬 Analyser le Document'},
+  pt:{back_home:'🏠 Voltar ao Início', gate_title:'Acesso Pesquisa / Profissional', gate_desc:'Insira o seu código de acesso de Pesquisa (começa com RM-, RS- ou RY-) para desbloquear a análise de documentos.', unlock_btn:'🚀 Desbloquear Modo Pesquisa', back_home_arrow:'← Voltar ao Início', doc_analysis:'Análise de Documento', attach_files:'📎 Anexar ficheiros — PDF, fotos, Excel, Word', select_pages:'📋 Selecionar Intervalo de Páginas', clear_all:'🗑️ Limpar Tudo', from_lbl:'De', to_lbl:'Até', max_pages:'Máx. 30 páginas', question_ph:"Faça uma pergunta sobre o seu documento (ex. 'Resuma os principais resultados')", analyze_btn:'🔬 Analisar Documento'},
+  sw:{back_home:'🏠 Rudi Nyumbani', gate_title:'Ufikiaji wa Utafiti / Kitaaluma', gate_desc:'Ingiza msimbo wako wa ufikiaji wa Utafiti (huanza na RM-, RS-, au RY-) ili kufungua uchambuzi wa hati.', unlock_btn:'🚀 Fungua Hali ya Utafiti', back_home_arrow:'← Rudi Nyumbani', doc_analysis:'Uchambuzi wa Hati', attach_files:'📎 Pakia faili — PDF, picha, Excel, Word', select_pages:'📋 Chagua Kurasa', clear_all:'🗑️ Futa Yote', from_lbl:'Kutoka', to_lbl:'Hadi', max_pages:'Upeo kurasa 30', question_ph:"Uliza swali kuhusu hati yako (mf. 'Fanya muhtasari wa matokeo muhimu')", analyze_btn:'🔬 Changanua Hati'},
+  zu:{back_home:'🏠 Buyela Ekhaya', gate_title:'Ukufinyelela Kocwaningo / Ochwepheshe', gate_desc:'Faka ikhodi yakho yokufinyelela Ucwaningo (iqala ngo-RM-, RS-, noma RY-) ukuvula ukuhlaziya kwedokhumenti.', unlock_btn:'🚀 Vula Imodi Yocwaningo', back_home_arrow:'← Buyela Ekhaya', doc_analysis:'Ukuhlaziya Idokhumenti', attach_files:'📎 Faka amafayela — PDF, izithombe, Excel, Word', select_pages:'📋 Khetha Ibanga Lamakhasi', clear_all:'🗑️ Sula Konke', from_lbl:'Kusuka', to_lbl:'Kuya', max_pages:'Amakhasi angeqe 30', question_ph:"Buza umbuzo mayelana nedokhumenti yakho (isb. 'Shwepesha okutholakele okubalulekile')", analyze_btn:'🔬 Hlaziya Idokhumenti'},
+  af:{back_home:'🏠 Terug na Tuis', gate_title:'Navorsing / Professionele Toegang', gate_desc:'Voer u Navorsingstoegangskode in (begin met RM-, RS-, of RY-) om dokumentanalise te ontsluit.', unlock_btn:'🚀 Ontsluit Navorsingsmodus', back_home_arrow:'← Terug na Tuis', doc_analysis:'Dokumentanalise', attach_files:'📎 Heg lêers aan — PDF, foto\'s, Excel, Word', select_pages:'📋 Kies Bladsybestek', clear_all:'🗑️ Vee Alles Uit', from_lbl:'Van', to_lbl:'Tot', max_pages:'Maks 30 bladsye', question_ph:"Vra 'n vraag oor u dokument (bv. 'Som die belangrikste bevindinge op')", analyze_btn:'🔬 Ontleed Dokument'},
+  es:{back_home:'🏠 Volver al Inicio', gate_title:'Acceso a Investigación / Profesional', gate_desc:'Introduzca su código de acceso de Investigación (comienza con RM-, RS- o RY-) para desbloquear el análisis de documentos.', unlock_btn:'🚀 Desbloquear Modo Investigación', back_home_arrow:'← Volver al Inicio', doc_analysis:'Análisis de Documento', attach_files:'📎 Adjuntar archivos — PDF, fotos, Excel, Word', select_pages:'📋 Seleccionar Rango de Páginas', clear_all:'🗑️ Borrar Todo', from_lbl:'Desde', to_lbl:'Hasta', max_pages:'Máx. 30 páginas', question_ph:"Haga una pregunta sobre su documento (ej. 'Resuma los hallazgos clave')", analyze_btn:'🔬 Analizar Documento'},
+  ar:{back_home:'🏠 العودة للرئيسية', gate_title:'الوصول للبحث / المهني', gate_desc:'أدخل رمز الوصول للبحث (يبدأ بـ RM- أو RS- أو RY-) لإلغاء قفل تحليل المستندات.', unlock_btn:'🚀 إلغاء قفل وضع البحث', back_home_arrow:'← العودة للرئيسية', doc_analysis:'تحليل المستند', attach_files:'📎 إرفاق ملفات — PDF، صور، Excel، Word', select_pages:'📋 تحديد نطاق الصفحات', clear_all:'🗑️ حذف الكل', from_lbl:'من', to_lbl:'إلى', max_pages:'الحد الأقصى 30 صفحة', question_ph:'اطرح سؤالاً حول مستندك (مثال: لخص النتائج الرئيسية)', analyze_btn:'🔬 تحليل المستند'},
+  hi:{back_home:'🏠 होम पर वापस जाएं', gate_title:'शोध / पेशेवर एक्सेस', gate_desc:'दस्तावेज़ विश्लेषण अनलॉक करने के लिए अपना शोध एक्सेस कोड दर्ज करें (RM-, RS-, या RY- से शुरू होता है)।', unlock_btn:'🚀 शोध मोड अनलॉक करें', back_home_arrow:'← होम पर वापस जाएं', doc_analysis:'दस्तावेज़ विश्लेषण', attach_files:'📎 फ़ाइलें संलग्न करें — PDF, फ़ोटो, Excel, Word', select_pages:'📋 पृष्ठ श्रेणी चुनें', clear_all:'🗑️ सभी साफ़ करें', from_lbl:'से', to_lbl:'तक', max_pages:'अधिकतम 30 पृष्ठ', question_ph:"अपने दस्तावेज़ के बारे में एक प्रश्न पूछें (जैसे 'मुख्य निष्कर्षों का सारांश दें')", analyze_btn:'🔬 दस्तावेज़ का विश्लेषण करें'},
+  zh:{back_home:'🏠 返回首页', gate_title:'研究/专业版访问', gate_desc:'输入您的研究访问代码（以 RM-、RS- 或 RY- 开头）以解锁文档分析。', unlock_btn:'🚀 解锁研究模式', back_home_arrow:'← 返回首页', doc_analysis:'文档分析', attach_files:'📎 附加文件 — PDF、照片、Excel、Word', select_pages:'📋 选择页面范围', clear_all:'🗑️ 清除全部', from_lbl:'从', to_lbl:'到', max_pages:'最多30页', question_ph:'就您的文档提出问题（例如"总结关键发现"）', analyze_btn:'🔬 分析文档'}
+};
+
+function rtApplyLanguage(lang){
+  var dict = RT_DICT[lang] || RT_DICT.en;
+  document.querySelectorAll('[data-rt]').forEach(function(el){
+    var key = el.getAttribute('data-rt');
+    if(dict[key]) el.textContent = dict[key];
+  });
+  document.querySelectorAll('[data-rt-ph]').forEach(function(el){
+    var key = el.getAttribute('data-rt-ph');
+    if(dict[key]) el.placeholder = dict[key];
+  });
+  document.documentElement.lang = lang;
+  if(lang === 'ar') document.documentElement.dir = 'rtl'; else document.documentElement.dir = 'ltr';
+}
+
+function rtSetLanguage(lang){
+  localStorage.setItem('rt_lang', lang);
+  rtApplyLanguage(lang);
+}
+
+// Apply saved language preference on load (also reuses the main site's
+// saved language choice if present, for a consistent experience)
+(function(){
+  var saved = localStorage.getItem('rt_lang') || localStorage.getItem('saa_lang') || 'en';
+  if(!RT_DICT[saved]) saved = 'en';
+  var sel = document.getElementById('rt-lang-select');
+  if(sel) sel.value = saved;
+  rtApplyLanguage(saved);
+})();
+
+var MAX_PDF_PAGES = 200; // Single cap for all modes — DualMind warns if >30 selected
+var MAX_DUALMIND_PAGES = 30; // Soft limit for DualMind — enforced as a warning, not a hard cap
+var MAIN_WORKER_URL = 'https://smartacademy-ai.kasongokimba.workers.dev';
+var PROF_WORKER_URL = 'https://prof-research.kasongokimba.workers.dev';
+var PROF_APP_SECRET = 'Prof2026Secret';
+var MAIN_APP_SECRET = 'sWN-UZpoi6PLUgCgZ7KiZi2iRPNUXq9f';
+
+var attachedFiles   = [];   // raw File objects (for Excel/Word/image display)
+var processedImages = [];   // pre-rendered base64 images (PDF pages + photos)
+var processedText   = '';   // accumulated text (Excel + Word)
+var pdfDoc          = null; // most recently loaded PDF (for the panel thumbnail)
+var pdfConfirmed    = false;
+var selectedPages   = {from:1, to:1};
+var pdfTotalPages   = 0;    // accumulated across all uploaded PDFs
+
+// ── ACCESS GATE ──
+async function verifyGateDirect(code){
+  // Called for auto-open from main site — skips client-side format check
+  // since code is already trusted (came from saved-codes panel).
+  var errEl = document.getElementById('gate-error');
+  errEl.style.display = 'none';
+  var btn = document.querySelector('.access-btn');
+  if(btn){ btn.disabled = true; btn.textContent = '⏳ Verifying...'; }
+  try{
+    var res = await fetch(MAIN_WORKER_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({_appSecret: MAIN_APP_SECRET, action:'validate-code', code: code, fingerprint:'prof-mode-'+Date.now()})
+    });
+    var data = await res.json();
+    if(data.valid === true){
+      sessionStorage.setItem('prof_unlocked','1');
+      sessionStorage.setItem('prof_verified_code', code);
+      document.getElementById('access-gate').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+      initUploadHandlers();
+    } else {
+      errEl.textContent = '❌ ' + (data.message || data.error || 'Code not recognized.');
+      errEl.style.display = 'block';
+    }
+  }catch(e){
+    errEl.textContent = '⚠️ Could not verify code — check your connection.';
+    errEl.style.display = 'block';
+  }finally{
+    if(btn){ btn.disabled = false; btn.textContent = '🚀 Unlock Research Mode'; }
+  }
+}
+
+async function verifyGate(){
+  var input = document.getElementById('gate-code-input');
+  var errEl = document.getElementById('gate-error');
+  var code = input.value.trim().toUpperCase();
+  errEl.style.display = 'none';
+
+  if(!code){ errEl.textContent = 'Please enter your access code.'; errEl.style.display='block'; return; }
+  if(!/^(RM|RS|RY)-[A-Z0-9]{4,12}$/.test(code)){ errEl.textContent = '❌ Code must start with RM-, RS-, or RY-'; errEl.style.display='block'; return; }
+
+  try{
+    var res = await fetch(MAIN_WORKER_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({_appSecret: MAIN_APP_SECRET, action:'validate-code', code: code, fingerprint:'prof-mode-'+Date.now()})
+    });
+    var data = await res.json();
+    if(data.valid === true){
+      sessionStorage.setItem('prof_unlocked','1');
+      sessionStorage.setItem('prof_verified_code', code); // needed so analyze-document can check this code's spending limit
+      document.getElementById('access-gate').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+      initUploadHandlers();
+    } else {
+      errEl.textContent = '❌ ' + (data.message || data.error || 'Code not recognized.');
+      errEl.style.display = 'block';
+    }
+  }catch(e){
+    errEl.textContent = '⚠️ Could not verify code — check your connection.';
+    errEl.style.display = 'block';
+  }
+}
+
+window.addEventListener('load', function(){
+  if(typeof pdfjsLib !== 'undefined' && !pdfjsLib.GlobalWorkerOptions.workerSrc){
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+  if(sessionStorage.getItem('prof_unlocked') === '1'){
+    document.getElementById('access-gate').style.display = 'none';
+    document.getElementById('main-content').style.display = 'block';
+    initUploadHandlers();
+    return;
+  }
+
+  var urlParams = new URLSearchParams(window.location.search);
+  var pendingCode = urlParams.get('code') || sessionStorage.getItem('prof_pending_code');
+  if(pendingCode){
+    sessionStorage.removeItem('prof_pending_code');
+    var inp = document.getElementById('gate-code-input');
+    if(inp){
+      inp.value = pendingCode.toUpperCase();
+      // Bypass the client-side format regex entirely for auto-open —
+      // the code came from the main site's saved-codes panel and is
+      // already trusted. The format guard was silently blocking valid
+      // codes that didn't match the regex exactly.
+      setTimeout(function(){ verifyGateDirect(pendingCode.toUpperCase()); }, 300);
+    }
+  }
+});
+
+// ── UPLOAD HANDLERS ──
+function initUploadHandlers(){
+  var attachBtn = document.getElementById('attach-btn');
+  var attachInput = document.getElementById('attach-input');
+  if(attachBtn._initialized) return; // avoid double-binding
+  attachBtn._initialized = true;
+
+  attachBtn.addEventListener('click', function(){ attachInput.click(); });
+  attachInput.addEventListener('change', async function(e){
+    var rawFiles = Array.from(e.target.files);
+    e.target.value = '';
+    for(var fi=0; fi<rawFiles.length; fi++){
+      await processUploadedFile(rawFiles[fi]);
+    }
+  });
+}
+
+function renderFilesPreview(){
+  var preview = document.getElementById('files-preview');
+  preview.innerHTML = attachedFiles.map(function(f,i){
+    return '<span class="file-chip">' + f.name.substring(0,24) + '<button onclick="removeFile(' + i + ')">&times;</button></span>';
+  }).join('');
+}
+function removeFile(i){
+  attachedFiles.splice(i,1);
+  // Reset all processed state when a file is removed — re-upload needed
+  processedImages=[]; processedText=''; pdfTotalPages=0; pdfDoc=null; pdfConfirmed=false;
+  renderFilesPreview();
+  if(!attachedFiles.some(function(f){ return f.name.toLowerCase().endsWith('.pdf'); }))
+    document.getElementById('pdf-panel').style.display='none';
+  toast('File removed — please re-confirm remaining files','ok');
+}
+// ── PROCESS EACH FILE IMMEDIATELY ON UPLOAD ───────────────────────────
+// This matches the proven Learner/Student upload approach: accumulate
+// processed content as files arrive rather than trying to re-open raw
+// File objects at analysis time (which caused the multi-file bug where
+// only the last PDF was ever actually processed).
+async function processUploadedFile(file){
+  var statusEl = document.getElementById('pdf-status');
+  var ext = file.name.split('.').pop().toLowerCase();
+
+  // ── IMAGES ────────────────────────────────────────────────────────
+  if(['png','jpg','jpeg'].includes(ext)){
+    var b64 = await readFileBase64(file);
+    processedImages.push(b64);
+    attachedFiles.push(file);
+    renderFilesPreview();
+    toast('✅ ' + file.name + ' added','ok');
+    return;
+  }
+
+  // ── PDF ───────────────────────────────────────────────────────────
+  if(ext === 'pdf'){
+    if(statusEl){ statusEl.textContent = '⏳ Loading ' + file.name + '...'; statusEl.style.display='block'; statusEl.style.color='#1a56db'; }
+    try{
+      // Ensure PDF.js is loaded and workerSrc is set — same guard as Learner side
+      if(typeof pdfjsLib === 'undefined' || !window.pdfjsLib){
+        await new Promise(function(resolve, reject){
+          var s = document.createElement('script');
+          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+          s.onload = resolve; s.onerror = reject;
+          document.head.appendChild(s);
+        });
+      }
+      if(!pdfjsLib.GlobalWorkerOptions.workerSrc){
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      }
+      var pdfBuf = await file.arrayBuffer();
+      var thisPdf = await pdfjsLib.getDocument({data: pdfBuf}).promise;
+      var numPages = thisPdf.numPages;
+      var prevTotal = pdfTotalPages;
+      pdfTotalPages += numPages;
+      pdfDoc = thisPdf; // update panel reference to latest PDF
+
+      // Update selector — extend To to cover new pages
+      var fromEl = document.getElementById('pdf-from');
+      var toEl = document.getElementById('pdf-to');
+      if(prevTotal === 0){
+        fromEl.value = 1;
+        toEl.value = Math.min(numPages, MAX_PDF_PAGES);
+      } else {
+        toEl.value = Math.min(pdfTotalPages, parseInt(toEl.value) + numPages);
+      }
+      var countLbl = document.getElementById('page-count-label');
+      if(countLbl) countLbl.textContent = pdfTotalPages + ' pages total';
+      document.getElementById('pdf-panel').style.display = 'block';
+      validatePages();
+
+      // Render thumbnails for this PDF (up to 40 total)
+      var thumbs = document.getElementById('pdf-thumbs');
+      var existingThumbCount = thumbs.querySelectorAll('.pdf-thumb').length;
+      var maxNewThumbs = Math.max(0, 40 - existingThumbCount);
+      for(var p=1; p<=Math.min(numPages, maxNewThumbs); p++){
+        var pg = await thisPdf.getPage(p);
+        var vp = pg.getViewport({scale:0.3});
+        var cv = document.createElement('canvas');
+        cv.width = vp.width; cv.height = vp.height;
+        await pg.render({canvasContext: cv.getContext('2d'), viewport: vp}).promise;
+        var div = document.createElement('div'); div.className='pdf-thumb'; div.dataset.page=(prevTotal+p);
+        var lbl = document.createElement('div'); lbl.className='pdf-thumb-label'; lbl.textContent='P'+(prevTotal+p);
+        div.appendChild(cv); div.appendChild(lbl);
+        thumbs.appendChild(div);
+      }
+      if(numPages > maxNewThumbs){
+        var more = document.createElement('span');
+        more.style.cssText='font-size:10px;color:var(--muted);padding:10px;align-self:center;white-space:nowrap;';
+        more.textContent='+ more pages — use From/To fields';
+        thumbs.appendChild(more);
+      }
+
+      attachedFiles.push(file);
+      renderFilesPreview();
+      if(statusEl){ statusEl.textContent = '✅ ' + file.name + ' — ' + numPages + ' pages ('+pdfTotalPages+' total)'; statusEl.style.color='#10b981'; }
+      toast('✅ ' + file.name + ' loaded — ' + numPages + ' pages','ok');
+    }catch(e){
+      if(statusEl){ statusEl.textContent = '❌ Could not read ' + file.name; statusEl.style.color='#ef4444'; }
+      toast('PDF error: ' + e.message, 'err');
+    }
+    return;
+  }
+
+  // ── EXCEL / CSV ───────────────────────────────────────────────────
+  if(['xlsx','xls','csv'].includes(ext)){
+    try{
+      var buf = await file.arrayBuffer();
+      var wb = XLSX.read(buf, {type:'array'});
+      var xlsText = '';
+      wb.SheetNames.forEach(function(sn){
+        xlsText += '=== ' + file.name + ' | ' + sn + ' ===\n' + XLSX.utils.sheet_to_csv(wb.Sheets[sn]) + '\n\n';
+      });
+      processedText += xlsText;
+      attachedFiles.push(file);
+      renderFilesPreview();
+      toast('✅ ' + file.name + ' — ' + wb.SheetNames.length + ' sheet(s)','ok');
+    }catch(e){ toast('Excel error: '+e.message,'err'); }
+    return;
+  }
+
+  // ── WORD ──────────────────────────────────────────────────────────
+  if(['doc','docx'].includes(ext)){
+    if(statusEl){ statusEl.textContent='⏳ Reading '+file.name+'...'; statusEl.style.display='block'; statusEl.style.color='#1a56db'; }
+    try{
+      if(typeof mammoth === 'undefined'){
+        await new Promise(function(resolve,reject){
+          var s=document.createElement('script');
+          s.src='https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
+          s.onload=resolve; s.onerror=reject; document.head.appendChild(s);
+        });
+      }
+      var wordBuf = await file.arrayBuffer();
+      var wordResult = await mammoth.extractRawText({arrayBuffer:wordBuf});
+      processedText += '=== ' + file.name + ' ===\n' + wordResult.value + '\n\n';
+      attachedFiles.push(file);
+      renderFilesPreview();
+      if(statusEl){ statusEl.textContent='✅ '+file.name+' read — '+(wordResult.value.split(/\s+/).length)+' words'; statusEl.style.color='#10b981'; }
+      toast('✅ ' + file.name + ' read','ok');
+    }catch(e){
+      if(statusEl){ statusEl.textContent='❌ Word error: '+e.message; statusEl.style.color='#ef4444'; }
+      toast('Word error: '+e.message,'err');
+    }
+    return;
+  }
+  toast('Unsupported file type: '+file.name,'err');
+}
+
+function clearAllFiles(){
+  attachedFiles=[]; processedImages=[]; processedText='';
+  pdfDoc=null; pdfConfirmed=false; pdfTotalPages=0;
+  renderFilesPreview();
+  document.getElementById('pdf-panel').style.display='none';
+  var status=document.getElementById('pdf-status');
+  if(status){ status.style.display='none'; status.textContent=''; }
+}
+
+
+
+
+function selectAllPages(){
+  if(!pdfDoc){ if(typeof toast === 'function') toast('Upload a PDF first', 'err'); return; }
+  document.getElementById('pdf-from').value = 1;
+  document.getElementById('pdf-to').value = Math.min(pdfDoc.numPages, MAX_PDF_PAGES);
+  validatePages();
+}
+
+function validatePages(){
+  var fromEl = document.getElementById('pdf-from');
+  var toEl = document.getElementById('pdf-to');
+  var status = document.getElementById('pdf-status');
+  var totalPages = pdfDoc ? pdfDoc.numPages : 999;
+  var from = Math.max(1, Math.min(parseInt(fromEl.value)||1, totalPages));
+  var to = Math.max(from, Math.min(parseInt(toEl.value)||1, totalPages));
+  var count = to - from + 1;
+  if(count > MAX_PDF_PAGES){ to = from + MAX_PDF_PAGES - 1; count = MAX_PDF_PAGES; }
+  fromEl.value = from; toEl.value = to;
+  pdfConfirmed = true;
+  selectedPages = {from:from, to:to};
+  status.textContent = '✓ ' + count + ' page(s) ready';
+  status.style.display = 'block';
+}
+document.addEventListener('change', function(e){
+  if(e.target && (e.target.id === 'pdf-from' || e.target.id === 'pdf-to')) validatePages();
+});
+
+// ── ANALYSIS ──
+function readFileBase64(file){
+  return new Promise(function(resolve,reject){
+    var r = new FileReader();
+    r.onload = function(){ resolve(r.result); };
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
+async function runAnalysis(){
+  var question = document.getElementById('question-input').value.trim();
+  var resultsEl = document.getElementById('results');
+  var btn = document.getElementById('analyze-btn');
+
+  if(!question){ alert('Please enter a question.'); return; }
+  if(!attachedFiles.length){ alert('Please upload a document first.'); return; }
+
+  // Soft warning for DualMind — GPT-4o performs best at ≤30 pages.
+  // Not a hard block — user can proceed, but we flag the risk.
+  var pageCount = selectedPages.to - selectedPages.from + 1;
+  if(pdfConfirmed && pageCount > MAX_DUALMIND_PAGES){
+    var proceed = confirm(
+      '⚠️ DualMind works best with up to 30 pages.\n\n' +
+      'You have ' + pageCount + ' pages selected. GPT-4o may be less reliable at this size.\n\n' +
+      'Tip: use the 🧠 Claude Only button below for large documents — it handles up to 200 pages reliably.\n\n' +
+      'Continue with DualMind anyway?'
+    );
+    if(!proceed) return;
+  }
+
+  btn.disabled = true; btn.textContent = '⏳ Analyzing...';
+  resultsEl.style.display = 'block';
+  resultsEl.innerHTML =
+    '<div class="loading-state">' +
+      '<div class="loading-dots">' +
+        '<div class="loading-dot" style="animation:aiPulse 1.2s ease infinite;"></div>' +
+        '<div class="loading-dot" style="animation:aiPulse 1.2s ease infinite 0.2s;"></div>' +
+        '<div class="loading-dot" style="animation:aiPulse 1.2s ease infinite 0.4s;"></div>' +
+      '</div>' +
+      '<div class="loading-text">🔬 Analyzing your document...</div>' +
+      '<div class="loading-subtext">Running GPT-4o and Claude in parallel, then verifying — usually 20-40 seconds</div>' +
+      '<div class="loading-bar-track"><div class="loading-bar-fill"></div></div>' +
+    '</div>';
+
+  // Auto-scroll so the loading indicator (and the results once ready) are
+  // immediately visible — avoids the person having to scroll down manually
+  // to see that analysis is actually running.
+  setTimeout(function(){ resultsEl.scrollIntoView({behavior:'smooth', block:'start'}); }, 100);
+
+  try{
+    // Use pre-processed content accumulated at upload time — same approach
+    // as the proven Learner/Student system. PDF pages were already rendered
+    // to images during upload; text was extracted from Excel/Word then too.
+    // For PDFs: extract only the selected page range from rendered images.
+    var allPdfImages = processedImages.filter(function(img){ return !img.startsWith('data:image/png') && true; });
+    // Re-render selected PDF pages at analysis quality (higher than thumbnail)
+    var images = [];
+    var docText = processedText;
+
+    // Re-render only the selected page range from PDFs at higher quality
+    if(pdfDoc && pdfConfirmed){
+      var pageCount = selectedPages.to - selectedPages.from + 1;
+      var scale = pageCount <= 5 ? 2.0 : pageCount <= 15 ? 1.5 : 1.2;
+      var quality = pageCount <= 5 ? 0.92 : pageCount <= 15 ? 0.85 : 0.78;
+      for(var p=selectedPages.from; p<=selectedPages.to; p++){
+        try{
+          var page = await pdfDoc.getPage(p);
+          var vp = page.getViewport({scale:scale});
+          var canvas = document.createElement('canvas');
+          canvas.width = vp.width; canvas.height = vp.height;
+          await page.render({canvasContext: canvas.getContext('2d'), viewport: vp}).promise;
+          images.push(canvas.toDataURL('image/jpeg', quality));
+        }catch(pgErr){}
+      }
+    }
+    // Add any directly uploaded images (photos)
+    for(var ii=0; ii<attachedFiles.length; ii++){
+      var ff = attachedFiles[ii];
+      var ffext = ff.name.split('.').pop().toLowerCase();
+      if(['png','jpg','jpeg'].includes(ffext)){
+        images.push(await readFileBase64(ff));
+      }
+    }
+
+    var res = await fetch(PROF_WORKER_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({_appSecret: PROF_APP_SECRET, action:'analyze-document', question:question, images:images, docText:docText, code: sessionStorage.getItem('prof_verified_code')||''})
+    });
+    var data = await res.json();
+    if(!data.ok){
+      resultsEl.innerHTML = '<div style="color:#ef4444;padding:16px;">Error: ' + (data.error||'Unknown error') + '</div>';
+      return;
+    }
+    renderResults(data);
+  }catch(e){
+    resultsEl.innerHTML = '<div style="color:#ef4444;padding:16px;">Error: ' + e.message + '</div>';
+  }finally{
+    btn.disabled = false; btn.textContent = '🔬 Analyze Document';
+  }
+}
+
+async function runClaudeOnly(){
+  var question = document.getElementById('question-input').value.trim();
+  var resultsEl = document.getElementById('results');
+  var btn = document.getElementById('claude-btn');
+  var analyzeBtn = document.getElementById('analyze-btn');
+
+  if(!question){ alert('Please enter a question.'); return; }
+  if(!attachedFiles.length){ alert('Please upload a document first.'); return; }
+
+  btn.disabled = true; btn.textContent = '⏳ Claude analyzing...';
+  if(analyzeBtn) analyzeBtn.disabled = true;
+
+  resultsEl.style.display = 'block';
+  resultsEl.innerHTML =
+    '<div class="loading-state">' +
+      '<div class="loading-dots">' +
+        '<div class="loading-dot" style="animation:aiPulse 1.2s ease infinite;background:#a78bfa;"></div>' +
+        '<div class="loading-dot" style="animation:aiPulse 1.2s ease infinite 0.2s;background:#a78bfa;"></div>' +
+        '<div class="loading-dot" style="animation:aiPulse 1.2s ease infinite 0.4s;background:#a78bfa;"></div>' +
+      '</div>' +
+      '<div class="loading-text">🧠 Claude is reading your document...</div>' +
+      '<div class="loading-subtext">Claude Sonnet — up to 200 pages — usually 20-60 seconds</div>' +
+      '<div class="loading-bar-track"><div class="loading-bar-fill" style="background:linear-gradient(90deg,#7c3aed,#a78bfa,#7c3aed);"></div></div>' +
+    '</div>';
+  setTimeout(function(){ resultsEl.scrollIntoView({behavior:'smooth', block:'start'}); }, 100);
+
+  try{
+    // Claude-only: same pre-processed content approach, but render at
+    // maximum quality since Claude handles large inputs reliably.
+    var images = [];
+    var docText = processedText;
+
+    if(pdfDoc && pdfConfirmed){
+      for(var p=selectedPages.from; p<=selectedPages.to; p++){
+        try{
+          var page = await pdfDoc.getPage(p);
+          var vp = page.getViewport({scale:2.0}); // max quality for Claude
+          var canvas = document.createElement('canvas');
+          canvas.width = vp.width; canvas.height = vp.height;
+          await page.render({canvasContext: canvas.getContext('2d'), viewport: vp}).promise;
+          images.push(canvas.toDataURL('image/jpeg', 0.92));
+        }catch(pgErr){}
+      }
+    }
+    for(var ii=0; ii<attachedFiles.length; ii++){
+      var ff = attachedFiles[ii];
+      var ffext = ff.name.split('.').pop().toLowerCase();
+      if(['png','jpg','jpeg'].includes(ffext)){
+        images.push(await readFileBase64(ff));
+      }
+    }
+
+    var res = await fetch(PROF_WORKER_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        _appSecret: PROF_APP_SECRET,
+        action: 'analyze-document',
+        question: question,
+        images: images,
+        docText: docText,
+        code: sessionStorage.getItem('prof_verified_code')||'',
+        claudeOnly: true  // signals the worker to use Claude only, skip GPT
+      })
+    });
+    var data = await res.json();
+    if(!data.ok){
+      resultsEl.innerHTML = '<div style="color:#ef4444;padding:16px;">Error: ' + (data.error||'Unknown error') + '</div>';
+      return;
+    }
+    // Claude-only: show the claudeAnswer or mergedAnswer in a single clean panel
+    var answer = data.claudeAnswer || data.mergedAnswer || data.gptAnswer || '';
+    lastResultData = data;
+    resultsEl.innerHTML =
+      '<div class="result-merged" style="border-color:rgba(167,139,250,0.5);background:rgba(124,58,237,0.08);">' +
+        '<div class="result-merged-title" style="color:#a78bfa;">🧠 Claude — Analysis Result</div>' +
+        '<div class="result-merged-body" id="merged-body-text">' + simpleMarkdown(answer) + '</div>' +
+        '<div class="download-row">' +
+          '<button class="download-btn" onclick="downloadWord()">⬇️ Download Word</button>' +
+          '<button class="download-btn" onclick="downloadPDF()">⬇️ Download PDF</button>' +
+        '</div>' +
+      '</div>';
+    if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([resultsEl]).catch(function(){});
+    setTimeout(function(){ resultsEl.scrollIntoView({behavior:'smooth', block:'start'}); }, 150);
+  }catch(e){
+    resultsEl.innerHTML = '<div style="color:#ef4444;padding:16px;">Error: ' + e.message + '</div>';
+  }finally{
+    btn.disabled = false; btn.textContent = '🧠 Claude Only';
+    if(analyzeBtn) analyzeBtn.disabled = false;
+  }
+}
+
+function simpleMarkdown(text){
+  if(!text) return '';
+  // Use marked.js (already loaded) for proper markdown including tables.
+  // Falls back to a basic converter if marked isn't available.
+  if(window.marked){
+    try{
+      return marked.parse(text, {breaks:true, gfm:true});
+    }catch(e){}
+  }
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\n/g,'<br>');
+}
+
+var lastResultData = null; // stored for download buttons
+
+function buildScorecardHTML(sc){
+  if(!sc) return '';
+  var score = sc.overall_confidence || 0;
+  var verdict = sc.verdict || '';
+  var sc_color = score>=75?'#10b981':score>=55?'#f59e0b':'#ef4444';
+
+  var metrics = [
+    {k:'source_coverage', l:'Source Coverage'},
+    {k:'factual_accuracy', l:'Factual Accuracy'},
+    {k:'analysis_depth', l:'Analysis Depth'},
+    {k:'agreement_level', l:'Model Agreement'},
+    {k:'clarity', l:'Clarity'}
+  ];
+
+  var html = '<div class="scorecard"><div class="scorecard-title">Confidence Scorecard</div>';
+  html += '<div class="scorecard-hero">';
+  html += '<div class="scorecard-pct" style="color:'+sc_color+'">'+score+'<span style="font-size:18px;color:var(--muted)">%</span></div>';
+  html += '<div class="scorecard-label">Overall Confidence</div>';
+  if(verdict) html += '<div class="scorecard-verdict" style="color:'+sc_color+'">'+verdict+'</div>';
+  html += '</div><div class="scorecard-grid">';
+  metrics.forEach(function(m){
+    var v = sc[m.k] || 0;
+    var c = v>=75?'#10b981':v>=55?'#f59e0b':'#ef4444';
+    html += '<div class="score-item"><div class="score-bar"><div class="score-bar-fill" style="width:'+v+'%;background:'+c+'"></div></div>'+
+      '<div class="score-val" style="color:'+c+'">'+v+'%</div><div class="score-label">'+m.l+'</div></div>';
+  });
+  html += '</div>';
+
+  if(sc.recommendations && sc.recommendations.length){
+    var metricLabels = {source_coverage:'Source Coverage', factual_accuracy:'Factual Accuracy', analysis_depth:'Analysis Depth', agreement_level:'Model Agreement', clarity:'Clarity'};
+    html += '<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">';
+    html += '<div style="font-size:11px;font-weight:700;color:#fbbf24;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">💡 To Improve Confidence</div>';
+    html += '<ul style="margin:0;padding-left:18px;">';
+    sc.recommendations.forEach(function(r){
+      var label = metricLabels[r.metric] || r.metric || '';
+      var text = (typeof r === 'string') ? r : (r.text || '');
+      html += '<li style="font-size:12px;color:#cbd5e1;line-height:1.6;margin-bottom:4px;"><strong style="color:#fbbf24;">'+label+':</strong> '+text+'</li>';
+    });
+    html += '</ul></div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+function renderResults(data){
+  lastResultData = data;
+  var resultsEl = document.getElementById('results');
+  var scorecardHtml = buildScorecardHTML(data.scorecard);
+
+  resultsEl.innerHTML =
+    '<div class="result-grid">' +
+      '<div class="result-panel gpt"><div class="result-panel-title" style="color:#1a56db;">🤖 GPT-4o</div>' + simpleMarkdown(data.gptAnswer) + '</div>' +
+      '<div class="result-panel claude"><div class="result-panel-title" style="color:#a78bfa;">🧠 Claude</div>' + simpleMarkdown(data.claudeAnswer) + '</div>' +
+    '</div>' +
+    '<div class="result-merged">' + scorecardHtml + '<div class="result-merged-title">📋 Verified Final Result</div>' +
+    '<div class="result-merged-body" id="merged-body-text">' + simpleMarkdown(data.mergedAnswer) + '</div>' +
+    '<div class="download-row">' +
+      '<button class="download-btn" onclick="downloadWord()">⬇️ Download Word</button>' +
+      '<button class="download-btn" onclick="downloadPDF()">⬇️ Download PDF</button>' +
+    '</div></div>';
+  if(window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([resultsEl]).catch(function(){});
+  setTimeout(function(){ resultsEl.scrollIntoView({behavior:'smooth', block:'start'}); }, 150);
+}
+
+function downloadWord(){
+  if(!lastResultData) return;
+  var sc = lastResultData.scorecard;
+  var recHtml = (sc && sc.recommendations && sc.recommendations.length) ?
+    '<h2>To Improve Confidence</h2><ul>' + sc.recommendations.map(function(r){
+    var ml={source_coverage:'Source Coverage',factual_accuracy:'Factual Accuracy',analysis_depth:'Analysis Depth',agreement_level:'Model Agreement',clarity:'Clarity'};
+    var lbl=ml[r.metric]||r.metric||'';
+    var txt=(typeof r==='string')?r:(r.text||'');
+    return '<li><b>'+lbl+':</b> '+txt+'</li>';
+  }).join('') + '</ul>' : '';
+  var html = '<html><head><meta charset="utf-8"><title>Research Report</title></head><body style="font-family:Arial,sans-serif;">' +
+    '<h1>Research / Professional Analysis Report</h1>' +
+    '<p style="color:#666;">Generated ' + new Date().toLocaleString() + '</p>' +
+    (sc ? '<h2>Confidence Scorecard</h2><p><b>Overall Confidence: ' + (sc.overall_confidence||0) + '%</b> — ' + (sc.verdict||'') + '</p>' +
+      '<ul><li>Source Coverage: ' + (sc.source_coverage||0) + '%</li><li>Factual Accuracy: ' + (sc.factual_accuracy||0) + '%</li>' +
+      '<li>Analysis Depth: ' + (sc.analysis_depth||0) + '%</li><li>Model Agreement: ' + (sc.agreement_level||0) + '%</li>' +
+      '<li>Clarity: ' + (sc.clarity||0) + '%</li></ul>' : '') +
+    recHtml +
+    '<h2>Verified Final Result</h2><p>' + (lastResultData.mergedAnswer||'').replace(/\n/g,'<br>') + '</p>' +
+    '</body></html>';
+  var blob = new Blob([html], {type:'application/msword'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'Research-Report-' + new Date().toISOString().slice(0,10) + '.doc';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function downloadPDF(){
+  if(!lastResultData) return;
+  var win = window.open('', '_blank');
+  var sc = lastResultData.scorecard;
+  var recHtml = (sc && sc.recommendations && sc.recommendations.length) ?
+    '<h2>To Improve Confidence</h2><ul>' + sc.recommendations.map(function(r){
+    var ml={source_coverage:'Source Coverage',factual_accuracy:'Factual Accuracy',analysis_depth:'Analysis Depth',agreement_level:'Model Agreement',clarity:'Clarity'};
+    var lbl=ml[r.metric]||r.metric||'';
+    var txt=(typeof r==='string')?r:(r.text||'');
+    return '<li><b>'+lbl+':</b> '+txt+'</li>';
+  }).join('') + '</ul>' : '';
+  win.document.write('<html><head><title>Research Report</title></head><body style="font-family:Arial,sans-serif;padding:30px;">' +
+    '<h1>Research / Professional Analysis Report</h1>' +
+    '<p style="color:#666;">Generated ' + new Date().toLocaleString() + '</p>' +
+    (sc ? '<h2>Confidence Scorecard</h2><p><b>Overall Confidence: ' + (sc.overall_confidence||0) + '%</b> — ' + (sc.verdict||'') + '</p>' +
+      '<ul><li>Source Coverage: ' + (sc.source_coverage||0) + '%</li><li>Factual Accuracy: ' + (sc.factual_accuracy||0) + '%</li>' +
+      '<li>Analysis Depth: ' + (sc.analysis_depth||0) + '%</li><li>Model Agreement: ' + (sc.agreement_level||0) + '%</li>' +
+      '<li>Clarity: ' + (sc.clarity||0) + '%</li></ul>' : '') +
+    recHtml +
+    '<h2>Verified Final Result</h2><p>' + (lastResultData.mergedAnswer||'').replace(/\n/g,'<br>') + '</p>' +
+    '</body></html>');
+  win.document.close();
+  setTimeout(function(){ win.print(); }, 400);
+}
+</script>
+</body>
+</html>

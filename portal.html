@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AcademyReports</title>
+<style>
+  :root{
+    --navy:#0f2544; --blue:#1e5fa8; --gold:#d4a017; --bg:#f4f6f9;
+    --card:#ffffff; --text:#1a1a2e; --muted:#6b7280; --green:#1a8a4a; --red:#c0392b;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);}
+  header{background:var(--navy);color:#fff;padding:18px 20px;text-align:center;}
+  header h1{margin:0;font-size:1.4rem;letter-spacing:.5px;}
+  header p{margin:4px 0 0;font-size:.8rem;color:#c8d4e6;}
+  .wrap{max-width:640px;margin:0 auto;padding:20px 16px 60px;}
+  .card{background:var(--card);border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.06);}
+  .role-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .role-btn{padding:16px 8px;border-radius:12px;border:2px solid #e2e8f0;background:#fff;cursor:pointer;text-align:center;font-size:.9rem;font-weight:600;color:var(--navy);}
+  .role-btn:active{background:#eef3fa;}
+  label{display:block;font-size:.8rem;color:var(--muted);margin:10px 0 4px;font-weight:600;}
+  input,select{width:100%;padding:11px;border:1px solid #d1d9e6;border-radius:8px;font-size:1rem;background:#fff;}
+  button.primary{width:100%;padding:13px;margin-top:16px;background:var(--blue);color:#fff;border:none;border-radius:9px;font-size:1rem;font-weight:600;cursor:pointer;}
+  button.primary:active{background:var(--navy);}
+  button.ghost{width:100%;padding:11px;margin-top:8px;background:none;border:1px solid #d1d9e6;border-radius:9px;color:var(--muted);cursor:pointer;}
+  .err{color:var(--red);font-size:.85rem;margin-top:8px;}
+  .msg{color:var(--green);font-size:.85rem;margin-top:8px;}
+  table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:10px;}
+  th,td{border:1px solid #e2e8f0;padding:6px 5px;text-align:center;}
+  th{background:var(--navy);color:#fff;font-size:.72rem;}
+  .locked{color:var(--muted);font-style:italic;font-size:.85rem;padding:10px;text-align:center;background:#f4f6f9;border-radius:8px;}
+  .hidden{display:none;}
+  .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+  .school-name{font-weight:700;color:var(--navy);}
+  .subtitle{font-size:.8rem;color:var(--muted);}
+  .toggle-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:.85rem;}
+  .switch{position:relative;width:44px;height:24px;background:#ccc;border-radius:20px;cursor:pointer;flex-shrink:0;}
+  .switch.on{background:var(--green);}
+  .switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.15s;}
+  .switch.on::after{left:22px;}
+  .audit-item{font-size:.78rem;border-bottom:1px solid #f0f0f0;padding:8px 0;}
+  .tabs{display:flex;gap:8px;margin-bottom:14px;}
+  .tab{flex:1;padding:10px;text-align:center;border-radius:8px;background:#eef3fa;color:var(--navy);font-size:.85rem;font-weight:600;cursor:pointer;}
+  .tab.active{background:var(--navy);color:#fff;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>AcademyReports</h1>
+  <p id="headerSub">Student • Teacher • Admin Portal</p>
+</header>
+
+<div class="wrap">
+
+  <!-- ═══ ROLE SELECT ═══ -->
+  <div id="roleScreen" class="card">
+    <p style="text-align:center;color:var(--muted);margin-top:0;">Select your role to continue</p>
+    <div class="role-grid">
+      <div class="role-btn" onclick="showLogin('student')">🎓<br>Student</div>
+      <div class="role-btn" onclick="showLogin('teacher')">📘<br>Teacher</div>
+      <div class="role-btn" onclick="showLogin('admin')">🛠️<br>Admin</div>
+    </div>
+  </div>
+
+  <!-- ═══ STUDENT LOGIN ═══ -->
+  <div id="studentLogin" class="card hidden">
+    <label>School Code</label>
+    <input id="s_schoolCode" placeholder="e.g. STMARYS">
+    <label>Your Access Code</label>
+    <input id="s_code" placeholder="e.g. AR-XXXXXXX">
+    <label>Surname</label>
+    <input id="s_surname" placeholder="Your surname">
+    <button class="primary" onclick="studentLogin()">View My Marks</button>
+    <div id="s_err" class="err"></div>
+    <button class="ghost" onclick="backToRoles()">Back</button>
+  </div>
+
+  <!-- ═══ STUDENT MARKS VIEW ═══ -->
+  <div id="studentMarks" class="card hidden">
+    <div class="top-row">
+      <div>
+        <div class="school-name" id="stu_name"></div>
+        <div class="subtitle" id="stu_class"></div>
+      </div>
+      <button class="ghost" style="width:auto;padding:8px 12px;" onclick="location.reload()">Logout</button>
+    </div>
+    <div id="marksContainer"></div>
+  </div>
+
+  <!-- ═══ TEACHER LOGIN ═══ -->
+  <div id="teacherLogin" class="card hidden">
+    <label>School Code</label>
+    <input id="t_schoolCode" placeholder="e.g. STMARYS">
+    <label>Your Access Code</label>
+    <input id="t_code" placeholder="Sent to your email">
+    <label>Surname</label>
+    <input id="t_surname" placeholder="Your surname">
+    <button class="primary" onclick="teacherLogin()">Log In</button>
+    <div id="t_err" class="err"></div>
+    <button class="ghost" onclick="backToRoles()">Back</button>
+  </div>
+
+  <!-- ═══ TEACHER ENTRY VIEW ═══ -->
+  <div id="teacherEntry" class="card hidden">
+    <div class="top-row">
+      <div class="school-name" id="tea_name"></div>
+      <button class="ghost" style="width:auto;padding:8px 12px;" onclick="location.reload()">Logout</button>
+    </div>
+    <p class="subtitle">Select subject/class to enter marks</p>
+    <select id="tea_scopeSelect" onchange="loadTeacherStudents()"></select>
+    <label>Student Code</label>
+    <input id="tea_studentCode" placeholder="Student's access code">
+    <label>Term</label>
+    <select id="tea_term"><option>Term1</option><option>Term2</option><option>Term3</option></select>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+      <div><label>CA1</label><input id="tea_ca1" type="number"></div>
+      <div><label>CA2</label><input id="tea_ca2" type="number"></div>
+      <div><label>CA3</label><input id="tea_ca3" type="number"></div>
+      <div><label>Midterm</label><input id="tea_mid" type="number"></div>
+      <div style="grid-column:1/3;"><label>Final Exam</label><input id="tea_final" type="number"></div>
+    </div>
+    <button class="primary" onclick="saveMark()">Save Mark</button>
+    <div id="tea_msg" class="msg"></div>
+  </div>
+
+  <!-- ═══ ADMIN LOGIN ═══ -->
+  <div id="adminLogin" class="card hidden">
+    <label>School Code</label>
+    <input id="a_schoolCode" placeholder="e.g. STMARYS">
+    <label>Admin Key</label>
+    <input id="a_key" type="password">
+    <button class="primary" onclick="adminLogin()">Log In</button>
+    <div id="a_err" class="err"></div>
+    <button class="ghost" onclick="backToRoles()">Back</button>
+  </div>
+
+  <!-- ═══ ADMIN DASHBOARD ═══ -->
+  <div id="adminDash" class="card hidden">
+    <div class="top-row">
+      <div class="school-name">Admin Dashboard</div>
+      <button class="ghost" style="width:auto;padding:8px 12px;" onclick="location.reload()">Logout</button>
+    </div>
+    <div class="tabs">
+      <div class="tab active" onclick="showAdminTab('release')">Release</div>
+      <div class="tab" onclick="showAdminTab('add')">Add People</div>
+      <div class="tab" onclick="showAdminTab('pay')">Payments</div>
+      <div class="tab" onclick="showAdminTab('audit')">Audit Log</div>
+    </div>
+
+    <div id="adminTab_release">
+      <label>Faculty / Option</label>
+      <input id="rel_group1" placeholder="e.g. Engineering or Option Scientifique">
+      <label>Department (leave as General for high school)</label>
+      <input id="rel_group2" placeholder="e.g. Metallurgy or General">
+      <label>Class</label>
+      <input id="rel_class" placeholder="e.g. 2nd Year or Grade 10A">
+      <label>Subject</label>
+      <input id="rel_subject" placeholder="e.g. Fluid Mechanics">
+      <label>Term</label>
+      <select id="rel_term"><option>Term1</option><option>Term2</option><option>Term3</option></select>
+      <div class="toggle-row">
+        <span>Release marks to students</span>
+        <div class="switch" id="rel_switch" onclick="toggleReleaseSwitch()"></div>
+      </div>
+      <button class="primary" onclick="submitRelease()">Apply</button>
+      <div id="rel_msg" class="msg"></div>
+    </div>
+
+    <div id="adminTab_add" class="hidden">
+      <p style="font-weight:600;">Add Student</p>
+      <label>Access Code</label><input id="add_s_code" placeholder="e.g. AR-XXXXXXX">
+      <label>Surname</label><input id="add_s_surname">
+      <label>Full Name</label><input id="add_s_name">
+      <label>Class</label><input id="add_s_class">
+      <label>Faculty/Option</label><input id="add_s_g1" value="General">
+      <label>Department</label><input id="add_s_g2" value="General">
+      <label>Subjects (comma-separated)</label><input id="add_s_subjects" placeholder="Math,English,Physics">
+      <button class="primary" onclick="addStudent()">Add Student</button>
+      <div id="add_s_msg" class="msg"></div>
+
+      <p style="font-weight:600;margin-top:20px;">Add Teacher</p>
+      <label>Full Name</label><input id="add_t_name">
+      <label>Surname</label><input id="add_t_surname">
+      <label>Email (code sent here)</label><input id="add_t_email" type="email">
+      <label>Subject Scope</label><input id="add_t_subject" placeholder="e.g. Math — Grade 10A">
+      <button class="primary" onclick="addTeacher()">Add Teacher &amp; Email Code</button>
+      <div id="add_t_msg" class="msg"></div>
+    </div>
+
+    <div id="adminTab_pay" class="hidden">
+      <label>Student Code</label><input id="pay_code">
+      <label>Amount</label><input id="pay_amount" type="number">
+      <label>Status</label>
+      <select id="pay_status"><option value="paid">Paid</option><option value="pending">Pending</option><option value="overdue">Overdue</option></select>
+      <button class="primary" onclick="recordPayment()">Record Payment</button>
+      <div id="pay_msg" class="msg"></div>
+    </div>
+
+    <div id="adminTab_audit" class="hidden">
+      <div id="auditList"><p class="subtitle">Loading...</p></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── CONFIG ─────────────────────────────────────────────────────────
+// Same Worker as Smart Academy AI — just new action names.
+const WORKER_URL = 'https://smartacademy-ai.kasongokimba.workers.dev';
+const ADMIN_KEY = ''; // filled in at login time, never hardcoded
+
+let session = { role:null, schoolCode:null, code:null, surname:null, adminKey:null, teacherScope:[] };
+
+function backToRoles(){
+  document.querySelectorAll('.card').forEach(c=>c.classList.add('hidden'));
+  document.getElementById('roleScreen').classList.remove('hidden');
+}
+function showLogin(role){
+  document.getElementById('roleScreen').classList.add('hidden');
+  document.getElementById(role+'Login').classList.remove('hidden');
+}
+
+async function callWorker(action, data){
+  const res = await fetch(WORKER_URL, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ action, ...data })
+  });
+  return res.json();
+}
+
+// ── STUDENT ──────────────────────────────────────────────────────
+async function studentLogin(){
+  const schoolCode = document.getElementById('s_schoolCode').value.trim();
+  const code = document.getElementById('s_code').value.trim();
+  const surname = document.getElementById('s_surname').value.trim();
+  document.getElementById('s_err').textContent = '';
+
+  const r = await callWorker('ar-student-login', {schoolCode, code, surname});
+  if(r.error){ document.getElementById('s_err').textContent = r.message || 'Invalid code or surname'; return; }
+
+  session = {...session, role:'student', schoolCode, code, surname};
+  document.getElementById('studentLogin').classList.add('hidden');
+  document.getElementById('studentMarks').classList.remove('hidden');
+  document.getElementById('stu_name').textContent = r.student.name;
+  document.getElementById('stu_class').textContent = r.student.class;
+  loadMarks();
+}
+
+async function loadMarks(){
+  const r = await callWorker('ar-get-marks', {schoolCode:session.schoolCode, code:session.code, surname:session.surname, term:'Term1'});
+  const container = document.getElementById('marksContainer');
+  if(r.error){ container.innerHTML = '<p class="err">Could not load marks.</p>'; return; }
+
+  if(!r.results.length){ container.innerHTML = '<p class="locked">No subjects on file yet.</p>'; return; }
+
+  let html = '<table><tr><th>Subject</th><th>CA1</th><th>CA2</th><th>CA3</th><th>Mid</th><th>Final</th><th>Total</th><th>Teacher</th></tr>';
+  let anyLocked = false;
+  r.results.forEach(row=>{
+    if(!row.released){ anyLocked = true; return; }
+    const m = row.marks || {};
+    html += `<tr><td>${row.subject}</td><td>${m.ca1??'-'}</td><td>${m.ca2??'-'}</td><td>${m.ca3??'-'}</td><td>${m.midterm??'-'}</td><td>${m.final??'-'}</td><td><b>${m.total??'-'}</b></td><td>${m.teacherName??'-'}</td></tr>`;
+  });
+  html += '</table>';
+  if(anyLocked) html += '<p class="locked">Some subjects are not yet released by your school admin.</p>';
+  container.innerHTML = html;
+}
+
+// ── TEACHER ──────────────────────────────────────────────────────
+async function teacherLogin(){
+  const schoolCode = document.getElementById('t_schoolCode').value.trim();
+  const code = document.getElementById('t_code').value.trim();
+  const surname = document.getElementById('t_surname').value.trim();
+  document.getElementById('t_err').textContent = '';
+
+  const r = await callWorker('ar-teacher-login', {schoolCode, code, surname});
+  if(r.error){ document.getElementById('t_err').textContent = 'Invalid code or surname'; return; }
+
+  session = {...session, role:'teacher', schoolCode, code, surname, teacherScope:r.teacher.scope||[]};
+  document.getElementById('teacherLogin').classList.add('hidden');
+  document.getElementById('teacherEntry').classList.remove('hidden');
+  document.getElementById('tea_name').textContent = r.teacher.name;
+
+  const sel = document.getElementById('tea_scopeSelect');
+  sel.innerHTML = session.teacherScope.map((s,i)=>`<option value="${i}">${s.subject} — ${s.className||''}</option>`).join('') || '<option>No subjects assigned</option>';
+}
+
+async function saveMark(){
+  const idx = document.getElementById('tea_scopeSelect').value;
+  const scope = session.teacherScope[idx];
+  if(!scope){ document.getElementById('tea_msg').textContent = 'No subject scope selected'; return; }
+
+  const r = await callWorker('ar-teacher-save-mark', {
+    schoolCode: session.schoolCode,
+    teacherCode: session.code,
+    studentCode: document.getElementById('tea_studentCode').value.trim().toUpperCase(),
+    subject: scope.subject,
+    term: document.getElementById('tea_term').value,
+    scores: {
+      ca1: document.getElementById('tea_ca1').value,
+      ca2: document.getElementById('tea_ca2').value,
+      ca3: document.getElementById('tea_ca3').value,
+      midterm: document.getElementById('tea_mid').value,
+      final: document.getElementById('tea_final').value
+    }
+  });
+  document.getElementById('tea_msg').textContent = r.success ? '✓ Mark saved' : (r.error||'Error saving mark');
+}
+
+// ── ADMIN ────────────────────────────────────────────────────────
+async function adminLogin(){
+  const schoolCode = document.getElementById('a_schoolCode').value.trim();
+  const key = document.getElementById('a_key').value;
+  // Quick check via a harmless toggle read so we don't need a dedicated login action
+  session = {...session, role:'admin', schoolCode, adminKey:key};
+  document.getElementById('adminLogin').classList.add('hidden');
+  document.getElementById('adminDash').classList.remove('hidden');
+  loadAudit();
+}
+
+let releaseOn = false;
+function toggleReleaseSwitch(){
+  releaseOn = !releaseOn;
+  document.getElementById('rel_switch').classList.toggle('on', releaseOn);
+}
+async function submitRelease(){
+  const r = await callWorker('ar-admin-toggle-release', {
+    schoolCode: session.schoolCode, adminKey: session.adminKey,
+    group1: document.getElementById('rel_group1').value || 'General',
+    group2: document.getElementById('rel_group2').value || 'General',
+    className: document.getElementById('rel_class').value,
+    subject: document.getElementById('rel_subject').value,
+    term: document.getElementById('rel_term').value,
+    released: releaseOn
+  });
+  document.getElementById('rel_msg').textContent = r.success ? '✓ Updated' : (r.error||'Error');
+}
+
+function showAdminTab(tab){
+  ['release','add','pay','audit'].forEach(t=>{
+    document.getElementById('adminTab_'+t).classList.toggle('hidden', t!==tab);
+  });
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  event.target.classList.add('active');
+  if(tab==='audit') loadAudit();
+}
+
+async function addStudent(){
+  const r = await callWorker('ar-admin-add-student', {
+    schoolCode: session.schoolCode, adminKey: session.adminKey,
+    code: document.getElementById('add_s_code').value,
+    surname: document.getElementById('add_s_surname').value,
+    name: document.getElementById('add_s_name').value,
+    className: document.getElementById('add_s_class').value,
+    group1: document.getElementById('add_s_g1').value,
+    group2: document.getElementById('add_s_g2').value,
+    subjects: document.getElementById('add_s_subjects').value.split(',').map(s=>s.trim()).filter(Boolean)
+  });
+  document.getElementById('add_s_msg').textContent = r.success ? '✓ Student added' : (r.error||'Error');
+}
+
+async function addTeacher(){
+  const r = await callWorker('ar-admin-add-teacher', {
+    schoolCode: session.schoolCode, adminKey: session.adminKey,
+    name: document.getElementById('add_t_name').value,
+    surname: document.getElementById('add_t_surname').value,
+    email: document.getElementById('add_t_email').value,
+    scope: [{subject: document.getElementById('add_t_subject').value}]
+  });
+  document.getElementById('add_t_msg').textContent = r.success ? '✓ Teacher added — code emailed' : (r.error||'Error');
+}
+
+async function recordPayment(){
+  const r = await callWorker('ar-admin-record-payment', {
+    schoolCode: session.schoolCode, adminKey: session.adminKey,
+    studentCode: document.getElementById('pay_code').value,
+    amount: document.getElementById('pay_amount').value,
+    status: document.getElementById('pay_status').value
+  });
+  document.getElementById('pay_msg').textContent = r.success ? '✓ Payment recorded' : (r.error||'Error');
+}
+
+async function loadAudit(){
+  const r = await callWorker('ar-admin-get-audit-log', {schoolCode: session.schoolCode, adminKey: session.adminKey});
+  const el = document.getElementById('auditList');
+  if(!r.success){ el.innerHTML = '<p class="err">Could not load log</p>'; return; }
+  if(!r.entries.length){ el.innerHTML = '<p class="subtitle">No activity yet.</p>'; return; }
+  el.innerHTML = r.entries.map(e=>`<div class="audit-item"><b>${e.teacherName||'—'}</b> edited <b>${e.subject}</b> for ${e.studentCode} · ${new Date(e.ts).toLocaleString()}</div>`).join('');
+}
+</script>
+</body>
+</html>
